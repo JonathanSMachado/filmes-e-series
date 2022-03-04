@@ -31,6 +31,7 @@ export type TMDBItem = {
   title: string;
   adult: boolean;
   vote_average: number;
+  popularity: number;
   poster_path: string;
   type: string;
 };
@@ -72,4 +73,6 @@ export type CardProps = {
 
 export type CardContainerProps = {
   items: TMDBItem[];
+  showSearch?: boolean;
+  infinityScroll?: boolean;
 };

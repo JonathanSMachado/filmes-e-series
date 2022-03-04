@@ -1,30 +1,34 @@
-import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
+import { Form, LoaderFunction, useLoaderData } from "remix";
 import CardContainer from "~/components/CardContainer";
 import AppError from "~/components/AppError";
 import { TMDBItem } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
+import Layout from "~/layout/Layout";
+import HeroArea from "~/components/HeroArea";
 
-const getPage = (searchParams: URLSearchParams) =>
-  Number(searchParams.get("page") || "1");
-
-export const loader: LoaderFunction = async ({
-  request,
-}): Promise<TMDBItem[]> => {
-  const page = getPage(new URL(request.url).searchParams);
-
-  return await TMDBApi.discover({});
-};
-
-export const action: ActionFunction = async ({ request }) => {
-  const url = new URL(request.url);
-
-  console.log(url);
+export const loader: LoaderFunction = async (): Promise<TMDBItem[]> => {
+  return await TMDBApi.getMostPopular({ limit: 12 });
 };
 
 export default function Index() {
   const items = useLoaderData<TMDBItem[]>();
 
-  return <CardContainer items={items} />;
+  return (
+    <Layout>
+      <HeroArea />
+      <CardContainer items={items} />
+      <div className="px-10 mt-10 flex justify-center">
+        <Form action="catalogo">
+          <button
+            type="submit"
+            className="px-5 py-3 rounded-xl border border-slate-500 text-slate-400 shadow-md shadow-slate-700 hover:bg-slate-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all ease-in-out duration-100"
+          >
+            Ver catálogo completo
+          </button>
+        </Form>
+      </div>
+    </Layout>
+  );
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {

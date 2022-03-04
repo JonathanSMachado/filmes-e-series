@@ -3,11 +3,7 @@
 @tailwind utilities;
 
 .card {
-  @apply flex-shrink-0 w-64 h-96 relative rounded-3xl shadow-slate-700 shadow-2xl transition-all duration-200 delay-200 ease-in-out hover:scale-110 hover:shadow-yellow-100 focus-visible:outline-none focus:scale-110 focus:shadow-yellow-100;
-}
-
-.card.card-small {
-  @apply w-40 h-60 shadow-lg hover:shadow-yellow-100 focus:shadow-yellow-100;
+  @apply flex-shrink-0 w-48 h-72 relative rounded-3xl shadow-slate-700 shadow-lg transition-all duration-200 delay-100 ease-in-out hover:scale-110 hover:shadow-yellow-100 focus-visible:outline-none focus:scale-110 focus:shadow-yellow-100;
 }
 
 .card.card-large {
@@ -15,5 +11,5 @@
 }
 
 .card > img {
-  @apply rounded-3xl object-cover;
+  @apply rounded-3xl object-cover h-full;
 }

@@ -14,6 +14,8 @@ export default function CardContainer(props: CardContainerProps) {
   const [page, setPage] = useState(2);
   const fetcher = useFetcher();
   const [items, setItems] = useState<TMDBItem[]>(props.items);
+  const showSearch = props.showSearch || false;
+  const infinityScroll = props.infinityScroll || false;
 
   const mainHeight = useCallback(
     (node) => {
@@ -24,54 +26,68 @@ export default function CardContainer(props: CardContainerProps) {
     [items.length]
   );
 
-  useEffect(() => {
-    const scrollListener = () => {
-      setClientHeight(window.innerHeight);
-      setScrollPosition(window.scrollY);
-    };
+  if (infinityScroll) {
+    useEffect(() => {
+      const scrollListener = () => {
+        setClientHeight(window.innerHeight);
+        setScrollPosition(window.scrollY);
+      };
 
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", scrollListener);
-    }
-
-    return () => {
       if (typeof window !== "undefined") {
-        window.removeEventListener("scroll", scrollListener);
+        window.addEventListener("scroll", scrollListener);
       }
-    };
-  }, []);
 
-  useEffect(() => {
-    if (!shouldFetch || !height) return;
-    if (clientHeight + scrollPosition + 400 < height) return;
+      return () => {
+        if (typeof window !== "undefined") {
+          window.removeEventListener("scroll", scrollListener);
+        }
+      };
+    }, []);
 
-    fetcher.load(`?page=${page}`);
+    useEffect(() => {
+      if (!shouldFetch || !height) return;
+      if (clientHeight + scrollPosition + 400 < height) return;
 
-    setShouldFetch(false);
-  }, [clientHeight, scrollPosition, fetcher]);
+      fetcher.load(`/catalogo?page=${page}`);
 
-  useEffect(() => {
-    if (fetcher.data && fetcher.data.length === 0) {
       setShouldFetch(false);
-      return;
-    }
+    }, [clientHeight, scrollPosition, fetcher]);
 
-    if (fetcher.data && fetcher.data.length > 0) {
-      setItems((prevItems: TMDBItem[]) => [...prevItems, ...fetcher.data]);
-      setPage((page: number) => page + 1);
-      setShouldFetch(true);
-    }
-  }, [fetcher.data]);
+    useEffect(() => {
+      if (fetcher.data && fetcher.data.length === 0) {
+        setShouldFetch(false);
+        return;
+      }
+
+      if (fetcher.data && fetcher.data.length > 0) {
+        setItems((prevItems: TMDBItem[]) => [...prevItems, ...fetcher.data]);
+        setPage((page: number) => page + 1);
+        setShouldFetch(true);
+      }
+    }, [fetcher.data]);
+  }
 
   return (
-    <main ref={mainHeight}>
-      <div className="flex justify-center my-10">
-        <Form method="post" action="">
-          <input type="search" name="search" />
-          <button type="submit">Procurar</button>
-        </Form>
-      </div>
-      <div className="flex flex-wrap justify-around items-center gap-10">
+    <main ref={mainHeight} className="px-10 mt-10">
+      {showSearch && (
+        <div className="flex justify-center my-10">
+          <Form>
+            <input
+              type="search"
+              name="search"
+              placeholder="Buscar filmes e séries"
+              className="rounded-l-md border border-r-0 border-slate-400 w-96 text-slate-700"
+            />
+            <button
+              type="submit"
+              className="rounded-r-md border border-l-0 border-slate-400 h-full px-7 text-slate-200 bg-slate-600 hover:bg-slate-500 transition-all ease-in-out"
+            >
+              Procurar
+            </button>
+          </Form>
+        </div>
+      )}
+      <div className="flex flex-wrap justify-around items-center gap-6">
         {items.sort(sortByPopularity).map((item: TMDBItem) => (
           <Card key={`${item.type}-${item.id}`} item={item} islink={true} />
         ))}

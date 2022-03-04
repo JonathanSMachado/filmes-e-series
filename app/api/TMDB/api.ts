@@ -7,12 +7,14 @@ import {
 
 type MediaType = "movie" | "tv";
 
-export async function discover({
+export async function getMostPopular({
   type,
   page,
+  limit,
 }: {
   type?: MediaType;
   page?: number;
+  limit?: number;
 }): Promise<TMDBItem[]> {
   try {
     const token = process.env.TMDB_TOKEN;
@@ -21,7 +23,7 @@ export async function discover({
 
     if (type) {
       const response = await fetch(
-        `http://api.themoviedb.org/3/discover/${type}?language=pt-BR&page=${
+        `http://api.themoviedb.org/3/${type}/popular?language=pt-BR&page=${
           page ?? 1
         }`,
         {
@@ -42,6 +44,7 @@ export async function discover({
           vote_average: item.vote_average,
           poster_path: tmdbImagesUrl + item.poster_path,
           type: item.title ? "movie" : "tv",
+          popularity: item.popularity,
         })
       );
     } else {
@@ -49,7 +52,7 @@ export async function discover({
 
       for (const type of types) {
         const response = await fetch(
-          `http://api.themoviedb.org/3/discover/${type}?language=pt-BR&page=${
+          `http://api.themoviedb.org/3/${type}/popular?language=pt-BR&page=${
             page ?? 1
           }`,
           {
@@ -69,11 +72,18 @@ export async function discover({
             vote_average: item.vote_average,
             poster_path: tmdbImagesUrl + item.poster_path,
             type: item.title ? "movie" : "tv",
+            popularity: item.popularity,
           })
         );
 
         collection = [...collection, ...items];
       }
+    }
+
+    collection.sort((a, b) => b.popularity - a.popularity);
+
+    if (limit) {
+      collection = collection.slice(0, limit);
     }
 
     return collection;
@@ -169,6 +179,7 @@ export async function getRecommendations({
         vote_average: item.vote_average,
         poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
         type: item.title ? "movie" : "tv",
+        popularity: item.popularity,
       })
     );
 
@@ -217,8 +228,46 @@ export async function getSimilar({
       vote_average: item.vote_average,
       poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
       type: item.title ? "movie" : "tv",
+      popularity: item.popularity,
     })
   );
 
   return data;
+}
+
+export async function search({
+  query,
+  type,
+}: {
+  query: string;
+  type?: "movie" | "tv";
+}): Promise<TMDBItem[]> {
+  const token = process.env.TMDB_TOKEN;
+  const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+
+  if (type) {
+    const response = await fetch(
+      `http://api.themoviedb.org/3/search/${type}?query=${query}&language=pt-BR`,
+      {
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    return data.results.map(
+      (item: TMDBResponseItem): TMDBItem => ({
+        id: item.id,
+        title: item.title || item.name || "",
+        adult: item.adult || false,
+        vote_average: item.vote_average,
+        poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
+        type: item.title ? "movie" : "tv",
+        popularity: item.popularity,
+      })
+    );
+  }
 }
