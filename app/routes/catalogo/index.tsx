@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
 import { TMDBItem } from "~/utils/type";
@@ -16,16 +16,16 @@ export const loader: LoaderFunction = async ({
   const search = url.searchParams.get("search");
 
   if (search) {
-    return await TMDBApi.search({ query: search });
+    return TMDBApi.search({ query: search, page });
   }
 
-  return await TMDBApi.getMostPopular({ page });
+  return TMDBApi.getMostPopular({ page });
 };
 
-// export default function Catalog() {
-//   const items = useLoaderData<TMDBItem[]>();
+export default function Catalog() {
+  const items = useLoaderData<TMDBItem[]>();
 
-//   return (
-//     <CardContainer items={items} showSearch={true} infinityScroll={true} />
-//   );
-// }
+  return (
+    <CardContainer items={items} showSearch={true} infinityScroll={true} />
+  );
+}

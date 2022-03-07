@@ -3,9 +3,8 @@ import {
   TMDBItemDetails,
   TMDBResponse,
   TMDBResponseItem,
+  MediaType,
 } from "~/utils/type";
-
-type MediaType = "movie" | "tv";
 
 export async function getMostPopular({
   type,
@@ -17,24 +16,14 @@ export async function getMostPopular({
   limit?: number;
 }): Promise<TMDBItem[]> {
   try {
-    const token = process.env.TMDB_TOKEN;
     const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
     let collection: TMDBItem[] = [];
 
     if (type) {
-      const response = await fetch(
-        `http://api.themoviedb.org/3/${type}/popular?language=pt-BR&page=${
-          page ?? 1
-        }`,
-        {
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const data = await response.json();
+      const data = await fetchData({
+        endpoint: `${convertTypeToTMDB(type)}/popular`,
+        page: page ?? 1,
+      });
 
       collection = data.results.map(
         (item: TMDBResponseItem): TMDBItem => ({
@@ -43,27 +32,19 @@ export async function getMostPopular({
           adult: item.adult || false,
           vote_average: item.vote_average,
           poster_path: tmdbImagesUrl + item.poster_path,
-          type: item.title ? "movie" : "tv",
+          type: item.title ? "filmes" : "series",
           popularity: item.popularity,
         })
       );
     } else {
-      const types = ["movie", "tv"];
+      const types: MediaType[] = ["filmes", "series"];
 
       for (const type of types) {
-        const response = await fetch(
-          `http://api.themoviedb.org/3/${type}/popular?language=pt-BR&page=${
-            page ?? 1
-          }`,
-          {
-            headers: {
-              "Content-Type": "application/json;charset=utf-8",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const data = await fetchData({
+          endpoint: `${convertTypeToTMDB(type)}/popular`,
+          page: page ?? 1,
+        });
 
-        const data = await response.json();
         const items = data.results.map(
           (item: TMDBResponseItem): TMDBItem => ({
             id: item.id,
@@ -71,7 +52,7 @@ export async function getMostPopular({
             adult: item.adult || false,
             vote_average: item.vote_average,
             poster_path: tmdbImagesUrl + item.poster_path,
-            type: item.title ? "movie" : "tv",
+            type: item.title ? "filmes" : "series",
             popularity: item.popularity,
           })
         );
@@ -79,8 +60,6 @@ export async function getMostPopular({
         collection = [...collection, ...items];
       }
     }
-
-    collection.sort((a, b) => b.popularity - a.popularity);
 
     if (limit) {
       collection = collection.slice(0, limit);
@@ -96,25 +75,15 @@ export async function getDetails({
   type,
   id,
 }: {
-  type: string;
+  type: MediaType;
   id: string;
 }): Promise<TMDBItemDetails> {
   try {
-    const token = process.env.TMDB_TOKEN;
     const posterUrl = process.env.TMDB_POSTER_IMAGES_URL;
     const backdropUrl = process.env.TMDB_BACKDROP_IMAGES_URL;
-
-    const response = await fetch(
-      `http://api.themoviedb.org/3/${type}/${id}?language=pt-BR`,
-      {
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await response.json();
+    const data = await fetchData({
+      endpoint: `${convertTypeToTMDB(type)}/${id}`,
+    });
 
     return {
       adult: data.adult,
@@ -126,7 +95,7 @@ export async function getDetails({
       popularity: data.popularity,
       poster_path: posterUrl + data.poster_path,
       title: data.title || data.name,
-      type: data.title ? "movie" : "tv",
+      type: data.title ? "filmes" : "series",
       vote_average: data.vote_average,
       vote_count: data.vote_count,
       release_date: data.release_date,
@@ -145,27 +114,18 @@ export async function getRecommendations({
   page,
   limit,
 }: {
-  type: string;
+  type: MediaType;
   id: number;
   page?: number;
   limit?: number;
 }): Promise<TMDBResponse> {
   try {
-    const token = process.env.TMDB_TOKEN;
     const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
 
-    const response = await fetch(
-      `http://api.themoviedb.org/3/${type}/${id}/recommendations?language=pt-BR&page=${page}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data = await response.json();
+    const data = await fetchData({
+      endpoint: `${convertTypeToTMDB(type)}/${id}/recommendations`,
+      page: page ?? 1,
+    });
 
     if (limit) {
       data.results = data.results.slice(0, limit);
@@ -177,8 +137,8 @@ export async function getRecommendations({
         title: item.title || item.name || "",
         adult: item.adult || false,
         vote_average: item.vote_average,
-        poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
-        type: item.title ? "movie" : "tv",
+        poster_path: tmdbImagesUrl + item.poster_path,
+        type: item.title ? "filmes" : "series",
         popularity: item.popularity,
       })
     );
@@ -195,26 +155,16 @@ export async function getSimilar({
   page,
   limit,
 }: {
-  type: string;
+  type: MediaType;
   id: number;
   page?: number;
   limit?: number;
 }) {
-  const token = process.env.TMDB_TOKEN;
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
-
-  const response = await fetch(
-    `http://api.themoviedb.org/3/${type}/${id}/similar?language=pt-BR&page=${page}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  const data = await response.json();
+  const data = await fetchData({
+    endpoint: `${convertTypeToTMDB(type)}/${id}/similar`,
+    page: page ?? 1,
+  });
 
   if (limit) {
     data.results = data.results.slice(0, limit);
@@ -226,8 +176,8 @@ export async function getSimilar({
       title: item.title || item.name || "",
       adult: item.adult || false,
       vote_average: item.vote_average,
-      poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
-      type: item.title ? "movie" : "tv",
+      poster_path: tmdbImagesUrl + item.poster_path,
+      type: item.title ? "filmes" : "series",
       popularity: item.popularity,
     })
   );
@@ -238,25 +188,22 @@ export async function getSimilar({
 export async function search({
   query,
   type,
+  page,
 }: {
   query: string;
-  type?: "movie" | "tv";
+  type?: MediaType;
+  page?: number;
 }): Promise<TMDBItem[]> {
-  const token = process.env.TMDB_TOKEN;
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
 
-  if (type) {
-    const response = await fetch(
-      `http://api.themoviedb.org/3/search/${type}?query=${query}&language=pt-BR`,
-      {
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  console.log(page);
 
-    const data = await response.json();
+  if (type) {
+    const data = await fetchData({
+      endpoint: `search/${convertTypeToTMDB(type)}`,
+      query,
+      page: page ?? 1,
+    });
 
     return data.results.map(
       (item: TMDBResponseItem): TMDBItem => ({
@@ -264,10 +211,85 @@ export async function search({
         title: item.title || item.name || "",
         adult: item.adult || false,
         vote_average: item.vote_average,
-        poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
-        type: item.title ? "movie" : "tv",
+        poster_path: tmdbImagesUrl + item.poster_path,
+        type: item.title ? "filmes" : "series",
         popularity: item.popularity,
       })
     );
+  } else {
+    const types: MediaType[] = ["filmes", "series"];
+
+    let collection: TMDBItem[] = [];
+
+    for (const type of types) {
+      const data = await fetchData({
+        endpoint: `search/${convertTypeToTMDB(type)}`,
+        query,
+        page: page ?? 1,
+      });
+
+      const items = data.results.map(
+        (item: TMDBResponseItem): TMDBItem => ({
+          id: item.id,
+          title: item.title || item.name || "",
+          adult: item.adult || false,
+          vote_average: item.vote_average,
+          poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
+          type: item.title ? "filmes" : "series",
+          popularity: item.popularity,
+        })
+      );
+
+      collection = [...collection, ...items];
+    }
+
+    return collection;
+  }
+}
+
+async function fetchData({
+  endpoint,
+  page,
+  query,
+}: {
+  endpoint: string;
+  page?: number;
+  query?: string;
+}) {
+  const token = process.env.TMDB_TOKEN;
+
+  const params = [];
+
+  if (page) {
+    params.push(`page=${page}`);
+  }
+
+  if (query) {
+    params.push(`query=${query}`);
+  }
+
+  const response = await fetch(
+    `http://api.themoviedb.org/3/${endpoint}?language=pt-BR&${params.join(
+      "&"
+    )}`,
+    {
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return await response.json();
+}
+
+function convertTypeToTMDB(type: MediaType): string {
+  switch (type) {
+    case "filmes":
+      return "movie";
+    case "series":
+      return "tv";
+    default:
+      return "";
   }
 }

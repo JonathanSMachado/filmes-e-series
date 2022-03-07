@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LoaderFunction, useLoaderData, useOutletContext } from "remix";
 import Card from "~/components/Card";
 import { getRecommendations } from "~/api/TMDB/api";
-import { TMDBItem, TMDBResponse } from "~/utils/type";
+import { MediaType, TMDBItem, TMDBResponse } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
@@ -16,7 +16,12 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     throw new Error("Invalid params.");
   }
 
-  return await TMDBApi.getRecommendations({ type, id, page, limit });
+  return await TMDBApi.getRecommendations({
+    type: type as MediaType,
+    id,
+    page,
+    limit,
+  });
 };
 
 export default function Recommendations() {
@@ -45,7 +50,7 @@ export default function Recommendations() {
           key={`${item.type}-${item.id}`}
           item={item}
           size="small"
-          islink={true}
+          link={`/catalogo/${item.type}/${item.id}`}
         />
       ))}
     </div>

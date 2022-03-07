@@ -33,7 +33,7 @@ export type TMDBItem = {
   vote_average: number;
   popularity: number;
   poster_path: string;
-  type: string;
+  type: MediaType;
 };
 
 export type TMDBItemDetails = {
@@ -46,7 +46,7 @@ export type TMDBItemDetails = {
   popularity: number;
   poster_path: string;
   title: string | undefined;
-  type: string;
+  type: MediaType;
   vote_average: number;
   vote_count: number;
   release_date?: string;
@@ -58,16 +58,8 @@ export type TMDBItemDetails = {
 export type CardSize = "small" | "medium" | "large";
 
 export type CardProps = {
-  item: {
-    id: number;
-    title: string | undefined;
-    type: string;
-    poster_path: string;
-    vote_average: number;
-    link?: string;
-    size?: CardSize;
-  };
-  islink?: boolean;
+  item: TMDBItem | TMDBItemDetails;
+  link?: string;
   size?: CardSize;
 };
 
@@ -76,3 +68,5 @@ export type CardContainerProps = {
   showSearch?: boolean;
   infinityScroll?: boolean;
 };
+
+export type MediaType = "filmes" | "series";

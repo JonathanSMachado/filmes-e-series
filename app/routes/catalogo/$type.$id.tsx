@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from "remix";
 import Card from "~/components/Card";
-import AppError from "~/components/AppError";
 import { formatToPtBr } from "~/utils/date";
-import { TMDBItem, TMDBItemDetails, TMDBResponse } from "~/utils/type";
+import {
+  TMDBItem,
+  TMDBItemDetails,
+  TMDBResponse,
+  MediaType,
+} from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -13,7 +17,7 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Error("Invalid params.");
   }
 
-  return await TMDBApi.getDetails({ type, id });
+  return await TMDBApi.getDetails({ type: type as MediaType, id });
 };
 
 export default function Details() {
@@ -31,7 +35,7 @@ export default function Details() {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    fetcher.load(`/${item.type}/${item.id}/recommendations?limit=6`);
+    fetcher.load(`/catalogo/${item.type}/${item.id}/recommendations?limit=6`);
   }, [item]);
 
   useEffect(() => {
@@ -55,7 +59,7 @@ export default function Details() {
           <h1 className="text-4xl text-slate-300">{item.title}</h1>
           <p className="text-sm">
             {item.release_date &&
-              `Data de lançamento ${formatToPtBr(item.release_date)}`}
+              `Data do lançamento ${formatToPtBr(item.release_date)}`}
           </p>
           {item.tagline && <p className="italic my-6">{item.tagline}</p>}
           <div className="mt-6">
@@ -74,10 +78,12 @@ export default function Details() {
               key={`${item.type}-${item.id}`}
               item={item}
               size="small"
-              islink={true}
+              link={`/catalogo/${item.type}/${item.id}`}
             />
           ))}
         </div>
+
+        <Outlet context={recommendations.results} />
 
         {recommendations.results.length < recommendations.total_results && (
           <Link to={`recommendations`}>Ver mais</Link>
@@ -86,11 +92,3 @@ export default function Details() {
     </main>
   );
 }
-
-// export const ErrorBoundary = () => {
-//   return (
-//     <AppError>
-//       <p>Ocorreu um erro ao carregar os dados.</p>
-//     </AppError>
-//   );
-// };

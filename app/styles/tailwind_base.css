@@ -13,3 +13,8 @@
 .card > img {
   @apply rounded-3xl object-cover h-full;
 }
+
+form input[type="search"]:focus {
+  box-shadow: none;
+  outline: none;
+}
