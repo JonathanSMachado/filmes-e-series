@@ -5,6 +5,7 @@ import { TMDBItem } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
 import Layout from "~/layout/Layout";
 import HeroArea from "~/components/HeroArea";
+import Footer from "~/components/Footer";
 
 export const loader: LoaderFunction = async (): Promise<Response> => {
   const data = await TMDBApi.getMostPopular({ limit: 12 });
@@ -29,6 +30,7 @@ export default function Index() {
           </button>
         </Form>
       </div>
+      <Footer />
     </Layout>
   );
 }

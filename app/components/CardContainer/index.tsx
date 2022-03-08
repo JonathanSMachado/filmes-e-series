@@ -78,7 +78,7 @@ export default function CardContainer(props: CardContainerProps) {
   }
 
   return (
-    <main ref={mainHeight} className="px-10 mt-10">
+    <div ref={mainHeight} className="px-10 mt-10">
       {showSearch && (
         <div className="flex justify-center my-10">
           <Form reloadDocument method="get">
@@ -106,6 +106,6 @@ export default function CardContainer(props: CardContainerProps) {
           />
         ))}
       </div>
-    </main>
+    </div>
   );
 }
