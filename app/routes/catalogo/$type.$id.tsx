@@ -44,7 +44,7 @@ export default function Details() {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    fetcher.load(`/catalogo/${item.type}/${item.id}/recommendations?limit=6`);
+    fetcher.load(`/catalogo/${item.type}/${item.id}/recomendacoes?limit=6`);
   }, [item]);
 
   useEffect(() => {

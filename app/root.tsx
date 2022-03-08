@@ -9,9 +9,13 @@ import {
 } from "remix";
 import type { MetaFunction } from "remix";
 import tailwindStyles from "~/styles/tailwind.css";
+import NProgress from "nprogress";
+import nProgressStyles from "nprogress/nprogress.css";
+import { useTransition } from "@remix-run/react";
+import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Catálogo de Filmes e Séries" };
 };
 
 export const links: LinksFunction = () => {
@@ -20,10 +24,24 @@ export const links: LinksFunction = () => {
       rel: "stylesheet",
       href: tailwindStyles,
     },
+    {
+      rel: "stylesheet",
+      href: nProgressStyles,
+    },
   ];
 };
 
 export default function App() {
+  const transition = useTransition();
+
+  useEffect(() => {
+    if (transition.state === "idle") {
+      NProgress.done();
+    } else {
+      NProgress.start();
+    }
+  }, [transition.state]);
+
   return (
     <html lang="en">
       <head>
