@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { LoaderFunction, useLoaderData, useOutletContext } from "remix";
+import { json, LoaderFunction, useLoaderData, useOutletContext } from "remix";
 import Card from "~/components/Card";
-import { getRecommendations } from "~/api/TMDB/api";
 import { MediaType, TMDBItem, TMDBResponse } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({
+  params,
+  request,
+}): Promise<Response> => {
   const type = params.type;
   const id = Number(params.id);
   const url = new URL(request.url);
@@ -16,12 +18,14 @@ export const loader: LoaderFunction = async ({ params, request }) => {
     throw new Error("Invalid params.");
   }
 
-  return await TMDBApi.getRecommendations({
+  const data = await TMDBApi.getRecommendations({
     type: type as MediaType,
     id,
     page,
     limit,
   });
+
+  return json(data);
 };
 
 export default function Recommendations() {

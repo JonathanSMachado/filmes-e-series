@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData } from "remix";
+import { json, LoaderFunction, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
 import { TMDBItem } from "~/utils/type";
@@ -10,16 +10,19 @@ const getPage = (searchParams: URLSearchParams) => {
 
 export const loader: LoaderFunction = async ({
   request,
-}): Promise<TMDBItem[]> => {
+}): Promise<Response> => {
   const url = new URL(request.url);
   const page = getPage(url.searchParams);
   const search = url.searchParams.get("search");
+  let data: TMDBItem[] = [];
 
   if (search) {
-    return TMDBApi.search({ query: search, page });
+    data = await TMDBApi.search({ query: search, page });
+  } else {
+    data = await TMDBApi.getMostPopular({ page });
   }
 
-  return TMDBApi.getMostPopular({ page });
+  return json(data);
 };
 
 export default function Catalog() {

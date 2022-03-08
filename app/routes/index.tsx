@@ -1,4 +1,4 @@
-import { Form, LoaderFunction, useLoaderData } from "remix";
+import { Form, json, LoaderFunction, useLoaderData } from "remix";
 import CardContainer from "~/components/CardContainer";
 import AppError from "~/components/AppError";
 import { TMDBItem } from "~/utils/type";
@@ -6,17 +6,19 @@ import { TMDBApi } from "~/api/TMDB";
 import Layout from "~/layout/Layout";
 import HeroArea from "~/components/HeroArea";
 
-export const loader: LoaderFunction = async (): Promise<TMDBItem[]> => {
-  return await TMDBApi.getMostPopular({ limit: 12 });
+export const loader: LoaderFunction = async (): Promise<Response> => {
+  const data = await TMDBApi.getMostPopular({ limit: 12 });
+
+  return json(data);
 };
 
 export default function Index() {
-  const items = useLoaderData<TMDBItem[]>();
+  const data = useLoaderData<TMDBItem[]>();
 
   return (
     <Layout>
       <HeroArea />
-      <CardContainer items={items} />
+      <CardContainer items={data} />
       <div className="px-10 mt-10 flex justify-center">
         <Form action="catalogo">
           <button

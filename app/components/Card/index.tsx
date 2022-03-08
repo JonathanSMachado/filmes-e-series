@@ -4,6 +4,7 @@ import { CardProps } from "~/utils/type";
 export default function Card({ item, link, size }: CardProps) {
   return (
     <Link
+      prefetch="intent"
       to={link ?? ""}
       className={`card group ${!link ? "pointer-events-none" : ""} ${
         size ? `card-${size}` : ""

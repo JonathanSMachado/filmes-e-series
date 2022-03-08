@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from "remix";
+import {
+  json,
+  Link,
+  LoaderFunction,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+} from "remix";
 import Card from "~/components/Card";
 import { formatToPtBr } from "~/utils/date";
 import {
@@ -10,14 +17,16 @@ import {
 } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
   const { type, id } = params;
 
   if (typeof type !== "string" || typeof id !== "string") {
     throw new Error("Invalid params.");
   }
 
-  return await TMDBApi.getDetails({ type: type as MediaType, id });
+  const data = await TMDBApi.getDetails({ type: type as MediaType, id });
+
+  return json(data);
 };
 
 export default function Details() {
