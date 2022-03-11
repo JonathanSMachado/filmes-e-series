@@ -1,9 +1,9 @@
 export default function Footer() {
   const linkStyle =
-    "cursor-pointer transition-colors ease-in-out text-slate-500 hover:text-slate-400";
+    "cursor-pointer transition-colors ease-in-out text-cyan-700 hover:text-cyan-500";
   return (
-    <footer className="absolute bottom-0 left-0 right-0">
-      <div className="flex items-center justify-center py-5 text-slate-500">
+    <footer className="mt-8">
+      <div className="flex items-center justify-center py-5 text-cyan-700">
         <p>
           Desenvolvido com
           <span className="mx-4">|</span>

@@ -1,9 +1,9 @@
 import {
+  MediaType,
   TMDBItem,
   TMDBItemDetails,
   TMDBResponse,
   TMDBResponseItem,
-  MediaType,
 } from "~/utils/type";
 
 export async function getMostPopular({
@@ -183,6 +183,39 @@ export async function getSimilar({
   );
 
   return data;
+}
+
+export async function getTrending({
+  type,
+  page,
+  limit,
+}: {
+  type?: MediaType;
+  page?: number;
+  limit?: number;
+}): Promise<TMDBItem[]> {
+  const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+  const endpoint = type
+    ? `${convertTypeToTMDB(type)}/trending/week`
+    : "trending/all/week";
+
+  const data = await fetchData({ endpoint, page: page ?? 1 });
+
+  if (limit) {
+    data.results = data.results.slice(0, limit);
+  }
+
+  return data.results.map((item: TMDBResponseItem): TMDBItem => {
+    return {
+      id: item.id,
+      title: item.title || item.name || "",
+      adult: item.adult || false,
+      vote_average: item.vote_average,
+      poster_path: tmdbImagesUrl + item.poster_path,
+      type: item.title ? "filmes" : "series",
+      popularity: item.popularity,
+    };
+  });
 }
 
 export async function search({

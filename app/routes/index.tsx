@@ -1,14 +1,14 @@
 import { Form, json, LoaderFunction, useLoaderData } from "remix";
-import CardContainer from "~/components/CardContainer";
-import AppError from "~/components/AppError";
-import { TMDBItem } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
-import Layout from "~/layout/Layout";
+import AppError from "~/components/AppError";
+import Button from "~/components/Button";
+import CardContainer from "~/components/CardContainer";
 import HeroArea from "~/components/HeroArea";
-import Footer from "~/components/Footer";
+import Layout from "~/layout/Layout";
+import { TMDBItem } from "~/utils/type";
 
 export const loader: LoaderFunction = async (): Promise<Response> => {
-  const data = await TMDBApi.getMostPopular({ limit: 12 });
+  const data = await TMDBApi.getTrending({ limit: 12 });
 
   return json(data);
 };
@@ -22,15 +22,11 @@ export default function Index() {
       <CardContainer items={data} />
       <div className="px-10 mt-10 flex justify-center">
         <Form action="catalogo">
-          <button
-            type="submit"
-            className="px-5 py-3 rounded-xl border border-slate-500 text-slate-400 shadow-md shadow-slate-700 hover:bg-slate-700 hover:scale-105 hover:shadow-lg hover:shadow-slate-700 transition-all ease-in-out duration-100"
-          >
+          <Button className="mt-6" type="submit" size="large" variant="primary">
             Ver catálogo completo
-          </button>
+          </Button>
         </Form>
       </div>
-      <Footer />
     </Layout>
   );
 }

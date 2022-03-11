@@ -50,7 +50,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col bg-gradient-to-tr from-slate-900 to-slate-700 min-h-screen">
+      <body className="flex flex-col bg-gradient-to-tr from-slate-800 to-slate-600 min-h-screen">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

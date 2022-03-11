@@ -54,7 +54,7 @@ export default function CardContainer(props: CardContainerProps) {
 
     useEffect(() => {
       if (!shouldFetch || !height) return;
-      if (clientHeight + scrollPosition + 400 < height) return;
+      if (clientHeight + scrollPosition + 100 < height) return;
 
       fetcher.load(
         `/catalogo?${search ? `search=${search}&` : ""}page=${page}`
@@ -85,7 +85,8 @@ export default function CardContainer(props: CardContainerProps) {
             <input
               type="search"
               name="search"
-              placeholder="Buscar filmes e séries"
+              placeholder="Buscar filmes e séries..."
+              autoComplete="off"
               className="rounded-l-md border border-r-0 border-slate-400 w-96 text-slate-700 focus:border-slate-400"
             />
             <button
@@ -97,7 +98,7 @@ export default function CardContainer(props: CardContainerProps) {
           </Form>
         </div>
       )}
-      <div className="flex flex-wrap justify-around items-center gap-6">
+      <div className="flex flex-wrap justify-center gap-12">
         {items.sort(sortByPopularity).map((item: TMDBItem) => (
           <Card
             key={`${item.type}-${item.id}`}

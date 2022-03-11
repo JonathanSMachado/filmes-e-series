@@ -7,15 +7,15 @@ import {
   useFetcher,
   useLoaderData,
 } from "remix";
+import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import { formatToPtBr } from "~/utils/date";
 import {
+  MediaType,
   TMDBItem,
   TMDBItemDetails,
   TMDBResponse,
-  MediaType,
 } from "~/utils/type";
-import { TMDBApi } from "~/api/TMDB";
 
 export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
   const { type, id } = params;
@@ -75,7 +75,9 @@ export default function Details() {
             <h3 className="text-2xl mb-4 font-semibold text-slate-300">
               Sinopse
             </h3>
-            <p className="text-xl text-slate-200">{item.overview}</p>
+            <p className="text-justify text-xl text-slate-200">
+              {item.overview}
+            </p>
           </div>
         </article>
       </section>
@@ -95,7 +97,11 @@ export default function Details() {
         <Outlet context={recommendations.results} />
 
         {recommendations.results.length < recommendations.total_results && (
-          <Link to={`recommendations`}>Ver mais</Link>
+          <div className="text-center mt-12">
+            <Link to={`recommendations`} className="btn btn-large btn-primary">
+              Ver mais
+            </Link>
+          </div>
         )}
       </section>
     </main>

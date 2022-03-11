@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import Footer from "~/components/Footer";
 import Header from "~/components/Header";
-import HeroArea from "~/components/HeroArea";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
       <main className="flex-1 relative">{children}</main>
+      <Footer />
     </>
   );
 }

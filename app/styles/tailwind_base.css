@@ -3,18 +3,38 @@
 @tailwind utilities;
 
 .card {
-  @apply flex-shrink-0 w-48 h-72 relative rounded-3xl shadow-slate-700 shadow-lg transition-all duration-200 delay-100 ease-in-out hover:scale-110 hover:shadow-yellow-100 focus-visible:outline-none focus:scale-110 focus:shadow-yellow-100;
+  @apply flex-shrink-0 w-60 h-auto relative rounded-3xl shadow-slate-700 shadow-lg transition-all duration-200 delay-100 ease-in-out hover:scale-110 hover:shadow-cyan-500 focus-visible:outline-none focus:scale-110 focus:shadow-yellow-100;
+}
+
+.card.card-small {
+  @apply w-44;
 }
 
 .card.card-large {
-  @apply w-80 h-auto;
+  @apply w-80;
 }
 
 .card > img {
-  @apply rounded-3xl object-cover h-full;
+  @apply rounded-3xl w-full h-full;
 }
 
 form input[type="search"]:focus {
   box-shadow: none;
   outline: none;
+}
+
+.btn {
+  @apply rounded-md shadow-md px-3 py-2 text-base transition-all ease-in-out duration-100;
+}
+
+.btn-primary {
+  @apply text-zinc-300 hover:text-zinc-100 bg-cyan-700 hover:bg-cyan-500 hover:shadow-cyan-700;
+}
+
+.btn-small {
+  @apply rounded-sm shadow-sm px-2 py-1 text-sm;
+}
+
+.btn-large {
+  @apply rounded-lg shadow-lg px-5 py-3 text-xl;
 }

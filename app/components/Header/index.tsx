@@ -8,7 +8,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-transparent text-slate-200">
+    <header className="bg-transparent text-zinc-300">
       HEADER
       {!isHome && (
         <a href="/" className="float-right">
