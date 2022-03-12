@@ -2,7 +2,7 @@ export default function Footer() {
   const linkStyle =
     "cursor-pointer transition-colors ease-in-out text-cyan-700 hover:text-cyan-500";
   return (
-    <footer className="mt-8">
+    <footer className="container mt-8">
       <div className="flex items-center justify-center py-5 text-cyan-700">
         <p>
           Desenvolvido com

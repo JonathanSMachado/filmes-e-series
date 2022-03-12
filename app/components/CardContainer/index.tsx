@@ -78,7 +78,7 @@ export default function CardContainer(props: CardContainerProps) {
   }
 
   return (
-    <div ref={mainHeight} className="px-10 mt-10">
+    <div ref={mainHeight} className="px-2 mt-10">
       {showSearch && (
         <div className="flex justify-center my-10">
           <Form reloadDocument method="get">
@@ -98,7 +98,7 @@ export default function CardContainer(props: CardContainerProps) {
           </Form>
         </div>
       )}
-      <div className="flex flex-wrap justify-center gap-12">
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
         {items.sort(sortByPopularity).map((item: TMDBItem) => (
           <Card
             key={`${item.type}-${item.id}`}

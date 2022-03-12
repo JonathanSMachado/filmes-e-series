@@ -8,7 +8,7 @@ import Layout from "~/layout/Layout";
 import { TMDBItem } from "~/utils/type";
 
 export const loader: LoaderFunction = async (): Promise<Response> => {
-  const data = await TMDBApi.getTrending({ limit: 12 });
+  const data = await TMDBApi.getTrending({});
 
   return json(data);
 };

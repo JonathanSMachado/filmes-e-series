@@ -1,3 +1,8 @@
+import { useTransition } from "@remix-run/react";
+import NProgress from "nprogress";
+import nProgressStyles from "nprogress/nprogress.css";
+import { useEffect } from "react";
+import type { MetaFunction } from "remix";
 import {
   Links,
   LinksFunction,
@@ -7,15 +12,13 @@ import {
   Scripts,
   ScrollRestoration,
 } from "remix";
-import type { MetaFunction } from "remix";
 import tailwindStyles from "~/styles/tailwind.css";
-import NProgress from "nprogress";
-import nProgressStyles from "nprogress/nprogress.css";
-import { useTransition } from "@remix-run/react";
-import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
-  return { title: "Catálogo de Filmes e Séries" };
+  return {
+    title: "Filmes e Séries",
+    description: "Catálogo de filmes e séries",
+  };
 };
 
 export const links: LinksFunction = () => {
@@ -27,6 +30,15 @@ export const links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: nProgressStyles,
+    },
+    {
+      rel: "icon",
+      type: "image/ico",
+      href: "/fav_icon.ico",
+    },
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap",
     },
   ];
 };
@@ -50,7 +62,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col bg-gradient-to-tr from-slate-800 to-slate-600 min-h-screen">
+      <body className="flex flex-col items-center bg-gradient-to-tr from-slate-800 to-slate-600 min-h-screen">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
