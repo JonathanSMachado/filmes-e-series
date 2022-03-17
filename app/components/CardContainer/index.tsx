@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Form, useFetcher } from "remix";
-import { CardContainerProps, TMDBItem } from "~/utils/type";
+import { useFetcher } from "remix";
+import { CardContainerProps, TMDBItem } from "~/utils/types";
 import Card from "../Card";
 
 const sortByPopularity = (a: TMDBItem, b: TMDBItem) =>
@@ -14,9 +14,9 @@ export default function CardContainer(props: CardContainerProps) {
   const [page, setPage] = useState(2);
   const fetcher = useFetcher();
   const [items, setItems] = useState<TMDBItem[]>(props.items);
-  const showSearch = props.showSearch || false;
   const infinityScroll = props.infinityScroll || false;
-  const [search, setSearch] = useState<string | null>("");
+  const [search, setSearch] = useState<string | null>(null);
+  const [type, setType] = useState<string | null>(null);
 
   const mainHeight = useCallback(
     (node) => {
@@ -36,13 +36,9 @@ export default function CardContainer(props: CardContainerProps) {
 
       if (typeof window !== "undefined") {
         window.addEventListener("scroll", scrollListener);
-
-        if (window && window.location.search.includes("search")) {
-          const url = new URL(window.location.href);
-          const search = url.searchParams.get("search");
-
-          setSearch(search);
-        }
+        const url = new URL(window.location.href);
+        setSearch(url.searchParams.get("search"));
+        setType(url.pathname.split("/")[2]);
       }
 
       return () => {
@@ -56,49 +52,44 @@ export default function CardContainer(props: CardContainerProps) {
       if (!shouldFetch || !height) return;
       if (clientHeight + scrollPosition + 100 < height) return;
 
-      fetcher.load(
-        `/catalogo?${search ? `search=${search}&` : ""}page=${page}`
-      );
+      let endpoint: string = `/catalogo?page=${page}`;
+
+      if (search) {
+        endpoint += `&search=${search}`;
+      }
+
+      if (type) {
+        endpoint += `&type=${type}`;
+      }
+
+      fetcher.load(endpoint);
 
       setShouldFetch(false);
     }, [clientHeight, scrollPosition, fetcher]);
 
     useEffect(() => {
-      if (fetcher.data && fetcher.data.length === 0) {
+      const items = fetcher?.data?.items;
+
+      if (items?.length === 0) {
         setShouldFetch(false);
         return;
       }
 
-      if (fetcher.data && fetcher.data.length > 0) {
-        setItems((prevItems: TMDBItem[]) => [...prevItems, ...fetcher.data]);
+      if (items?.length > 0) {
+        setItems((prevItems: TMDBItem[]) => [...prevItems, ...items]);
         setPage((page: number) => page + 1);
         setShouldFetch(true);
       }
     }, [fetcher.data]);
   }
 
+  useEffect(() => {
+    setItems(props.items);
+  }, [props.items]);
+
   return (
-    <div ref={mainHeight} className="px-2 mt-10">
-      {showSearch && (
-        <div className="flex justify-center my-10">
-          <Form reloadDocument method="get">
-            <input
-              type="search"
-              name="search"
-              placeholder="Buscar filmes e séries..."
-              autoComplete="off"
-              className="rounded-l-md border border-r-0 border-slate-400 w-96 text-slate-700 focus:border-slate-400"
-            />
-            <button
-              type="submit"
-              className="rounded-r-md border border-l-0 border-slate-400 h-full px-7 text-slate-200 bg-slate-600 hover:bg-slate-500 transition-all ease-in-out"
-            >
-              Procurar
-            </button>
-          </Form>
-        </div>
-      )}
-      <div className="flex flex-wrap justify-center gap-x-6 gap-y-12">
+    <div ref={mainHeight} className="px-6 mt-10">
+      <div className="flex flex-wrap justify-around gap-x-4 gap-y-10">
         {items.sort(sortByPopularity).map((item: TMDBItem) => (
           <Card
             key={`${item.type}-${item.id}`}

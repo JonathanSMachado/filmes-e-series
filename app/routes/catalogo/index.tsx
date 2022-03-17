@@ -1,11 +1,16 @@
 import { json, LoaderFunction, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
-import { TMDBItem } from "~/utils/type";
+import { TMDBItem } from "~/utils/types";
 
 const getPage = (searchParams: URLSearchParams) => {
   const page = searchParams.get("page");
   return page ? parseInt(page) : 1;
+};
+
+type LoaderData = {
+  items: TMDBItem[];
+  search: string | undefined;
 };
 
 export const loader: LoaderFunction = async ({
@@ -14,21 +19,33 @@ export const loader: LoaderFunction = async ({
   const url = new URL(request.url);
   const page = getPage(url.searchParams);
   const search = url.searchParams.get("search");
-  let data: TMDBItem[] = [];
+  const type = url.searchParams.get("type");
+  let items: TMDBItem[] = [];
+
+  console.log(type);
 
   if (search) {
-    data = await TMDBApi.search({ query: search, page });
+    items = await TMDBApi.search({ query: search, page });
+  } else if (type) {
+    items = await TMDBApi.getMostPopular({ type, page });
   } else {
-    data = await TMDBApi.getMostPopular({ page });
+    items = await TMDBApi.getMostPopular({ page });
   }
 
-  return json(data);
+  return json({ search, items });
 };
 
 export default function Catalog() {
-  const items = useLoaderData<TMDBItem[]>();
+  const { search, items } = useLoaderData<LoaderData>();
 
   return (
-    <CardContainer items={items} showSearch={true} infinityScroll={true} />
+    <>
+      {search && (
+        <p className="text-slate-300 text-xl">
+          Resultado da busca por <em className="text-slate-100">{search}</em>
+        </p>
+      )}
+      <CardContainer items={items} infinityScroll={true} />
+    </>
   );
 }

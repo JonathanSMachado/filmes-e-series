@@ -33,7 +33,7 @@ export type TMDBItem = {
   vote_average: number;
   popularity: number;
   poster_path: string;
-  type: MediaType;
+  type: "filmes" | "series";
 };
 
 export type TMDBItemDetails = {
@@ -46,7 +46,7 @@ export type TMDBItemDetails = {
   popularity: number;
   poster_path: string;
   title: string | undefined;
-  type: MediaType;
+  type: "filmes" | "series";
   vote_average: number;
   vote_count: number;
   release_date?: string;
@@ -65,8 +65,5 @@ export type CardProps = {
 
 export type CardContainerProps = {
   items: TMDBItem[];
-  showSearch?: boolean;
   infinityScroll?: boolean;
 };
-
-export type MediaType = "filmes" | "series";

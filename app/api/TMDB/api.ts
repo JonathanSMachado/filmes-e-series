@@ -1,17 +1,19 @@
+import { convertPeriodToTMDB, convertTypeToTMDB } from "~/utils/converters";
 import {
-  MediaType,
   TMDBItem,
   TMDBItemDetails,
   TMDBResponse,
   TMDBResponseItem,
-} from "~/utils/type";
+} from "~/utils/types";
+
+const TYPES = ["movie", "tv"];
 
 export async function getMostPopular({
   type,
   page,
   limit,
 }: {
-  type?: MediaType;
+  type?: string | null;
   page?: number;
   limit?: number;
 }): Promise<TMDBItem[]> {
@@ -37,11 +39,9 @@ export async function getMostPopular({
         })
       );
     } else {
-      const types: MediaType[] = ["filmes", "series"];
-
-      for (const type of types) {
+      for (const type of TYPES) {
         const data = await fetchData({
-          endpoint: `${convertTypeToTMDB(type)}/popular`,
+          endpoint: `${type}/popular`,
           page: page ?? 1,
         });
 
@@ -75,7 +75,7 @@ export async function getDetails({
   type,
   id,
 }: {
-  type: MediaType;
+  type: string;
   id: string;
 }): Promise<TMDBItemDetails> {
   try {
@@ -114,7 +114,7 @@ export async function getRecommendations({
   page,
   limit,
 }: {
-  type: MediaType;
+  type: string;
   id: number;
   page?: number;
   limit?: number;
@@ -155,7 +155,7 @@ export async function getSimilar({
   page,
   limit,
 }: {
-  type: MediaType;
+  type: string;
   id: number;
   page?: number;
   limit?: number;
@@ -189,15 +189,18 @@ export async function getTrending({
   type,
   page,
   limit,
+  period,
 }: {
-  type?: MediaType;
+  type?: string;
   page?: number;
   limit?: number;
+  period?: string | null;
 }): Promise<TMDBItem[]> {
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
-  const endpoint = type
-    ? `${convertTypeToTMDB(type)}/trending/week`
-    : "trending/all/week";
+  let endpoint = type
+    ? `trending/${convertTypeToTMDB(type)}/`
+    : "trending/all/";
+  endpoint += period ? convertPeriodToTMDB(period) : "day";
 
   const data = await fetchData({ endpoint, page: page ?? 1 });
 
@@ -224,7 +227,7 @@ export async function search({
   page,
 }: {
   query: string;
-  type?: MediaType;
+  type?: string;
   page?: number;
 }): Promise<TMDBItem[]> {
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
@@ -250,13 +253,11 @@ export async function search({
       })
     );
   } else {
-    const types: MediaType[] = ["filmes", "series"];
-
     let collection: TMDBItem[] = [];
 
-    for (const type of types) {
+    for (const type of TYPES) {
       const data = await fetchData({
-        endpoint: `search/${convertTypeToTMDB(type)}`,
+        endpoint: `search/${type}`,
         query,
         page: page ?? 1,
       });
@@ -314,15 +315,4 @@ async function fetchData({
   );
 
   return await response.json();
-}
-
-function convertTypeToTMDB(type: MediaType): string {
-  switch (type) {
-    case "filmes":
-      return "movie";
-    case "series":
-      return "tv";
-    default:
-      return "";
-  }
 }

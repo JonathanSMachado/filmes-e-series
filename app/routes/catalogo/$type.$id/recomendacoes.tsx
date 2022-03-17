@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { json, LoaderFunction, useLoaderData, useOutletContext } from "remix";
-import Card from "~/components/Card";
-import { MediaType, TMDBItem, TMDBResponse } from "~/utils/type";
 import { TMDBApi } from "~/api/TMDB";
+import Card from "~/components/Card";
+import { TMDBItem, TMDBResponse } from "~/utils/types";
 
 export const loader: LoaderFunction = async ({
   params,
@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({
   }
 
   const data = await TMDBApi.getRecommendations({
-    type: type as MediaType,
+    type,
     id,
     page,
     limit,
@@ -48,7 +48,7 @@ export default function Recommendations() {
   }, [oldItems, data]);
 
   return (
-    <div className="flex flex-wrap justify-around items-center gap-6">
+    <div className="flex flex-wrap justify-around items-center gap-y-10 gap-x-6 ">
       {items.map((item: TMDBItem) => (
         <Card
           key={`${item.type}-${item.id}`}

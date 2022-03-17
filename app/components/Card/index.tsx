@@ -1,5 +1,5 @@
 import { Link } from "remix";
-import { CardProps } from "~/utils/type";
+import { CardProps } from "~/utils/types";
 
 export default function Card({ item, link, size }: CardProps) {
   return (
@@ -16,8 +16,8 @@ export default function Card({ item, link, size }: CardProps) {
         {item.popularity}
       </div>
       {link && (
-        <p className="absolute bottom-0 w-full rounded-b-3xl border-0 opacity-0 h-0 flex justify-center items-center bg-cyan-500 text-slate-200 uppercase text-sm transition-all ease-in-out group-hover:delay-100 group-hover:opacity-100 group-hover:h-7 group-focus:delay-100 group-focus:opacity-100 group-focus:h-7">
-          Ver detalhes
+        <p className="absolute bottom-0 w-full rounded-b-3xl border-0 opacity-0 h-0 px-4 flex justify-center items-center bg-cyan-500 text-slate-200 uppercase text-sm transition-all ease-in-out text-center group-hover:delay-100 group-hover:opacity-100 group-hover:h-1/3 group-focus:delay-100 group-focus:opacity-100 group-focus:h-1/3">
+          {item.title}
         </p>
       )}
     </Link>

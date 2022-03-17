@@ -1,21 +1,9 @@
 import { useEffect, useState } from "react";
-import {
-  json,
-  Link,
-  LoaderFunction,
-  Outlet,
-  useFetcher,
-  useLoaderData,
-} from "remix";
+import { json, LoaderFunction, useFetcher, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import { formatToPtBr } from "~/utils/date";
-import {
-  MediaType,
-  TMDBItem,
-  TMDBItemDetails,
-  TMDBResponse,
-} from "~/utils/type";
+import { TMDBItem, TMDBItemDetails, TMDBResponse } from "~/utils/types";
 
 export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
   const { type, id } = params;
@@ -24,7 +12,7 @@ export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
     throw new Error("Invalid params.");
   }
 
-  const data = await TMDBApi.getDetails({ type: type as MediaType, id });
+  const data = await TMDBApi.getDetails({ type, id });
 
   return json(data);
 };
@@ -54,7 +42,7 @@ export default function Details() {
   }, [fetcher.data]);
 
   return (
-    <main className="mt-10 text-slate-400">
+    <main className="text-slate-400">
       <section
         className="flex flex-col sm:flex-row gap-10 p-10 py-20 bg-cover bg-no-repeat"
         style={{
@@ -83,7 +71,7 @@ export default function Details() {
       </section>
       <section className="p-10">
         <p className="text-xl text-slate-300 mb-10">Recomendados</p>
-        <div className="flex flex-wrap justify-around items-center gap-6">
+        <div className="flex flex-wrap justify-around items-center gap-6 mb-10">
           {recommendations.results.map((item: TMDBItem) => (
             <Card
               key={`${item.type}-${item.id}`}
@@ -94,15 +82,15 @@ export default function Details() {
           ))}
         </div>
 
-        <Outlet context={recommendations.results} />
+        {/* <Outlet context={[recommendations.results]} />
 
-        {recommendations.results.length < recommendations.total_results && (
+        {recommendations.page < recommendations.total_pages && (
           <div className="text-center mt-12">
-            <Link to={`recommendations`} className="btn btn-large btn-primary">
+            <Link to={`recomendacoes`} className="btn btn-large btn-primary">
               Ver mais
             </Link>
           </div>
-        )}
+        )} */}
       </section>
     </main>
   );
