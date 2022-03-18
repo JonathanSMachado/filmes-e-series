@@ -50,7 +50,7 @@ export default function CardContainer(props: CardContainerProps) {
 
     useEffect(() => {
       if (!shouldFetch || !height) return;
-      if (clientHeight + scrollPosition + 100 < height) return;
+      if (clientHeight + scrollPosition + 200 < height) return;
 
       let endpoint: string = `/catalogo?page=${page}`;
 

@@ -25,7 +25,11 @@ export const loader: LoaderFunction = async ({
     limit,
   });
 
-  return json(data);
+  return json(data, {
+    headers: {
+      "Cache-Control": "max-age=60, stale-while-revalidate=60",
+    },
+  });
 };
 
 export default function Recommendations() {

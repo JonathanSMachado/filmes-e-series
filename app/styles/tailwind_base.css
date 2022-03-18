@@ -7,7 +7,7 @@ body {
 }
 
 .card {
-  @apply flex-shrink-0 w-60 h-auto relative rounded-3xl shadow-slate-700 shadow-lg transition-all duration-200 delay-100 ease-in-out hover:scale-110 hover:shadow-cyan-500 focus-visible:outline-none focus:scale-110 focus:shadow-yellow-100;
+  @apply flex-shrink-0 w-60 h-auto relative rounded-md shadow-slate-700 shadow-lg transition-all duration-200 delay-100 ease-in-out hover:shadow-cyan-500 focus-visible:outline-none focus:shadow-cyan-500;
 }
 
 .card.card-small {
@@ -18,13 +18,29 @@ body {
   @apply w-80;
 }
 
-.card > img {
-  @apply rounded-3xl w-full h-full;
+.card > .card-background {
+  @apply rounded-md w-full h-full;
 }
 
-form input[type="search"]:focus {
-  box-shadow: none;
-  outline: none;
+.card > .card-description {
+  @apply absolute bottom-0 w-full rounded-b-md border-0 opacity-0 h-0 px-4 flex flex-col justify-center items-center bg-cyan-500 text-slate-200 uppercase text-sm transition-all ease-in-out text-center;
+}
+
+.card > .card-adult-content-alert {
+  @apply absolute bg-slate-200 rounded-full;
+  top: 5px;
+  left: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+}
+
+.card > .card-adult-content-alert > .image {
+  width: 100%;
+  height: 100%;
+  mask: url("/images/18-plus.svg");
+  -webkit-mask: url("/images/18-plus.svg");
+  background-color: rgb(223, 19, 19);
 }
 
 .btn {

@@ -36,6 +36,7 @@ export async function getMostPopular({
           poster_path: tmdbImagesUrl + item.poster_path,
           type: item.title ? "filmes" : "series",
           popularity: item.popularity,
+          release_date: item.release_date ?? item.first_air_date,
         })
       );
     } else {
@@ -54,6 +55,7 @@ export async function getMostPopular({
             poster_path: tmdbImagesUrl + item.poster_path,
             type: item.title ? "filmes" : "series",
             popularity: item.popularity,
+            release_date: item.release_date ?? item.first_air_date,
           })
         );
 
@@ -98,7 +100,7 @@ export async function getDetails({
       type: data.title ? "filmes" : "series",
       vote_average: data.vote_average,
       vote_count: data.vote_count,
-      release_date: data.release_date,
+      release_date: data.release_date ?? data.first_air_date,
       number_of_episodes: data.number_of_episodes,
       number_of_seasons: data.number_of_seasons,
       tagline: data.tagline || "",
@@ -140,6 +142,7 @@ export async function getRecommendations({
         poster_path: tmdbImagesUrl + item.poster_path,
         type: item.title ? "filmes" : "series",
         popularity: item.popularity,
+        release_date: item.release_date ?? item.first_air_date,
       })
     );
 
@@ -179,6 +182,7 @@ export async function getSimilar({
       poster_path: tmdbImagesUrl + item.poster_path,
       type: item.title ? "filmes" : "series",
       popularity: item.popularity,
+      release_date: item.release_date ?? item.first_air_date,
     })
   );
 
@@ -217,6 +221,7 @@ export async function getTrending({
       poster_path: tmdbImagesUrl + item.poster_path,
       type: item.title ? "filmes" : "series",
       popularity: item.popularity,
+      release_date: item.release_date ?? item.first_air_date,
     };
   });
 }
@@ -250,6 +255,7 @@ export async function search({
         poster_path: tmdbImagesUrl + item.poster_path,
         type: item.title ? "filmes" : "series",
         popularity: item.popularity,
+        release_date: item.release_date ?? item.first_air_date,
       })
     );
   } else {
@@ -271,6 +277,7 @@ export async function search({
           poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
           type: item.title ? "filmes" : "series",
           popularity: item.popularity,
+          release_date: item.release_date ?? item.first_air_date,
         })
       );
 

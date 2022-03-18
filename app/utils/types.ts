@@ -34,6 +34,7 @@ export type TMDBItem = {
   popularity: number;
   poster_path: string;
   type: "filmes" | "series";
+  release_date?: string;
 };
 
 export type TMDBItemDetails = {

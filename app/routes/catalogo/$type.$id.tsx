@@ -14,7 +14,11 @@ export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
 
   const data = await TMDBApi.getDetails({ type, id });
 
-  return json(data);
+  return json(data, {
+    headers: {
+      "Cache-Control": "max-age=60, stale-while-revalidate=60",
+    },
+  });
 };
 
 export default function Details() {

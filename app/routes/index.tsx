@@ -15,7 +15,11 @@ export const loader: LoaderFunction = async ({
   const period = url.searchParams.get("tendencias");
   const data = await TMDBApi.getTrending({ period });
 
-  return json(data);
+  return json(data, {
+    headers: {
+      "Cache-Control": "max-age=60, stale-while-revalidate=60",
+    },
+  });
 };
 
 export default function Index() {

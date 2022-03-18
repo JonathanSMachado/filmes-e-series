@@ -11,7 +11,14 @@ export const loader: LoaderFunction = async ({ params }) => {
   const type = params.type;
   const items = await TMDBApi.getMostPopular({ type });
 
-  return json({ items });
+  return json(
+    { items },
+    {
+      headers: {
+        "Cache-Control": "max-age=60, stale-while-revalidate=60",
+      },
+    }
+  );
 };
 
 export default function Type() {

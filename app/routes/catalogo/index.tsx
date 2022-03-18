@@ -22,8 +22,6 @@ export const loader: LoaderFunction = async ({
   const type = url.searchParams.get("type");
   let items: TMDBItem[] = [];
 
-  console.log(type);
-
   if (search) {
     items = await TMDBApi.search({ query: search, page });
   } else if (type) {
@@ -32,7 +30,14 @@ export const loader: LoaderFunction = async ({
     items = await TMDBApi.getMostPopular({ page });
   }
 
-  return json({ search, items });
+  return json(
+    { search, items },
+    {
+      headers: {
+        "Cache-Control": "max-age=60, stale-while-revalidate=60",
+      },
+    }
+  );
 };
 
 export default function Catalog() {
