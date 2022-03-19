@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { json, LoaderFunction, useFetcher, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
-import { formatToPtBr } from "~/utils/date";
+import { convertMinutesToFormattedHours, formatDateToPtBr } from "~/utils/date";
 import { TMDBItem, TMDBItemDetails, TMDBResponse } from "~/utils/types";
 
 export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
@@ -46,7 +46,7 @@ export default function Details() {
   }, [fetcher.data]);
 
   return (
-    <main className="text-slate-400">
+    <>
       <section
         className="flex flex-col sm:flex-row gap-10 p-10 py-20 bg-cover bg-no-repeat"
         style={{
@@ -56,11 +56,25 @@ export default function Details() {
         }}
       >
         <Card item={item} size={"large"} />
-        <article>
+        <article className="text-slate-400">
           <h1 className="text-4xl text-slate-300">{item.title}</h1>
-          <p className="text-sm">
-            {item.release_date &&
-              `Data do lançamento ${formatToPtBr(item.release_date)}`}
+          <p className="text-sm mt-2">
+            {/* <span
+              className="mr-3 p-1 border border-slate-400 rounded-lg"
+              title="Classificação"
+            >
+              {
+                item.genres
+                  .filter((genre) => genre.id <= 18)
+                  .map((genre) => genre.id)
+                  .sort((a, b) => a - b)[0]
+              }
+            </span> */}
+            {item.release_date && formatDateToPtBr(item.release_date)}
+            <span className="mx-2">-</span>
+            {item.genres.map((genre) => genre.name).join(", ")}
+            <span className="mx-2">-</span>
+            {convertMinutesToFormattedHours(item.runtime)}
           </p>
           {item.tagline && <p className="italic my-6">{item.tagline}</p>}
           <div className="mt-6">
@@ -68,34 +82,32 @@ export default function Details() {
               Sinopse
             </h3>
             <p className="text-justify text-xl text-slate-200">
-              {item.overview}
+              {item.overview ? (
+                item.overview
+              ) : (
+                <span className="italic">Nenhuma informação disponível</span>
+              )}
             </p>
           </div>
         </article>
       </section>
       <section className="p-10">
         <p className="text-xl text-slate-300 mb-10">Recomendados</p>
-        <div className="flex flex-wrap justify-around items-center gap-6 mb-10">
-          {recommendations.results.map((item: TMDBItem) => (
-            <Card
-              key={`${item.type}-${item.id}`}
-              item={item}
-              size="small"
-              link={`/catalogo/${item.type}/${item.id}`}
-            />
-          ))}
+        <div className="flex flex-wrap justify-around items-center gap-6 mb-10 text-slate-400">
+          {recommendations.results.length ? (
+            recommendations.results.map((item: TMDBItem) => (
+              <Card
+                key={`${item.type}-${item.id}`}
+                item={item}
+                size="small"
+                link={`/catalogo/${item.type}/${item.id}`}
+              />
+            ))
+          ) : (
+            <p>Ainda não existem recomendações para este título!</p>
+          )}
         </div>
-
-        {/* <Outlet context={[recommendations.results]} />
-
-        {recommendations.page < recommendations.total_pages && (
-          <div className="text-center mt-12">
-            <Link to={`recomendacoes`} className="btn btn-large btn-primary">
-              Ver mais
-            </Link>
-          </div>
-        )} */}
       </section>
-    </main>
+    </>
   );
 }

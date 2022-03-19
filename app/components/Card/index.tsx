@@ -1,6 +1,14 @@
 import { Link } from "remix";
-import { formatToPtBr } from "~/utils/date";
+import { formatDateToPtBr } from "~/utils/date";
 import { CardProps } from "~/utils/types";
+
+function getUserScore(votes_average: number): string {
+  if (votes_average === 0) {
+    return "N/A";
+  }
+
+  return votes_average * 10 + "%";
+}
 
 export default function Card({ item, link, size }: CardProps) {
   return (
@@ -20,12 +28,12 @@ export default function Card({ item, link, size }: CardProps) {
       {link && (
         <div className="card-description group-hover:opacity-100 group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
           <p className="text-slate-100">{item.title}</p>
-          <small>{formatToPtBr(item.release_date!)}</small>
+          <small>{formatDateToPtBr(item.release_date!)}</small>
         </div>
       )}
-      <div className="absolute top-0 right-0 text-slate-100">
-        {item.vote_average * 10}%
-      </div>
+      {/* <div className="absolute top-[5px] right-[5px]">
+        {getUserScore(item.vote_average)}
+      </div> */}
       {item.adult && (
         <div className="card-adult-content-alert">
           <div className="image"></div>

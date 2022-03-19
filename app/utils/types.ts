@@ -1,4 +1,4 @@
-type TMDBGenre = {
+export type TMDBGenre = {
   id: number;
   name: string;
 };
@@ -53,7 +53,8 @@ export type TMDBItemDetails = {
   release_date?: string;
   number_of_episodes?: number;
   number_of_seasons?: number;
-  tagline?: string;
+  tagline: string;
+  runtime: number;
 };
 
 export type CardSize = "small" | "medium" | "large";

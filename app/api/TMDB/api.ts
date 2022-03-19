@@ -104,6 +104,7 @@ export async function getDetails({
       number_of_episodes: data.number_of_episodes,
       number_of_seasons: data.number_of_seasons,
       tagline: data.tagline || "",
+      runtime: data.runtime || 0,
     };
   } catch (error: any) {
     throw new Error(error);
@@ -236,8 +237,6 @@ export async function search({
   page?: number;
 }): Promise<TMDBItem[]> {
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
-
-  console.log(page);
 
   if (type) {
     const data = await fetchData({
