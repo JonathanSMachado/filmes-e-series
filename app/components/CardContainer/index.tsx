@@ -88,22 +88,22 @@ export default function CardContainer(props: CardContainerProps) {
   }, [props.items]);
 
   return (
-    <div ref={mainHeight} className="px-6 mt-10">
-      <div className="flex flex-wrap justify-around gap-x-4 gap-y-10">
-        {!items.length ? (
-          <p className="text-slate-300">Nenhum item encontrado</p>
-        ) : (
-          items
-            .sort(sortByPopularity)
-            .map((item: TMDBItem) => (
-              <Card
-                key={`${item.type}-${item.id}`}
-                item={item}
-                link={`/catalogo/${item.type}/${item.id}`}
-              />
-            ))
-        )}
-      </div>
+    <div ref={mainHeight} className="card-container">
+      {/* <div className="flex flex-wrap justify-around gap-x-4 gap-y-10"> */}
+      {!items.length ? (
+        <p className="text-slate-300">Nenhum item encontrado!</p>
+      ) : (
+        items
+          .sort(sortByPopularity)
+          .map((item: TMDBItem) => (
+            <Card
+              key={`${item.type}-${item.id}`}
+              item={item}
+              link={`/catalogo/${item.type}/${item.id}`}
+            />
+          ))
+      )}
+      {/* </div> */}
     </div>
   );
 }

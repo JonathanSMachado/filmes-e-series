@@ -27,7 +27,7 @@ export default function Card({ item, link, size }: CardProps) {
         onError={(e) => (e.currentTarget.src = "/images/logo.png")}
       />
       {link && (
-        <div className="card-description group-hover:opacity-100 group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
+        <div className="card-description group-hover:opacity-100 group-hover:visible group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
           <p className="text-slate-100">{item.title}</p>
           <small>{formatDateToPtBr(item.release_date!)}</small>
         </div>

@@ -7,7 +7,7 @@ export default function Header() {
   const activeLinkStyle = "border-b-2 border-cyan-500";
 
   return (
-    <header className="container w-full mb-10 px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300">
+    <header className="container w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300">
       <Link to="/">
         <img
           src="/images/logo.png"
