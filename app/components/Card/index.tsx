@@ -24,6 +24,7 @@ export default function Card({ item, link, size }: CardProps) {
         className="card-background"
         src={item.poster_path}
         alt={item.title}
+        onError={(e) => (e.currentTarget.src = "/images/logo.png")}
       />
       {link && (
         <div className="card-description group-hover:opacity-100 group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
@@ -31,9 +32,6 @@ export default function Card({ item, link, size }: CardProps) {
           <small>{formatDateToPtBr(item.release_date!)}</small>
         </div>
       )}
-      {/* <div className="absolute top-[5px] right-[5px]">
-        {getUserScore(item.vote_average)}
-      </div> */}
       {item.adult && (
         <div className="card-adult-content-alert">
           <div className="image"></div>

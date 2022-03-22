@@ -46,7 +46,7 @@ export default function Catalog() {
   return (
     <>
       {search && (
-        <p className="text-slate-300 text-xl">
+        <p className="text-slate-300 text-xl mx-10">
           Resultado da busca por <em className="text-slate-100">{search}</em>
         </p>
       )}

@@ -59,17 +59,6 @@ export default function Details() {
         <article className="text-slate-400">
           <h1 className="text-4xl text-slate-300">{item.title}</h1>
           <p className="text-sm mt-2">
-            {/* <span
-              className="mr-3 p-1 border border-slate-400 rounded-lg"
-              title="Classificação"
-            >
-              {
-                item.genres
-                  .filter((genre) => genre.id <= 18)
-                  .map((genre) => genre.id)
-                  .sort((a, b) => a - b)[0]
-              }
-            </span> */}
             {item.release_date && formatDateToPtBr(item.release_date)}
             <span className="mx-2">-</span>
             {item.genres.map((genre) => genre.name).join(", ")}
