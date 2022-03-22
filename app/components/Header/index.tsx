@@ -39,6 +39,17 @@ export default function Header() {
         <div className="m-0 lg:ml-14">
           <Search method="get" action="/catalogo" />
         </div>
+        <a
+          href="https://github.com/JonathanSMachado/filmes-e-series"
+          target="_blank"
+          className="mx-2 opacity-90 hover:opacity-100 transition-opacity"
+        >
+          <img
+            src="/images/GitHub-Mark-Light-32px.png"
+            alt="Projeto no GitHub"
+            title="Projeto no GitHub"
+          />
+        </a>
       </div>
     </header>
   );
