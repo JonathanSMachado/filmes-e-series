@@ -7,8 +7,8 @@ export default function Header() {
   const activeLinkStyle = "border-b-2 border-cyan-500";
 
   return (
-    <header className="container w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300">
-      <Link to="/">
+    <header className="w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300">
+      <Link to="/" className="self-start">
         <img
           src="/images/logo.png"
           alt="Filmes e Séries"
@@ -36,13 +36,13 @@ export default function Header() {
             Séries
           </NavLink>
         </nav>
-        <div className="m-0 lg:ml-14">
+        <div className="mx-0 my-4 lg:my-0 lg:mx-14">
           <Search method="get" action="/catalogo" />
         </div>
         <a
           href="https://github.com/JonathanSMachado/filmes-e-series"
           target="_blank"
-          className="mx-2 opacity-90 hover:opacity-100 transition-opacity"
+          className="absolute top-10 right-4 ml-14 opacity-90 hover:opacity-100 transition-opacity"
         >
           <img
             src="/images/GitHub-Mark-Light-32px.png"
