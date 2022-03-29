@@ -36,9 +36,9 @@ export default function Index() {
   return (
     <Layout>
       <HeroArea />
-      <div className="px-10 py-5 flex items-center">
+      <div className="px-10 py-5 flex flex-col md:flex-row items-center">
         <h3 className="text-2xl text-slate-300">Tendências</h3>
-        <nav className="relative ml-10 flex bg-slate-300 rounded-full overflow-hidden">
+        <nav className="relative mt-2 md:mt-0 md:ml-10 flex bg-slate-300 rounded-full overflow-hidden">
           <div
             className={`absolute top-0 bottom-0 rounded-full bg-cyan-500 w-full z-10 transition-all ease-in-out duration-200 ${
               isTodayActive ? "-translate-x-32" : "translate-x-16"
@@ -54,7 +54,7 @@ export default function Index() {
           </NavLink>
           <NavLink
             to="?tendencias=semana"
-            className={`px-4 py-1 rounded-full bg-transparent z-10 ${
+            className={`px-4 py-1 whitespace-nowrap rounded-full bg-transparent z-10 ${
               !isTodayActive && "text-slate-200"
             }`}
           >
