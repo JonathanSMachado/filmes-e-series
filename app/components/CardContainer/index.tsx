@@ -50,9 +50,9 @@ export default function CardContainer(props: CardContainerProps) {
 
     useEffect(() => {
       if (!shouldFetch || !height) return;
-      if (clientHeight + scrollPosition + 200 < height) return;
+      if (clientHeight + scrollPosition + 100 < height) return;
 
-      let endpoint: string = `/catalogo?page=${page}`;
+      let endpoint: string = `/catalogo?index&page=${page}`;
 
       if (search) {
         endpoint += `&search=${search}`;
@@ -89,7 +89,6 @@ export default function CardContainer(props: CardContainerProps) {
 
   return (
     <div ref={mainHeight} className="card-container">
-      {/* <div className="flex flex-wrap justify-around gap-x-4 gap-y-10"> */}
       {!items.length ? (
         <p className="text-slate-300">Nenhum item encontrado!</p>
       ) : (
@@ -103,7 +102,11 @@ export default function CardContainer(props: CardContainerProps) {
             />
           ))
       )}
-      {/* </div> */}
+      {fetcher.state === "loading" && (
+        <div className="flex justify-center mt-3 text-slate-300">
+          Carregando...
+        </div>
+      )}
     </div>
   );
 }

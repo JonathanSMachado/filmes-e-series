@@ -2,12 +2,8 @@ import { Link } from "remix";
 import { formatDateToPtBr } from "~/utils/date";
 import { CardProps } from "~/utils/types";
 
-function getUserScore(votes_average: number): string {
-  if (votes_average === 0) {
-    return "N/A";
-  }
-
-  return votes_average * 10 + "%";
+function getUserScore(votes_average: number): number {
+  return votes_average ? votes_average * 10 : 0;
 }
 
 export default function Card({ item, link, size }: CardProps) {
