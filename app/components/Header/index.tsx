@@ -13,6 +13,8 @@ export default function Header() {
           src="/images/logo.png"
           alt="Filmes e Séries"
           className="w-64 h-auto hover:scale-105 transition-transform ease-in-out"
+          width="256"
+          height="110"
         />
       </Link>
       <div className="flex flex-col lg:flex-row items-center">
@@ -48,6 +50,8 @@ export default function Header() {
             src="/images/GitHub-Mark-Light-32px.png"
             alt="Projeto no GitHub"
             title="Projeto no GitHub"
+            width="32"
+            height="32"
           />
         </a>
       </div>

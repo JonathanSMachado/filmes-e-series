@@ -56,8 +56,8 @@ export default function Details() {
         }}
       >
         <Card item={item} size={"large"} />
-        <article className="text-slate-400">
-          <h1 className="text-4xl text-slate-300">{item.title}</h1>
+        <article className="text-slate-200">
+          <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">
             {item.release_date && formatDateToPtBr(item.release_date)}
             <span className="mx-2">-</span>

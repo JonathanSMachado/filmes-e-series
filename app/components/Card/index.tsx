@@ -15,17 +15,17 @@ export default function Card({ item, link, size }: CardProps) {
         size ? ` card-${size}` : ""
       }`}
       title={item.title}
+      style={{
+        backgroundImage: `url(${item.poster_path})`,
+      }}
     >
-      <img
-        className="card-background"
-        src={item.poster_path}
-        alt={item.title}
-        onError={(e) => (e.currentTarget.src = "/images/logo.png")}
-      />
       {link && (
         <div className="card-description group-hover:opacity-100 group-hover:visible group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
-          <p className="text-slate-100">{item.title}</p>
-          <small>{formatDateToPtBr(item.release_date!)}</small>
+          <p className="text-slate-100 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity delay-75">
+            {item.title}
+            <br />
+            <small>{formatDateToPtBr(item.release_date!)}</small>
+          </p>
         </div>
       )}
       {item.adult && (

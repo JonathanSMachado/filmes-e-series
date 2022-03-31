@@ -18,7 +18,7 @@ export default function Button(props: ButtonProps) {
       }`}
       {...(onclick && { onClick: onclick })}
     >
-      {props.children}
+      {children}
     </button>
   );
 }
