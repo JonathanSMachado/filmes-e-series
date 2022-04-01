@@ -2,6 +2,7 @@ import { useTransition } from "@remix-run/react";
 import NProgress from "nprogress";
 import nProgressStyles from "nprogress/nprogress.css";
 import { useEffect } from "react";
+import progressBarStyles from "react-circular-progressbar/dist/styles.css";
 import type { MetaFunction } from "remix";
 import {
   Links,
@@ -39,6 +40,10 @@ export const links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: "https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap",
+    },
+    {
+      rel: "stylesheet",
+      href: progressBarStyles,
     },
   ];
 };

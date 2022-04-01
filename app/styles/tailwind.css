@@ -1113,21 +1113,6 @@ select {
   color: rgb(148 163 184 / var(--tw-text-opacity));
 }
 
-.text-zinc-100 {
-  --tw-text-opacity: 1;
-  color: rgb(244 244 245 / var(--tw-text-opacity));
-}
-
-.text-zinc-200 {
-  --tw-text-opacity: 1;
-  color: rgb(228 228 231 / var(--tw-text-opacity));
-}
-
-.text-zinc-300 {
-  --tw-text-opacity: 1;
-  color: rgb(212 212 216 / var(--tw-text-opacity));
-}
-
 .opacity-0 {
   opacity: 0;
 }
@@ -1307,6 +1292,13 @@ body {
   mask: url("/images/18-plus.svg");
   -webkit-mask: url("/images/18-plus.svg");
   background-color: rgb(223, 19, 19);
+}
+
+.card > .card-user-score {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 50px;
 }
 
 .btn {

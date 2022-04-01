@@ -1,6 +1,7 @@
 import { Link } from "remix";
 import { formatDateToPtBr } from "~/utils/date";
 import { CardProps } from "~/utils/types";
+import Score from "./Score";
 
 function getUserScore(votes_average: number): number {
   return votes_average ? votes_average * 10 : 0;
@@ -33,6 +34,10 @@ export default function Card({ item, link, size }: CardProps) {
           <div className="image"></div>
         </div>
       )}
+
+      <div className="card-user-score" title="Pontuação (quanto maior melhor)">
+        <Score value={item.vote_average} />
+      </div>
     </Link>
   );
 }

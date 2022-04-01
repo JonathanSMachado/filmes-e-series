@@ -52,6 +52,11 @@ body {
   background-color: rgb(223, 19, 19);
 }
 
+.card > .card-user-score {
+  @apply absolute top-1 right-1;
+  width: 50px;
+}
+
 .btn {
   @apply rounded-md shadow-md px-3 py-2 text-base transition-all ease-in-out duration-100;
 }
