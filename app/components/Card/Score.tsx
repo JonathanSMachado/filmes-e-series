@@ -10,7 +10,7 @@ const Score = (props: ScoreProps) => {
 
   const calculateValue = useCallback(
     (value) => {
-      return value * 10;
+      return Math.ceil(value * 10);
     },
     [value]
   );

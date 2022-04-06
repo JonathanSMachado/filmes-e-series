@@ -22,8 +22,7 @@ export async function getMostPopular({
     let collection: TMDBItem[] = [];
 
     if (type) {
-      const data = await fetchData({
-        endpoint: `${convertTypeToTMDB(type)}/popular`,
+      const data = await fetchData(`${convertTypeToTMDB(type)}/popular`, {
         page: page ?? 1,
       });
 
@@ -41,8 +40,7 @@ export async function getMostPopular({
       );
     } else {
       for (const type of TYPES) {
-        const data = await fetchData({
-          endpoint: `${type}/popular`,
+        const data = await fetchData(`${type}/popular`, {
           page: page ?? 1,
         });
 
@@ -83,9 +81,7 @@ export async function getDetails({
   try {
     const posterUrl = process.env.TMDB_POSTER_IMAGES_URL;
     const backdropUrl = process.env.TMDB_BACKDROP_IMAGES_URL;
-    const data = await fetchData({
-      endpoint: `${convertTypeToTMDB(type)}/${id}`,
-    });
+    const data = await fetchData(`${convertTypeToTMDB(type)}/${id}`, {});
 
     return {
       adult: data.adult,
@@ -125,10 +121,12 @@ export async function getRecommendations({
   try {
     const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
 
-    const data = await fetchData({
-      endpoint: `${convertTypeToTMDB(type)}/${id}/recommendations`,
-      page: page ?? 1,
-    });
+    const data = await fetchData(
+      `${convertTypeToTMDB(type)}/${id}/recommendations`,
+      {
+        page: page ?? 1,
+      }
+    );
 
     if (limit) {
       data.results = data.results.slice(0, limit);
@@ -165,8 +163,7 @@ export async function getSimilar({
   limit?: number;
 }) {
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
-  const data = await fetchData({
-    endpoint: `${convertTypeToTMDB(type)}/${id}/similar`,
+  const data = await fetchData(`${convertTypeToTMDB(type)}/${id}/similar`, {
     page: page ?? 1,
   });
 
@@ -207,7 +204,7 @@ export async function getTrending({
     : "trending/all/";
   endpoint += period ? convertPeriodToTMDB(period) : "day";
 
-  const data = await fetchData({ endpoint, page: page ?? 1 });
+  const data = await fetchData(endpoint, { page: page ?? 1 });
 
   if (limit) {
     data.results = data.results.slice(0, limit);
@@ -239,8 +236,7 @@ export async function search({
   const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
 
   if (type) {
-    const data = await fetchData({
-      endpoint: `search/${convertTypeToTMDB(type)}`,
+    const data = await fetchData(`search/${convertTypeToTMDB(type)}`, {
       query,
       page: page ?? 1,
     });
@@ -261,8 +257,7 @@ export async function search({
     let collection: TMDBItem[] = [];
 
     for (const type of TYPES) {
-      const data = await fetchData({
-        endpoint: `search/${type}`,
+      const data = await fetchData(`search/${type}`, {
         query,
         page: page ?? 1,
       });
@@ -287,31 +282,31 @@ export async function search({
   }
 }
 
-async function fetchData({
-  endpoint,
-  page,
-  query,
-}: {
-  endpoint: string;
-  page?: number;
-  query?: string;
-}) {
+async function fetchData(
+  endpoint: string,
+  params?: {
+    page?: number;
+    query?: string;
+  }
+) {
   const token = process.env.TMDB_TOKEN;
 
-  const params = [];
+  const queryParams = ["language=pt-BR"];
 
-  if (page) {
-    params.push(`page=${page}`);
+  if (params) {
+    if (params.page) {
+      queryParams.push(`page=${params.page}`);
+    }
+
+    if (params.query) {
+      queryParams.push(`query=${params.query}`);
+    }
   }
 
-  if (query) {
-    params.push(`query=${query}`);
-  }
+  console.log(endpoint);
 
   const response = await fetch(
-    `http://api.themoviedb.org/3/${endpoint}?language=pt-BR&${params.join(
-      "&"
-    )}`,
+    `http://api.themoviedb.org/3/${endpoint}?${queryParams.join("&")}`,
     {
       headers: {
         "Content-Type": "application/json;charset=utf-8",
