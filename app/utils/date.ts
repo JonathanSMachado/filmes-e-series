@@ -8,7 +8,7 @@ export function formatDateToPtBr(date: string): string {
     month: "long",
     year: "numeric",
     timeZone: "UTC",
-  }).format(new Date(date));
+  }).format(new Date(date + "T23:59:59"));
 }
 
 export function convertMinutesToFormattedHours(minutes: number): string {

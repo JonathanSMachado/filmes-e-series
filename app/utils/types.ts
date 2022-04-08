@@ -3,6 +3,13 @@ export type TMDBGenre = {
   name: string;
 };
 
+export type TMDBVideo = {
+  id: string;
+  name: string;
+  url: string;
+  published_at: string;
+};
+
 export type TMDBResponse = {
   page: number;
   results: TMDBItem[];
@@ -55,6 +62,7 @@ export type TMDBItemDetails = {
   number_of_seasons?: number;
   tagline: string;
   runtime: number;
+  videos: TMDBVideo[] | undefined;
 };
 
 export type CardSize = "small" | "medium" | "large";
@@ -63,6 +71,7 @@ export type CardProps = {
   item: TMDBItem | TMDBItemDetails;
   link?: string;
   size?: CardSize;
+  showScore?: boolean;
 };
 
 export type CardContainerProps = {
