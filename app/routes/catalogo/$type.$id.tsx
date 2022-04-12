@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 import { json, LoaderFunction, useFetcher, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
+import Score from "~/components/Card/Score";
 import { convertMinutesToFormattedHours, formatDateToPtBr } from "~/utils/date";
 import { TMDBItem, TMDBItemDetails, TMDBResponse } from "~/utils/types";
 
@@ -55,22 +57,22 @@ export default function Details() {
           backgroundBlendMode: "darken",
         }}
       >
-        <Card item={item} size={"large"} />
+        <Card item={item} size={"large"} showScore={false} />
         <article className="text-slate-200">
           <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">
-            {item.release_date && formatDateToPtBr(item.release_date)}
+            {item.release_date && formatDateToPtBr(item.release_date) + " (BR)"}
             <span className="mx-2">-</span>
             {item.genres.map((genre) => genre.name).join(", ")}
             <span className="mx-2">-</span>
             {convertMinutesToFormattedHours(item.runtime)}
           </p>
-          {item.tagline && <p className="italic my-6">{item.tagline}</p>}
+          {item.tagline && (
+            <p className="italic my-6 text-slate-300">{item.tagline}</p>
+          )}
           <div className="mt-6">
-            <h3 className="text-2xl mb-4 font-semibold text-slate-300">
-              Sinopse
-            </h3>
-            <p className="text-justify text-xl text-slate-200">
+            <h2 className="text-2xl mb-4 font-semibold">Sinopse</h2>
+            <p className="text-justify text-lg">
               {item.overview ? (
                 item.overview
               ) : (
@@ -78,25 +80,55 @@ export default function Details() {
               )}
             </p>
           </div>
+          <div className="mt-6 flex items-center">
+            <div className="w-20 h-20 hover:scale-110 transition-all">
+              <Score value={item.vote_average} />
+            </div>
+            <p className="ml-2 text-slate-300">Avaliação dos usuários</p>
+          </div>
         </article>
       </section>
-      <section className="p-10">
-        <p className="text-xl text-slate-300 mb-10">Recomendados</p>
-        <div className="flex flex-wrap justify-around items-center gap-6 mb-10 text-slate-400">
-          {recommendations.results.length ? (
-            recommendations.results.map((item: TMDBItem) => (
+      {item.videos?.length && (
+        <section className="p-10">
+          <h3 className="text-xl text-slate-300 mb-10">Vídeos</h3>
+          <div className="flex flex-wrap justify-around gap-4">
+            {item.videos.map((video) => {
+              return (
+                <div
+                  className="w-72 md:w-96 h-44 md:h-64 relative"
+                  key={video.id}
+                >
+                  <span className="absolute top-0 left-1 text-slate-300">
+                    {video.name}
+                  </span>
+                  <ReactPlayer
+                    url={video.url}
+                    controls={true}
+                    width="100%"
+                    height="100%"
+                    light={true}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+      {recommendations.results.length && (
+        <section className="p-10">
+          <h3 className="text-xl text-slate-300 mb-10">Recomendados</h3>
+          <div className="flex flex-wrap justify-around items-center gap-6 mb-10 text-slate-400">
+            {recommendations.results.map((item: TMDBItem) => (
               <Card
                 key={`${item.type}-${item.id}`}
                 item={item}
                 size="small"
                 link={`/catalogo/${item.type}/${item.id}`}
               />
-            ))
-          ) : (
-            <p>Ainda não existem recomendações para este título!</p>
-          )}
-        </div>
-      </section>
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }

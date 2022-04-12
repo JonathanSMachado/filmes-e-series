@@ -4,6 +4,7 @@ import {
   TMDBItemDetails,
   TMDBResponse,
   TMDBResponseItem,
+  TMDBVideo,
 } from "~/utils/types";
 
 const TYPES = ["movie", "tv"];
@@ -81,7 +82,29 @@ export async function getDetails({
   try {
     const posterUrl = process.env.TMDB_POSTER_IMAGES_URL;
     const backdropUrl = process.env.TMDB_BACKDROP_IMAGES_URL;
-    const data = await fetchData(`${convertTypeToTMDB(type)}/${id}`, {});
+    const data = await fetchData(`${convertTypeToTMDB(type)}/${id}`, {
+      appendVideos: true,
+    });
+
+    function getVideoBaseUrl(site: string): string {
+      switch (site) {
+        case "YouTube":
+          return "https://www.youtube.com/watch?v=";
+        case "Vimeo":
+          return "https://vimeo.com/";
+        default:
+          return "";
+      }
+    }
+
+    const videos = data?.videos?.results?.map((video: any): TMDBVideo => {
+      return {
+        id: video.id,
+        name: video.name,
+        url: `${getVideoBaseUrl(video.site)}${video.key}`,
+        published_at: video.published_at,
+      };
+    });
 
     return {
       adult: data.adult,
@@ -101,6 +124,7 @@ export async function getDetails({
       number_of_seasons: data.number_of_seasons,
       tagline: data.tagline || "",
       runtime: data.runtime || 0,
+      videos,
     };
   } catch (error: any) {
     throw new Error(error);
@@ -287,6 +311,7 @@ async function fetchData(
   params?: {
     page?: number;
     query?: string;
+    appendVideos?: boolean;
   }
 ) {
   const token = process.env.TMDB_TOKEN;
@@ -301,12 +326,16 @@ async function fetchData(
     if (params.query) {
       queryParams.push(`query=${params.query}`);
     }
+
+    if (params.appendVideos) {
+      queryParams.push("append_to_response=videos");
+    }
   }
 
   console.log(endpoint);
 
   const response = await fetch(
-    `http://api.themoviedb.org/3/${endpoint}?${queryParams.join("&")}`,
+    `https://api.themoviedb.org/3/${endpoint}?${queryParams.join("&")}`,
     {
       headers: {
         "Content-Type": "application/json;charset=utf-8",

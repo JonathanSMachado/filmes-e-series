@@ -7,7 +7,7 @@ function getUserScore(votes_average: number): number {
   return votes_average ? votes_average * 10 : 0;
 }
 
-export default function Card({ item, link, size }: CardProps) {
+export default function Card({ item, link, size, showScore }: CardProps) {
   return (
     <Link
       prefetch="intent"
@@ -35,9 +35,14 @@ export default function Card({ item, link, size }: CardProps) {
         </div>
       )}
 
-      <div className="card-user-score" title="Pontuação (quanto maior melhor)">
-        <Score value={item.vote_average} />
-      </div>
+      {(showScore === undefined || showScore) && (
+        <div
+          className="card-user-score"
+          title="Pontuação (quanto maior melhor)"
+        >
+          <Score value={item.vote_average} />
+        </div>
+      )}
     </Link>
   );
 }
