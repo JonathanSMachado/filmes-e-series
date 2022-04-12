@@ -2559,7 +2559,7 @@ meow@^4.0.0:
     normalize-package-data "^2.3.4"
     read-pkg-up "^3.0.0"
     redent "^2.0.0"
-    trim-newlines "^2.0.0"
+    trim-newlines "^3.0.1"
 
 meow@^7.1.1:
   version "7.1.1"
