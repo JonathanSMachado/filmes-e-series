@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Form,
-  json,
-  LoaderFunction,
-  MetaFunction,
-  NavLink,
-  useLoaderData,
-} from "remix";
+import { Form, json, LoaderFunction, NavLink, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import AppError from "~/components/AppError";
 import Button from "~/components/Button";
@@ -14,19 +7,6 @@ import CardContainer from "~/components/CardContainer";
 import HeroArea from "~/components/HeroArea";
 import Layout from "~/layout/Layout";
 import { TMDBItem } from "~/utils/types";
-
-export const meta: MetaFunction = () => ({
-  "og:type": "website",
-  "og:url": "https://filmes-e-series.vercel.app/",
-  "og:title": "Filmes e Séries",
-  "og:description": "Catálogo de filmes e séries atualizado.",
-  "og:image": "",
-  "twitter:card": "summary_large_image",
-  "twitter:url": "https://filmes-e-series.vercel.app/",
-  "twitter:title": "Filmes e Séries",
-  "twitter:description": "Catálogo de filmes e séries atualizado.",
-  "twitter:image": "",
-});
 
 export const loader: LoaderFunction = async ({
   request,

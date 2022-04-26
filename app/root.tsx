@@ -19,6 +19,17 @@ export const meta: MetaFunction = () => {
   return {
     title: "Filmes e Séries",
     description: "Catálogo de filmes e séries",
+
+    "og:type": "website",
+    "og:url": "https://filmes-e-series.vercel.app/",
+    "og:title": "Filmes e Séries",
+    "og:description": "Catálogo de filmes e séries atualizado.",
+    "og:image": "",
+    "twitter:card": "summary_large_image",
+    "twitter:url": "https://filmes-e-series.vercel.app/",
+    "twitter:title": "Filmes e Séries",
+    "twitter:description": "Catálogo de filmes e séries atualizado.",
+    "twitter:image": "",
   };
 };
 
