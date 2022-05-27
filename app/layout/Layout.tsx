@@ -1,5 +1,5 @@
 import { ArrowUpIcon } from "@heroicons/react/outline";
-import { Action, KBarProvider } from "kbar";
+import { Action } from "kbar";
 import { useEffect } from "react";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
@@ -51,7 +51,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <KBarProvider actions={actions}>
+    // <KBarProvider actions={actions}>
+    <>
       <Header />
       <main className="w-full flex-grow">{children}</main>
       <Footer />
@@ -62,6 +63,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       >
         <ArrowUpIcon className=" w-5 h-5 text-slate-300 hover:text-slate-100" />
       </button>
-    </KBarProvider>
+    </>
+    // </KBarProvider>
   );
 }
