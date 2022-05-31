@@ -41,12 +41,14 @@ export default function Card({ item, link, size, showScore }: CardProps) {
         </div>
       )}
 
-      {/* <img
-        className="card__image__bg"
-        src={item.poster_path}
-        alt={item.title}
-        loading="lazy"
-      /> */}
+      {item.poster_path && (
+        <img
+          className="card__image__bg"
+          src={item.poster_path}
+          alt={item.title}
+          loading="lazy"
+        />
+      )}
     </Link>
   );
 }
