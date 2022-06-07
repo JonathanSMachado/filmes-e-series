@@ -91,7 +91,7 @@ export default function Details() {
       {item.videos?.length && (
         <section className="p-10">
           <h3 className="text-xl text-slate-300 mb-10">Vídeos</h3>
-          <div className="flex flex-wrap justify-around gap-4">
+          <div className="flex flex-wrap gap-6">
             {item.videos.map((video) => {
               return (
                 <div
@@ -117,7 +117,7 @@ export default function Details() {
       {recommendations.results.length && (
         <section className="p-10">
           <h3 className="text-xl text-slate-300 mb-10">Recomendados</h3>
-          <div className="flex flex-wrap justify-around items-center gap-6 mb-10 text-slate-400">
+          <div className="flex flex-wrap gap-6 text-slate-400">
             {recommendations.results.map((item: TMDBItem) => (
               <Card
                 key={`${item.type}-${item.id}`}

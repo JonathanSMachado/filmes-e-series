@@ -1,4 +1,3 @@
-
 import { ArrowUpIcon } from "@heroicons/react/outline";
 import { useEffect } from "react";
 import Footer from "~/components/Footer";

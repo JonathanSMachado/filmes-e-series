@@ -16,9 +16,6 @@ export default function Card({ item, link, size, showScore }: CardProps) {
         size ? ` card-${size}` : ""
       }`}
       title={item.title}
-      style={{
-        backgroundImage: `url(${item.poster_path})`,
-      }}
     >
       {link && (
         <div className="card-description group-hover:opacity-100 group-hover:visible group-hover:h-1/4 group-focus:opacity-100 group-focus:h-1/4">
@@ -42,6 +39,15 @@ export default function Card({ item, link, size, showScore }: CardProps) {
         >
           <Score value={item.vote_average} />
         </div>
+      )}
+
+      {item.poster_path && (
+        <img
+          className="card__image__bg"
+          src={item.poster_path}
+          alt={item.title}
+          loading="lazy"
+        />
       )}
     </Link>
   );
