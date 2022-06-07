@@ -6,7 +6,7 @@ module.exports = {
   appDirectory: "app",
   assetsBuildDirectory: "public/build",
   // serverBuildPath: "api/_build",
-  serverBuildTarget: "vercel",
+  // serverBuildTarget: "vercel",
   publicPath: "/build/",
   // devServerPort: 8002
 };
