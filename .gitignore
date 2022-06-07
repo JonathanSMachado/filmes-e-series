@@ -7,3 +7,5 @@ node_modules
 app/tailwind.css
 yarn-error.log
 api/_build
+api/_build.map
+api/index.js.map
