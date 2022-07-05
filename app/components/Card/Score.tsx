@@ -20,12 +20,13 @@ const Score = (props: ScoreProps) => {
       value={calculateValue(value)}
       text={`${calculateValue(value)}%`}
       background={true}
-      backgroundPadding={5}
+      backgroundPadding={2}
       strokeWidth={5}
       styles={buildStyles({
-        textSize: "1.7em",
+        textSize: "2rem",
         backgroundColor: "#000",
         textColor: "#fff",
+        trailColor: "#000",
         pathColor: `
           ${value > 6.5 ? "green" : value < 3.5 ? "red" : "orange"}
         `,

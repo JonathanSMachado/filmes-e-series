@@ -4,6 +4,7 @@
 
 body {
   font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .card-container {
@@ -51,6 +52,7 @@ body {
 .card > .card-user-score {
   @apply absolute top-1 right-1;
   width: 50px;
+  height: 50px;
 }
 
 .card > .card__image__bg {
