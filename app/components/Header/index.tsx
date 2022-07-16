@@ -3,7 +3,7 @@ import Search from "../Search";
 
 export default function Header() {
   const linkStyle =
-    "text-slate-300 border-b-2 border-transparent transition-all ease-in-out hover:border-cyan-500";
+    "text-slate-300 border-b-2 border-transparent transition-all ease-in-out outline-none hover:border-cyan-500 hover:text-cyan-500 focus:border-cyan-500 focus:text-cyan-500";
   const activeLinkStyle = "border-b-2 border-cyan-500";
 
   return (
@@ -12,7 +12,7 @@ export default function Header() {
         <img
           src="/images/logo.png"
           alt="Filmes e Séries"
-          className="w-64 h-auto hover:scale-105 transition-transform ease-in-out"
+          className="w-64 h-auto outline-none hover:scale-105 focus:scale-105 transition-transform ease-in-out"
           width="256"
           height="110"
         />

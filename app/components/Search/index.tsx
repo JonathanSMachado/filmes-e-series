@@ -17,7 +17,7 @@ export default function Search(props: SearchProps) {
         required
         placeholder="Buscar filmes e séries..."
         autoComplete="off"
-        className="w-auto sm:w-80 rounded-l-md border border-r-0 border-slate-400 text-slate-700 focus:border-slate-400 focus:shadow-none focus:outline-none"
+        className="w-auto sm:w-80 rounded-l-md border border-slate-400 border-r-0 text-slate-700 outline-none focus:border-slate-400"
       />
       <button
         type="submit"
