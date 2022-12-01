@@ -1457,7 +1457,13 @@ form:not(#form-search) > button[type="submit"] {
   color: rgb(226 232 240 / var(--tw-text-opacity));
 }
 
-form:not(#form-search) > button[type="submit"]:hover, form:not(#form-search) > button[type="submit"]:focus {
+form:not(#form-search) > button[type="submit"][disabled] {
+  pointer-events: none;
+  --tw-bg-opacity: 1;
+  background-color: rgb(71 85 105 / var(--tw-bg-opacity));
+}
+
+form:not(#form-search) > button[type="submit"]:not(disabled):hover, form:not(#form-search) > button[type="submit"]:not(disabled):focus {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
   transition-property: all;
@@ -1465,7 +1471,7 @@ form:not(#form-search) > button[type="submit"]:hover, form:not(#form-search) > b
   transition-duration: 150ms;
 }
 
-form:not(#form-search) > button[type="submit"]:hover:hover, form:not(#form-search) > button[type="submit"]:focus:hover {
+form:not(#form-search) > button[type="submit"]:not(disabled):hover:hover, form:not(#form-search) > button[type="submit"]:not(disabled):focus:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(8 145 178 / var(--tw-bg-opacity));
 }
