@@ -9,3 +9,4 @@ yarn-error.log
 api/_build
 api/_build.map
 api/index.js.map
+sendgrid.env

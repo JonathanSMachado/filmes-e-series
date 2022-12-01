@@ -74,3 +74,68 @@ body {
 .btn-large {
   @apply rounded-lg shadow-lg px-5 py-3 text-xl;
 }
+
+form:not(#form-search) {
+  @apply flex flex-col;
+}
+
+form:not(#form-search) > div {
+  @apply flex flex-col gap-1 mb-4;
+}
+
+form:not(#form-search) label {
+  @apply text-slate-200;
+}
+
+form:not(#form-search) [role="alert"] {
+  @apply text-red-500 text-sm;
+}
+
+form:not(#form-search) > button[type="submit"] {
+  @apply w-80 self-center py-2 rounded-md bg-cyan-700 text-slate-200 text-xl mt-4;
+}
+
+form:not(#form-search) > button[type="submit"]:hover,
+form:not(#form-search) > button[type="submit"]:focus {
+  @apply hover:bg-cyan-600 text-white transition-all;
+}
+
+form:not(#form-search) [type="text"],
+form:not(#form-search) [type="email"],
+form:not(#form-search) [type="url"],
+form:not(#form-search) [type="password"],
+form:not(#form-search) [type="number"],
+form:not(#form-search) [type="date"],
+form:not(#form-search) [type="datetime-local"],
+form:not(#form-search) [type="month"],
+form:not(#form-search) [type="search"],
+form:not(#form-search) [type="tel"],
+form:not(#form-search) [type="time"],
+form:not(#form-search) [type="week"],
+form:not(#form-search) [multiple],
+form:not(#form-search) textarea,
+form:not(#form-search) select {
+  @apply rounded-md;
+}
+
+form:not(#form-search) [type="text"]:focus,
+form:not(#form-search) [type="email"]:focus,
+form:not(#form-search) [type="url"]:focus,
+form:not(#form-search) [type="password"]:focus,
+form:not(#form-search) [type="number"]:focus,
+form:not(#form-search) [type="date"]:focus,
+form:not(#form-search) [type="datetime-local"]:focus,
+form:not(#form-search) [type="month"]:focus,
+form:not(#form-search) [type="search"]:focus,
+form:not(#form-search) [type="tel"]:focus,
+form:not(#form-search) [type="time"]:focus,
+form:not(#form-search) [type="week"]:focus,
+form:not(#form-search) [multiple]:focus,
+form:not(#form-search) textarea:focus,
+form:not(#form-search) select:focus {
+  @apply ring-cyan-400 ring-2;
+}
+
+form [aria-describedby^="errors"] {
+  @apply ring-red-500 ring-1;
+}

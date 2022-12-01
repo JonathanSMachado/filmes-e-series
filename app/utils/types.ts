@@ -78,3 +78,11 @@ export type CardContainerProps = {
   items: TMDBItem[];
   infinityScroll?: boolean;
 };
+
+export type MessageObject = {
+  from?: string;
+  subject: string;
+  text?: string;
+  html?: string;
+  to?: string;
+};

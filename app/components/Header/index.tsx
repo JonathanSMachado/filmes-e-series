@@ -1,4 +1,6 @@
-import { Link, NavLink } from "remix";
+import { MailIcon } from "@heroicons/react/outline";
+import { NavLink } from "remix";
+import Logo from "../Logo";
 import Search from "../Search";
 
 export default function Header() {
@@ -7,16 +9,8 @@ export default function Header() {
   const activeLinkStyle = "border-b-2 border-cyan-500";
 
   return (
-    <header className="w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300">
-      <Link to="/" className="self-start">
-        <img
-          src="/images/logo.png"
-          alt="Filmes e Séries"
-          className="w-64 h-auto outline-none hover:scale-105 focus:scale-105 transition-transform ease-in-out"
-          width="256"
-          height="110"
-        />
-      </Link>
+    <header className="w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300 relative">
+      <Logo />
       <div className="flex flex-col lg:flex-row items-center">
         <nav className="flex gap-6 text-xl">
           <NavLink
@@ -38,22 +32,31 @@ export default function Header() {
             Séries
           </NavLink>
         </nav>
-        <div className="mx-0 my-4 lg:my-0 lg:mx-14">
+        <div className="mx-0 my-4 lg:my-0 lg:mx-10">
           <Search method="get" action="/catalogo" />
         </div>
-        <a
-          href="https://github.com/JonathanSMachado/filmes-e-series"
-          target="_blank"
-          className="absolute top-10 right-4 ml-14 opacity-90 hover:opacity-100 transition-opacity"
-        >
-          <img
-            src="/images/GitHub-Mark-Light-32px.png"
-            alt="Projeto no GitHub"
-            title="Projeto no GitHub"
-            width="32"
-            height="32"
-          />
-        </a>
+        <div className="flex items-center gap-3 absolute lg:relative top-6 lg:top-0 right-4 lg:right-auto">
+          <a
+            href="https://github.com/JonathanSMachado/filmes-e-series"
+            target="_blank"
+            className="opacity-90 hover:opacity-100 transition-opacity"
+          >
+            <img
+              src="/images/GitHub-Mark-Light-32px.png"
+              alt="Projeto no GitHub"
+              title="Projeto no GitHub"
+              width="32"
+              height="32"
+            />
+          </a>
+          <NavLink
+            to="/contato"
+            title="Entre em contato"
+            className="opacity-80 hover:opacity-90 transition-opacity text-white"
+          >
+            <MailIcon className="w-8 h-8" />
+          </NavLink>
+        </div>
       </div>
     </header>
   );

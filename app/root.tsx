@@ -1,4 +1,4 @@
-import { useTransition } from "@remix-run/react";
+import { useSearchParams, useTransition } from "@remix-run/react";
 import NProgress from "nprogress";
 import nProgressStyles from "nprogress/nprogress.css";
 import { useEffect } from "react";
@@ -61,6 +61,7 @@ export const links: LinksFunction = () => {
 
 export default function App() {
   const transition = useTransition();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (transition.state === "idle") {
@@ -71,7 +72,7 @@ export default function App() {
   }, [transition.state]);
 
   return (
-    <html lang="en">
+    <html lang="pt-br">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

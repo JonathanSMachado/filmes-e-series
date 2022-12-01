@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Form, json, LoaderFunction, NavLink, useLoaderData } from "remix";
+import { json, Link, LoaderFunction, NavLink, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import AppError from "~/components/AppError";
-import Button from "~/components/Button";
 import CardContainer from "~/components/CardContainer";
 import HeroArea from "~/components/HeroArea";
 import Layout from "~/layout/Layout";
@@ -64,11 +63,12 @@ export default function Index() {
       </div>
       <CardContainer items={data} />
       <div className="mt-10 flex justify-center">
-        <Form action="catalogo">
-          <Button className="mt-6" type="submit" size="large" variant="primary">
-            Ver catálogo completo
-          </Button>
-        </Form>
+        <Link
+          to={"catalogo"}
+          className="btn btn-primary btn-medium mt-6 px-4 py-2 text-white"
+        >
+          Ver catálogo completo
+        </Link>
       </div>
     </Layout>
   );
