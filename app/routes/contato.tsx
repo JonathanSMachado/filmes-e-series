@@ -28,7 +28,11 @@ const mutation = makeDomainFunction(schema)(async (values) => {
     `,
   };
 
-  await Mailer.sendAdminNotification(message);
+  try {
+    await Mailer.sendAdminNotification(message);
+  } catch (error) {
+    throw "Ocorreu um problema ao enviar o contato. Por favor, tente novamente!";
+  }
 
   return { status: "success" };
 });
@@ -56,7 +60,12 @@ export default function Contact() {
             <h1 className="text-slate-200 text-xl">
               Entre em contato conosco preenchendo o formulário abaixo
             </h1>
-            <Form schema={schema} className="mt-8" buttonLabel="Enviar">
+            <Form
+              schema={schema}
+              mode="onChange"
+              className="mt-8"
+              buttonLabel="Enviar"
+            >
               {({ Field, Errors, Button }) => (
                 <>
                   <Field name="name" label="Informe o seu nome" />
