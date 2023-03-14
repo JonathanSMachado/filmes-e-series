@@ -3,7 +3,7 @@ import { MessageObject } from "~/utils/types";
 
 export async function sendAdminNotification(message: MessageObject) {
   try {
-    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY as string;
+    const SENDGRID_API_KEY = ENV.SENDGRID_API_KEY as string;
     mail.setApiKey(SENDGRID_API_KEY);
 
     if (!message.html && !message.text) {
@@ -12,8 +12,8 @@ export async function sendAdminNotification(message: MessageObject) {
       );
     }
 
-    const MAIL_NOTIFICATION_RECIPIENT = process.env
-      .MAIL_NOTIFICATION_RECIPIENT as string;
+    const MAIL_NOTIFICATION_RECIPIENT =
+      ENV.MAIL_NOTIFICATION_RECIPIENT as string;
 
     message.to = MAIL_NOTIFICATION_RECIPIENT;
     message.from = MAIL_NOTIFICATION_RECIPIENT;

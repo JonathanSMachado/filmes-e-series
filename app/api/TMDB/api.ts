@@ -19,7 +19,7 @@ export async function getMostPopular({
   limit?: number;
 }): Promise<TMDBItem[]> {
   try {
-    const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+    const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
     let collection: TMDBItem[] = [];
 
     if (type) {
@@ -80,8 +80,8 @@ export async function getDetails({
   id: string;
 }): Promise<TMDBItemDetails> {
   try {
-    const posterUrl = process.env.TMDB_POSTER_IMAGES_URL;
-    const backdropUrl = process.env.TMDB_BACKDROP_IMAGES_URL;
+    const posterUrl = ENV.TMDB_POSTER_IMAGES_URL;
+    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
     const data = await fetchData(`${convertTypeToTMDB(type)}/${id}`, {
       appendVideos: true,
     });
@@ -143,7 +143,7 @@ export async function getRecommendations({
   limit?: number;
 }): Promise<TMDBResponse> {
   try {
-    const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+    const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
 
     const data = await fetchData(
       `${convertTypeToTMDB(type)}/${id}/recommendations`,
@@ -186,7 +186,7 @@ export async function getSimilar({
   page?: number;
   limit?: number;
 }) {
-  const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
   const data = await fetchData(`${convertTypeToTMDB(type)}/${id}/similar`, {
     page: page ?? 1,
   });
@@ -222,7 +222,7 @@ export async function getTrending({
   limit?: number;
   period?: string | null;
 }): Promise<TMDBItem[]> {
-  const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
   let endpoint = type
     ? `trending/${convertTypeToTMDB(type)}/`
     : "trending/all/";
@@ -257,7 +257,7 @@ export async function search({
   type?: string;
   page?: number;
 }): Promise<TMDBItem[]> {
-  const tmdbImagesUrl = process.env.TMDB_POSTER_IMAGES_URL;
+  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
 
   if (type) {
     const data = await fetchData(`search/${convertTypeToTMDB(type)}`, {
@@ -314,7 +314,7 @@ async function fetchData(
     appendVideos?: boolean;
   }
 ) {
-  const token = process.env.TMDB_TOKEN;
+  const token = ENV.TMDB_TOKEN;
 
   const queryParams = ["language=pt-BR"];
 
