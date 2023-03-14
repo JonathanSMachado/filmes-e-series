@@ -88,25 +88,31 @@ export default function CardContainer(props: CardContainerProps) {
   }, [props.items]);
 
   return (
-    <div ref={mainHeight} className="card-container">
-      {!items.length ? (
-        <p className="text-slate-300">Nenhum item encontrado!</p>
-      ) : (
-        items
-          .sort(sortByPopularity)
-          .map((item: TMDBItem) => (
-            <Card
-              key={`${item.type}-${item.id}`}
-              item={item}
-              link={`/catalogo/${item.type}/${item.id}`}
-            />
-          ))
-      )}
+    <>
+      <div ref={mainHeight} className="card-container">
+        {!items.length ? (
+          <p className="text-slate-300">Nenhum item encontrado!</p>
+        ) : (
+          items
+            .sort(sortByPopularity)
+            .map((item: TMDBItem) => (
+              <Card
+                key={`${item.type}-${item.id}`}
+                item={item}
+                link={`/catalogo/${item.type}/${item.id}`}
+              />
+            ))
+        )}
+      </div>
       {fetcher.state === "loading" && (
-        <div className="flex justify-center mt-3 text-slate-300">
-          Carregando...
+        <div className="flex justify-center mt-10 text-slate-300">
+          <span className="inline-flex items-center gap-px">
+            <span className="animate-blink mx-px h-3 w-3 rounded-full bg-cyan-500"></span>
+            <span className="animate-blink animation-delay-200 mx-px h-3 w-3 rounded-full bg-cyan-500"></span>
+            <span className="animate-blink animation-delay-[400ms] mx-px h-3 w-3 rounded-full bg-cyan-500"></span>
+          </span>
         </div>
       )}
-    </div>
+    </>
   );
 }
