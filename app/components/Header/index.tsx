@@ -9,7 +9,7 @@ export default function Header() {
   const activeLinkStyle = "border-b-2 border-cyan-500";
 
   return (
-    <header className="w-full px-6 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300 relative">
+    <header className="w-full px-6 mb-4 lg:mb-0 flex flex-col lg:flex-row items-center justify-between bg-transparent text-slate-300 relative">
       <Logo />
       <div className="flex flex-col lg:flex-row items-center">
         <nav className="flex gap-6 text-xl">

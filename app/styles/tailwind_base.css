@@ -19,11 +19,13 @@ body {
 }
 
 .card.card-small {
+  @apply ring-1 ring-slate-700 hover:ring-cyan-500 focus:ring-cyan-500;
   width: 185px;
   height: 278px;
 }
 
 .card.card-large {
+  @apply ring-1 ring-slate-800;
   width: 296px;
   height: 444px;
 }

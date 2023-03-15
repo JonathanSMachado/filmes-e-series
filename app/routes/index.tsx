@@ -35,7 +35,7 @@ export default function Index() {
   return (
     <Layout>
       <HeroArea />
-      <div className="px-10 py-5 flex flex-col md:flex-row items-center">
+      <div className="px-10 py-5 mb-10 flex flex-col md:flex-row items-center">
         <h3 className="text-2xl text-slate-300">Tendências</h3>
         <nav className="relative mt-2 md:mt-0 md:ml-10 flex bg-slate-300 rounded-full overflow-hidden">
           <div
