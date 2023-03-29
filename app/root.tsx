@@ -1,4 +1,5 @@
 import { useSearchParams, useTransition } from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/react";
 import NProgress from "nprogress";
 import nProgressStyles from "nprogress/nprogress.css";
 import { useEffect } from "react";
@@ -84,6 +85,7 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
+        <Analytics />
       </body>
     </html>
   );
