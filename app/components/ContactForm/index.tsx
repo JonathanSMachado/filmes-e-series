@@ -39,9 +39,9 @@ interface ContactProps {
 
 export function ContactForm({ submit }: ContactProps) {
   return (
-    <main className="flex-1 pt-7">
+    <div className="mt-7 max-w-xl mx-auto px-2">
       {submit?.status === "success" ? (
-        <h1 className="text-slate-200 text-xl">
+        <h1 className="text-slate-200 text-xl text-center">
           Obrigado. Em breve manteremos contato!! ❤️
         </h1>
       ) : (
@@ -71,6 +71,6 @@ export function ContactForm({ submit }: ContactProps) {
           </Form>
         </>
       )}
-    </main>
+    </div>
   );
 }

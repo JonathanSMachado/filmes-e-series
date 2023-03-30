@@ -94,7 +94,7 @@ form:not(#form-search) [role="alert"] {
 }
 
 form:not(#form-search) > button[type="submit"] {
-  @apply w-80 self-center py-2 rounded-md bg-cyan-700 text-slate-200 text-xl mt-4;
+  @apply max-w-xs w-32 sm:w-80 self-center px-3 py-2 rounded-md bg-cyan-700 text-slate-200 text-xl mt-4;
 }
 
 form:not(#form-search) > button[type="submit"][disabled] {

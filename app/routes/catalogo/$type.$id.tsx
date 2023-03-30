@@ -50,7 +50,7 @@ export default function Details() {
   return (
     <>
       <section
-        className="flex flex-col sm:flex-row gap-10 p-10 py-20 bg-cover bg-no-repeat"
+        className="flex flex-col sm:flex-row items-center gap-10 p-10 py-20 bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${item.backdrop_path})`,
           backgroundColor: "rgba(0,0,0,.7)",
