@@ -1,7 +1,6 @@
 import { ActionFunction, useActionData } from "remix";
 import { ContactForm, mutation, schema } from "~/components/ContactForm";
-import Footer from "~/components/Footer";
-import Header from "~/components/Header";
+import Layout from "~/layout/Layout";
 import { formAction } from "~/utils/forms";
 
 export const action: ActionFunction = async ({ request }) =>
@@ -15,10 +14,8 @@ export default function Contact() {
   const submit = useActionData();
 
   return (
-    <>
-      <Header />
+    <Layout>
       <ContactForm submit={submit} />
-      <Footer />
-    </>
+    </Layout>
   );
 }
