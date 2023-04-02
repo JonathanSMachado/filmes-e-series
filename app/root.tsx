@@ -1,4 +1,4 @@
-import { useSearchParams, useTransition } from "@remix-run/react";
+import { useTransition } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 import NProgress from "nprogress";
 import nProgressStyles from "nprogress/nprogress.css";
@@ -62,7 +62,6 @@ export const links: LinksFunction = () => {
 
 export default function App() {
   const transition = useTransition();
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (transition.state === "idle") {
