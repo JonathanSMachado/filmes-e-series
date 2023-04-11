@@ -1,4 +1,10 @@
-import { convertPeriodToTMDB, convertTypeToTMDB } from "~/utils/converters";
+import {
+  convertMediaType,
+  convertMediaTypeToSlug,
+  convertPeriodToTMDB,
+  convertTypeToTMDB,
+} from "~/utils/converters";
+import { getVideoBaseUrl } from "~/utils/general";
 import {
   TMDBItem,
   TMDBItemDetails,
@@ -34,7 +40,8 @@ export async function getMostPopular({
           adult: item.adult || false,
           vote_average: item.vote_average,
           poster_path: tmdbImagesUrl + item.poster_path,
-          type: item.title ? "filmes" : "series",
+          media_type_slug: convertMediaTypeToSlug(item.media_type),
+          media_type: convertMediaType(item.media_type),
           popularity: item.popularity,
           release_date: item.release_date ?? item.first_air_date,
         })
@@ -52,7 +59,8 @@ export async function getMostPopular({
             adult: item.adult || false,
             vote_average: item.vote_average,
             poster_path: tmdbImagesUrl + item.poster_path,
-            type: item.title ? "filmes" : "series",
+            media_type_slug: convertMediaTypeToSlug(item.media_type),
+            media_type: convertMediaType(item.media_type),
             popularity: item.popularity,
             release_date: item.release_date ?? item.first_air_date,
           })
@@ -86,17 +94,6 @@ export async function getDetails({
       appendVideos: true,
     });
 
-    function getVideoBaseUrl(site: string): string {
-      switch (site) {
-        case "YouTube":
-          return "https://www.youtube.com/watch?v=";
-        case "Vimeo":
-          return "https://vimeo.com/";
-        default:
-          return "";
-      }
-    }
-
     const videos = data?.videos?.results?.map((video: any): TMDBVideo => {
       return {
         id: video.id,
@@ -116,14 +113,15 @@ export async function getDetails({
       popularity: data.popularity,
       poster_path: posterUrl + data.poster_path,
       title: data.title || data.name,
-      type: data.title ? "filmes" : "series",
+      media_type_slug: convertMediaTypeToSlug(data.title ? "movie" : "tv"),
+      media_type: convertMediaType(data.title ? "movie" : "tv"),
       vote_average: data.vote_average,
       vote_count: data.vote_count,
       release_date: data.release_date ?? data.first_air_date,
       number_of_episodes: data.number_of_episodes,
       number_of_seasons: data.number_of_seasons,
       tagline: data.tagline || "",
-      runtime: data.runtime || 0,
+      runtime: data.runtime,
       videos,
     };
   } catch (error: any) {
@@ -163,7 +161,8 @@ export async function getRecommendations({
         adult: item.adult || false,
         vote_average: item.vote_average,
         poster_path: tmdbImagesUrl + item.poster_path,
-        type: item.title ? "filmes" : "series",
+        media_type_slug: convertMediaTypeToSlug(item.media_type),
+        media_type: convertMediaType(item.media_type),
         popularity: item.popularity,
         release_date: item.release_date ?? item.first_air_date,
       })
@@ -202,7 +201,8 @@ export async function getSimilar({
       adult: item.adult || false,
       vote_average: item.vote_average,
       poster_path: tmdbImagesUrl + item.poster_path,
-      type: item.title ? "filmes" : "series",
+      media_type_slug: convertMediaTypeToSlug(item.media_type),
+      media_type: convertMediaType(item.media_type),
       popularity: item.popularity,
       release_date: item.release_date ?? item.first_air_date,
     })
@@ -228,7 +228,9 @@ export async function getTrending({
     : "trending/all/";
   endpoint += period ? convertPeriodToTMDB(period) : "day";
 
-  const data = await fetchData(endpoint, { page: page ?? 1 });
+  const data = await fetchData(endpoint, {
+    page: page ?? 1,
+  });
 
   if (limit) {
     data.results = data.results.slice(0, limit);
@@ -241,7 +243,8 @@ export async function getTrending({
       adult: item.adult || false,
       vote_average: item.vote_average,
       poster_path: tmdbImagesUrl + item.poster_path,
-      type: item.title ? "filmes" : "series",
+      media_type_slug: convertMediaTypeToSlug(item.media_type),
+      media_type: convertMediaType(item.media_type),
       popularity: item.popularity,
       release_date: item.release_date ?? item.first_air_date,
     };
@@ -272,7 +275,8 @@ export async function search({
         adult: item.adult || false,
         vote_average: item.vote_average,
         poster_path: tmdbImagesUrl + item.poster_path,
-        type: item.title ? "filmes" : "series",
+        media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
+        media_type: convertMediaType(item.title ? "movie" : "tv"),
         popularity: item.popularity,
         release_date: item.release_date ?? item.first_air_date,
       })
@@ -293,7 +297,8 @@ export async function search({
           adult: item.adult || false,
           vote_average: item.vote_average,
           poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
-          type: item.title ? "filmes" : "series",
+          media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
+          media_type: convertMediaType(item.title ? "movie" : "tv"),
           popularity: item.popularity,
           release_date: item.release_date ?? item.first_air_date,
         })
@@ -331,8 +336,6 @@ async function fetchData(
       queryParams.push("append_to_response=videos");
     }
   }
-
-  console.log(endpoint);
 
   const response = await fetch(
     `https://api.themoviedb.org/3/${endpoint}?${queryParams.join("&")}`,

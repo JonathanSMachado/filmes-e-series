@@ -1038,7 +1038,7 @@ async function fetchData(endpoint, params) {
       queryParams.push("append_to_response=videos");
     }
   }
-  console.log(endpoint);
+
   const response = await fetch(
     `https://api.themoviedb.org/3/${endpoint}?${queryParams.join("&")}`,
     {

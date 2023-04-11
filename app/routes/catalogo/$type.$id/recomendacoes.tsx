@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { json, LoaderFunction, useLoaderData, useOutletContext } from "remix";
+import { LoaderFunction, json, useLoaderData, useOutletContext } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import { TMDBItem, TMDBResponse } from "~/utils/types";
@@ -55,10 +55,10 @@ export default function Recommendations() {
     <div className="flex flex-wrap justify-around items-center gap-y-10 gap-x-6 ">
       {items.map((item: TMDBItem) => (
         <Card
-          key={`${item.type}-${item.id}`}
+          key={`${item.media_type_slug}-${item.id}`}
           item={item}
           size="small"
-          link={`/catalogo/${item.type}/${item.id}`}
+          link={`/catalogo/${item.media_type_slug}/${item.id}`}
         />
       ))}
     </div>
