@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { json, LoaderFunction, useFetcher, useLoaderData } from "remix";
+import { LoaderFunction, json, useFetcher, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import Score from "~/components/Card/Score";
@@ -38,7 +38,9 @@ export default function Details() {
   const fetcher = useFetcher();
 
   useEffect(() => {
-    fetcher.load(`/catalogo/${item.type}/${item.id}/recomendacoes?limit=6`);
+    fetcher.load(
+      `/catalogo/${item.media_type_slug}/${item.id}/recomendacoes?limit=6`
+    );
   }, [item]);
 
   useEffect(() => {
@@ -61,11 +63,31 @@ export default function Details() {
         <article className="text-slate-200">
           <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">
-            {item.release_date && formatDateToPtBr(item.release_date) + " (BR)"}
-            <span className="mx-2">-</span>
-            {item.genres.map((genre) => genre.name).join(", ")}
-            <span className="mx-2">-</span>
-            {convertMinutesToFormattedHours(item.runtime)}
+            {item.release_date && (
+              <span>{formatDateToPtBr(item.release_date)} (BR)</span>
+            )}
+            {item.genres && (
+              <>
+                <span className="mx-2">-</span>
+                <span>{item.genres.map((genre) => genre.name).join(", ")}</span>
+              </>
+            )}
+            {item.runtime && (
+              <>
+                <span className="mx-2">-</span>
+                <span>{convertMinutesToFormattedHours(item.runtime)}</span>
+              </>
+            )}
+            {item.number_of_seasons && (
+              <>
+                <span className="mx-2">-</span>
+                <span>
+                  {item.number_of_seasons}{" "}
+                  {"Temporada" + (item.number_of_seasons > 1 ? "s" : "")} (
+                  {item.number_of_episodes} Episódios)
+                </span>
+              </>
+            )}
           </p>
           {item.tagline && (
             <p className="italic my-6 text-slate-300">{item.tagline}</p>
@@ -120,10 +142,10 @@ export default function Details() {
           <div className="flex flex-wrap gap-6 text-slate-400">
             {recommendations.results.map((item: TMDBItem) => (
               <Card
-                key={`${item.type}-${item.id}`}
+                key={`${item.media_type_slug}-${item.id}`}
                 item={item}
                 size="small"
-                link={`/catalogo/${item.type}/${item.id}`}
+                link={`/catalogo/${item.media_type_slug}/${item.id}`}
               />
             ))}
           </div>

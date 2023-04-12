@@ -97,9 +97,9 @@ export default function CardContainer(props: CardContainerProps) {
             .sort(sortByPopularity)
             .map((item: TMDBItem) => (
               <Card
-                key={`${item.type}-${item.id}`}
+                key={`${item.media_type_slug}-${item.id}`}
                 item={item}
-                link={`/catalogo/${item.type}/${item.id}`}
+                link={`/catalogo/${item.media_type_slug}/${item.id}`}
               />
             ))
         )}

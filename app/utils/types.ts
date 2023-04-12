@@ -31,6 +31,7 @@ export type TMDBResponseItem = {
   vote_count: number;
   name?: string;
   title?: string;
+  media_type: string;
 };
 
 export type TMDBItem = {
@@ -40,7 +41,8 @@ export type TMDBItem = {
   vote_average: number;
   popularity: number;
   poster_path: string;
-  type: "filmes" | "series";
+  media_type_slug: "filmes" | "series";
+  media_type: "Filmes" | "Séries";
   release_date?: string;
 };
 
@@ -54,7 +56,8 @@ export type TMDBItemDetails = {
   popularity: number;
   poster_path: string;
   title: string | undefined;
-  type: "filmes" | "series";
+  media_type_slug: "filmes" | "series";
+  media_type: "Filmes" | "Séries";
   vote_average: number;
   vote_count: number;
   release_date?: string;
