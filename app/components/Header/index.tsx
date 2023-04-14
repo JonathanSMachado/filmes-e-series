@@ -12,6 +12,13 @@ export default function Header() {
       <Logo />
       <nav className="flex items-center justify-between gap-8 text-xl">
         <NavLink
+          to="/"
+          role="button"
+          className={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+        >
+          Início
+        </NavLink>
+        <NavLink
           to="/catalogo/filmes"
           role="button"
           className={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
