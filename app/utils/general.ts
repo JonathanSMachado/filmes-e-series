@@ -8,3 +8,8 @@ export function getVideoBaseUrl(site: string): string {
       throw new Error("Unknown site");
   }
 }
+
+export const getPage = (searchParams: URLSearchParams) => {
+  const page = searchParams.get("page");
+  return page ? parseInt(page) : 1;
+};

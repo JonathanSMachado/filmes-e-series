@@ -1,9 +1,18 @@
 import { ArrowUpIcon } from "@heroicons/react/outline";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";
+import { HeroArea } from "~/components/HeroArea";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+type LayoutProps = {
+  showHero?: boolean;
+  heroBackground?: string;
+  children?: ReactNode;
+};
+
+export default function Layout(props: LayoutProps) {
+  const { showHero, heroBackground, children } = props;
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const backToTopButton = document.getElementById("back-to-top-button");
@@ -27,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      {showHero ? <HeroArea backgroundImage={heroBackground} /> : <Header />}
       <main className="w-full flex-grow">{children}</main>
       <Footer />
       <button

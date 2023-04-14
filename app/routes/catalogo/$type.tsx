@@ -1,18 +1,32 @@
 import { json, LoaderFunction, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
+import { Search } from "~/components/Search";
+import { getPage } from "~/utils/general";
 import { TMDBItem } from "~/utils/types";
 
 type LoaderData = {
   items: TMDBItem[];
+  type: string;
+  search?: string;
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const type = params.type;
-  const items = await TMDBApi.getMostPopular({ type });
+  const url = new URL(request.url);
+  const search = url.searchParams.get("search");
+  const page = getPage(url.searchParams);
+
+  let items: TMDBItem[] = [];
+
+  if (search) {
+    items = await TMDBApi.search({ query: search, page, type });
+  } else {
+    items = await TMDBApi.getMostPopular({ type });
+  }
 
   return json(
-    { items },
+    { items, type, search },
     {
       headers: {
         "Cache-Control": "max-age=60, stale-while-revalidate=60",
@@ -22,7 +36,20 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function Type() {
-  const { items } = useLoaderData<LoaderData>();
+  const { items, type, search } = useLoaderData<LoaderData>();
+  const placeholder = type === "filmes" ? "Buscar filmes" : "Buscar séries";
+  const searchAction =
+    type === "filmes" ? "/catalogo/filmes" : "/catalogo/series";
 
-  return <CardContainer items={items} infinityScroll={true} />;
+  return (
+    <>
+      <Search action={searchAction} placeholder={placeholder} />
+      {search && (
+        <p className="text-slate-400 text-xl mx-10 mb-16">
+          Resultado da busca por <em>{search}</em>
+        </p>
+      )}
+      <CardContainer items={items} infinityScroll={true} />;
+    </>
+  );
 }

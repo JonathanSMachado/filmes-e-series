@@ -44,6 +44,7 @@ export type TMDBItem = {
   media_type_slug: "filmes" | "series";
   media_type: "Filmes" | "Séries";
   release_date?: string;
+  backdrop_path: string;
 };
 
 export type TMDBItemDetails = {

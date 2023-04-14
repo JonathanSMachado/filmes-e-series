@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { json, Link, LoaderFunction, NavLink, useLoaderData } from "remix";
+import { Link, LoaderFunction, NavLink, json, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import AppError from "~/components/AppError";
 import CardContainer from "~/components/CardContainer";
-import HeroArea from "~/components/HeroArea";
 import Layout from "~/layout/Layout";
 import { TMDBItem } from "~/utils/types";
 
@@ -25,6 +24,9 @@ export default function Index() {
   const data = useLoaderData<TMDBItem[]>();
   const [isTodayActive, setIsTodayActive] = useState(true);
 
+  const heroBackground =
+    data[Math.floor(Math.random() * data.length)].backdrop_path;
+
   useEffect(() => {
     setIsTodayActive(
       window.location.search.includes("tendencias=hoje") ||
@@ -33,9 +35,8 @@ export default function Index() {
   }, [data]);
 
   return (
-    <Layout>
-      <HeroArea />
-      <div className="px-10 py-5 mb-10 flex flex-col md:flex-row items-center">
+    <Layout showHero={true} heroBackground={heroBackground}>
+      <div className="px-12 py-5 mb-10 flex flex-col md:flex-row items-center">
         <h3 className="text-2xl text-slate-300">Tendências</h3>
         <nav className="relative mt-2 md:mt-0 md:ml-10 flex bg-slate-300 rounded-full overflow-hidden">
           <div

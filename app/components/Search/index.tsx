@@ -1,21 +1,27 @@
 import { Form } from "remix";
 
 type SearchProps = {
-  action: string;
-  method: "get" | "post";
+  action?: string;
+  method?: "get" | "post";
+  placeholder?: string;
 };
 
-export default function Search(props: SearchProps) {
-  const { action, method } = props;
+export function Search(props: SearchProps) {
+  const { action, method, placeholder } = props;
 
   return (
-    <Form method={method} action={action} className="flex" id="form-search">
-      <div className="relative mx-auto text-slate-700">
+    <Form
+      method={method ?? "get"}
+      action={action ?? "/catalogo"}
+      className="flex w-full min-w-[320px] max-w-[768px] mx-auto mt-4 mb-16"
+      id="form-search"
+    >
+      <div className="relative text-slate-700 w-full">
         <input
-          className="h-10 pl-4 pr-10 rounded-md text-md focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-200"
+          className="w-full h-10 pl-4 pr-10 rounded-3xl text-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-200"
           type="search"
           name="search"
-          placeholder="Pesquisar..."
+          placeholder={placeholder ?? "Buscar filmes e séries"}
         />
         <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">
           <svg

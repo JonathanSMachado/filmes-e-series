@@ -13,7 +13,7 @@ export default function Footer() {
         >
           Remix.run
         </a>
-        <span className="hidden sm:block">&nbsp; & &nbsp;</span>
+        <span className="hidden sm:block px-3">&</span>
         <a
           href="https://www.themoviedb.org/documentation/api"
           target="_blank"
@@ -21,6 +21,20 @@ export default function Footer() {
           className={linkStyle}
         >
           The Movie Database API
+        </a>
+        <span className="px-3 font-bold">|</span>
+        <a
+          href="https://github.com/JonathanSMachado/filmes-e-series"
+          target="_blank"
+          className="opacity-60 hover:opacity-90 focus:opacity-90 transition-opacity"
+        >
+          <img
+            src="/images/github-mark-white.svg"
+            alt="Projeto no GitHub"
+            title="Projeto no GitHub"
+            width="32"
+            height="32"
+          />
         </a>
       </p>
     </footer>

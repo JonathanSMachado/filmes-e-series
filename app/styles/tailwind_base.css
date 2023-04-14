@@ -145,3 +145,11 @@ form:not(#form-search) select:focus {
 form [aria-describedby^="errors"] {
   @apply ring-red-500 ring-1;
 }
+
+.icon-github {
+  -webkit-mask: url("/images/github-mark-white.svg") no-repeat center;
+  mask: url("/images/github-mark-white.svg") no-repeat center;
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}

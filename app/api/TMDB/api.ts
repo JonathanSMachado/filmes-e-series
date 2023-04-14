@@ -26,6 +26,8 @@ export async function getMostPopular({
 }): Promise<TMDBItem[]> {
   try {
     const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
+    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
+
     let collection: TMDBItem[] = [];
 
     if (type) {
@@ -44,6 +46,7 @@ export async function getMostPopular({
           media_type: convertMediaType(item.media_type),
           popularity: item.popularity,
           release_date: item.release_date ?? item.first_air_date,
+          backdrop_path: backdropUrl + item.backdrop_path,
         })
       );
     } else {
@@ -63,6 +66,7 @@ export async function getMostPopular({
             media_type: convertMediaType(item.media_type),
             popularity: item.popularity,
             release_date: item.release_date ?? item.first_air_date,
+            backdrop_path: backdropUrl + item.backdrop_path,
           })
         );
 
@@ -142,6 +146,7 @@ export async function getRecommendations({
 }): Promise<TMDBResponse> {
   try {
     const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
+    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
 
     const data = await fetchData(
       `${convertTypeToTMDB(type)}/${id}/recommendations`,
@@ -165,6 +170,7 @@ export async function getRecommendations({
         media_type: convertMediaType(item.media_type),
         popularity: item.popularity,
         release_date: item.release_date ?? item.first_air_date,
+        backdrop_path: backdropUrl + item.backdrop_path,
       })
     );
 
@@ -186,6 +192,8 @@ export async function getSimilar({
   limit?: number;
 }) {
   const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
+  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
+
   const data = await fetchData(`${convertTypeToTMDB(type)}/${id}/similar`, {
     page: page ?? 1,
   });
@@ -205,6 +213,7 @@ export async function getSimilar({
       media_type: convertMediaType(item.media_type),
       popularity: item.popularity,
       release_date: item.release_date ?? item.first_air_date,
+      backdrop_path: backdropUrl + item.backdrop_path,
     })
   );
 
@@ -223,6 +232,8 @@ export async function getTrending({
   period?: string | null;
 }): Promise<TMDBItem[]> {
   const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
+  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
+
   let endpoint = type
     ? `trending/${convertTypeToTMDB(type)}/`
     : "trending/all/";
@@ -247,6 +258,7 @@ export async function getTrending({
       media_type: convertMediaType(item.media_type),
       popularity: item.popularity,
       release_date: item.release_date ?? item.first_air_date,
+      backdrop_path: backdropUrl + item.backdrop_path,
     };
   });
 }
@@ -261,6 +273,7 @@ export async function search({
   page?: number;
 }): Promise<TMDBItem[]> {
   const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
+  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
 
   if (type) {
     const data = await fetchData(`search/${convertTypeToTMDB(type)}`, {
@@ -279,6 +292,7 @@ export async function search({
         media_type: convertMediaType(item.title ? "movie" : "tv"),
         popularity: item.popularity,
         release_date: item.release_date ?? item.first_air_date,
+        backdrop_path: backdropUrl + item.backdrop_path,
       })
     );
   } else {
@@ -301,6 +315,7 @@ export async function search({
           media_type: convertMediaType(item.title ? "movie" : "tv"),
           popularity: item.popularity,
           release_date: item.release_date ?? item.first_air_date,
+          backdrop_path: backdropUrl + item.backdrop_path,
         })
       );
 

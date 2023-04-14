@@ -2,7 +2,7 @@ import { Link } from "remix";
 
 export default function Logo() {
   return (
-    <Link to="/" className="self-start">
+    <Link to="/">
       <img
         src="/images/logo.png"
         alt="Filmes e Séries"
