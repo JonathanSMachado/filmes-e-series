@@ -886,10 +886,6 @@ select {
   width: 18rem;
 }
 
-.min-w-\[320px\] {
-  min-width: 320px;
-}
-
 .max-w-xl {
   max-width: 36rem;
 }
@@ -987,6 +983,10 @@ select {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .gap-y-10 {
@@ -1334,8 +1334,18 @@ body {
   display: grid;
   justify-items: center;
   gap: 1.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+@media (min-width: 768px) {
+  .card-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.card-container {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
@@ -1738,6 +1748,10 @@ form [aria-describedby^="errors"] {
   .sm\:justify-between {
     justify-content: space-between;
   }
+
+  .sm\:gap-8 {
+    gap: 2rem;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1761,9 +1775,8 @@ form [aria-describedby^="errors"] {
     flex-direction: row;
   }
 
-  .md\:px-0 {
-    padding-left: 0px;
-    padding-right: 0px;
+  .md\:gap-8 {
+    gap: 2rem;
   }
 }
 

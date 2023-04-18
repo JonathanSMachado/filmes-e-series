@@ -8,7 +8,7 @@ body {
 }
 
 .card-container {
-  @apply grid px-6 mt-7 gap-6 justify-items-center;
+  @apply grid px-0 md:px-6 mt-7 gap-6 justify-items-center;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 

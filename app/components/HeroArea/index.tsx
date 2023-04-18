@@ -24,7 +24,7 @@ export function HeroArea(props: HeroAreaProps) {
   return (
     <section className="hero flex flex-col w-full mb-4" style={style}>
       <Header />
-      <div className="w-full self-center min-w-[320px] max-w-[768px] mt-7 px-10 md:px-0 text-slate-300">
+      <div className="w-full self-center max-w-[768px] mt-7 px-4 text-slate-300">
         <h1 className="text-5xl">Bem vindo(a)!</h1>
         <h2 className="text-2xl mb-5">
           Explore nosso catálogo de filmes e séries

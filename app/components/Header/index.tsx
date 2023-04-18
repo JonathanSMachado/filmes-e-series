@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="w-full px-10 mb-4 lg:mb-0 flex flex-col sm:flex-row items-center justify-center sm:justify-between bg-transparent text-slate-300 relative">
       <Logo />
-      <nav className="flex items-center justify-between gap-8 text-xl">
+      <nav className="flex flex-wrap items-center justify-between gap-4 sm:gap-8 text-xl">
         <NavLink
           to="/"
           role="button"
