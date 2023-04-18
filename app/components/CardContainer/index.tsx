@@ -15,8 +15,8 @@ export default function CardContainer(props: CardContainerProps) {
   const fetcher = useFetcher();
   const [items, setItems] = useState<TMDBItem[]>(props.items);
   const infinityScroll = props.infinityScroll || false;
-  const [search, setSearch] = useState<string | null>(null);
-  const [type, setType] = useState<string | null>(null);
+  const [type, setType] = useState(props.type);
+  const [search, setSearch] = useState(props.search);
 
   const mainHeight = useCallback(
     (node) => {
@@ -36,9 +36,6 @@ export default function CardContainer(props: CardContainerProps) {
 
       if (typeof window !== "undefined") {
         window.addEventListener("scroll", scrollListener);
-        const url = new URL(window.location.href);
-        setSearch(url.searchParams.get("search"));
-        setType(url.pathname.split("/")[2]);
       }
 
       return () => {
@@ -52,15 +49,15 @@ export default function CardContainer(props: CardContainerProps) {
       if (!shouldFetch || !height) return;
       if (clientHeight + scrollPosition + 100 < height) return;
 
-      let endpoint: string = `/catalogo?index&page=${page}`;
+      let endpoint: string = `/catalogo${
+        type ? `/${type}` : ""
+      }?index&page=${page}`;
 
       if (search) {
         endpoint += `&search=${search}`;
       }
 
-      if (type) {
-        endpoint += `&type=${type}`;
-      }
+      console.log(type, search);
 
       fetcher.load(endpoint);
 

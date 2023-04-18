@@ -45,7 +45,7 @@ export default function Catalog() {
           Resultado da busca por <em>{search}</em>
         </p>
       )}
-      <CardContainer items={items} infinityScroll={true} />
+      <CardContainer items={items} infinityScroll={true} search={search} />
     </>
   );
 }

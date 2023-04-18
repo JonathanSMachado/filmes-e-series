@@ -7,7 +7,7 @@ import { TMDBItem } from "~/utils/types";
 
 type LoaderData = {
   items: TMDBItem[];
-  type: string;
+  type: "filmes" | "series";
   search?: string;
 };
 
@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (search) {
     items = await TMDBApi.search({ query: search, page, type });
   } else {
-    items = await TMDBApi.getMostPopular({ type });
+    items = await TMDBApi.getMostPopular({ page, type });
   }
 
   return json(
@@ -38,18 +38,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function Type() {
   const { items, type, search } = useLoaderData<LoaderData>();
   const placeholder = type === "filmes" ? "Buscar filmes" : "Buscar séries";
-  const searchAction =
-    type === "filmes" ? "/catalogo/filmes" : "/catalogo/series";
 
   return (
     <>
-      <Search action={searchAction} placeholder={placeholder} />
+      <Search action={type} placeholder={placeholder} />
       {search && (
         <p className="text-slate-400 text-xl mx-10 mb-16">
           Resultado da busca por <em>{search}</em>
         </p>
       )}
-      <CardContainer items={items} infinityScroll={true} />;
+      <CardContainer
+        items={items}
+        infinityScroll={true}
+        type={type}
+        search={search}
+      />
+      ;
     </>
   );
 }

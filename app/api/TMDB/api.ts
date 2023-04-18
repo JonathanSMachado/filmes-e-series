@@ -35,6 +35,8 @@ export async function getMostPopular({
         page: page ?? 1,
       });
 
+      console.log(data.results);
+
       collection = data.results.map(
         (item: TMDBResponseItem): TMDBItem => ({
           id: item.id,
@@ -42,8 +44,8 @@ export async function getMostPopular({
           adult: item.adult || false,
           vote_average: item.vote_average,
           poster_path: tmdbImagesUrl + item.poster_path,
-          media_type_slug: convertMediaTypeToSlug(item.media_type),
-          media_type: convertMediaType(item.media_type),
+          media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
+          media_type: convertMediaType(item.title ? "movie" : "tv"),
           popularity: item.popularity,
           release_date: item.release_date ?? item.first_air_date,
           backdrop_path: backdropUrl + item.backdrop_path,
@@ -62,8 +64,10 @@ export async function getMostPopular({
             adult: item.adult || false,
             vote_average: item.vote_average,
             poster_path: tmdbImagesUrl + item.poster_path,
-            media_type_slug: convertMediaTypeToSlug(item.media_type),
-            media_type: convertMediaType(item.media_type),
+            media_type_slug: convertMediaTypeToSlug(
+              item.title ? "movie" : "tv"
+            ),
+            media_type: convertMediaType(item.title ? "movie" : "tv"),
             popularity: item.popularity,
             release_date: item.release_date ?? item.first_air_date,
             backdrop_path: backdropUrl + item.backdrop_path,

@@ -12,7 +12,7 @@ export function Search(props: SearchProps) {
   return (
     <Form
       method={method ?? "get"}
-      action={action ?? "/catalogo"}
+      action={"/catalogo" + (action ? `/${action}` : "")}
       className="flex w-full min-w-[320px] max-w-[768px] mx-auto mt-4 mb-16"
       id="form-search"
     >

@@ -81,6 +81,8 @@ export type CardProps = {
 export type CardContainerProps = {
   items: TMDBItem[];
   infinityScroll?: boolean;
+  type?: "filmes" | "series";
+  search?: string;
 };
 
 export type MessageObject = {
