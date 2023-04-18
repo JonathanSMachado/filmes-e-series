@@ -57,8 +57,6 @@ export default function CardContainer(props: CardContainerProps) {
         endpoint += `&search=${search}`;
       }
 
-      console.log(type, search);
-
       fetcher.load(endpoint);
 
       setShouldFetch(false);

@@ -35,8 +35,6 @@ export async function getMostPopular({
         page: page ?? 1,
       });
 
-      console.log(data.results);
-
       collection = data.results.map(
         (item: TMDBResponseItem): TMDBItem => ({
           id: item.id,
