@@ -41,7 +41,7 @@ export type TMDBItem = {
   vote_average: number;
   popularity: number;
   poster_path: string;
-  media_type_slug: "filmes" | "series";
+  media_type_slug: string;
   media_type: "Filmes" | "Séries";
   release_date?: string;
   backdrop_path: string;
@@ -57,7 +57,7 @@ export type TMDBItemDetails = {
   popularity: number;
   poster_path: string;
   title: string | undefined;
-  media_type_slug: "filmes" | "series";
+  media_type_slug: string;
   media_type: "Filmes" | "Séries";
   vote_average: number;
   vote_count: number;

@@ -1,10 +1,9 @@
 import {
   convertMediaType,
-  convertMediaTypeToSlug,
   convertPeriodToTMDB,
   convertTypeToTMDB,
 } from "~/utils/converters";
-import { getVideoBaseUrl } from "~/utils/general";
+import { getVideoBaseUrl, slugify } from "~/utils/general";
 import {
   TMDBItem,
   TMDBItemDetails,
@@ -14,6 +13,8 @@ import {
 } from "~/utils/types";
 
 const TYPES = ["movie", "tv"];
+const POSTER_URL = ENV.TMDB_POSTER_IMAGES_URL;
+const BACKDROP_URL = ENV.TMDB_BACKDROP_IMAGES_URL;
 
 export async function getMostPopular({
   type,
@@ -25,62 +26,22 @@ export async function getMostPopular({
   limit?: number;
 }): Promise<TMDBItem[]> {
   try {
-    const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
-    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
-
-    let collection: TMDBItem[] = [];
+    let items: TMDBItem[] = [];
 
     if (type) {
-      const data = await fetchData(`${convertTypeToTMDB(type)}/popular`, {
-        page: page ?? 1,
-      });
-
-      collection = data.results.map(
-        (item: TMDBResponseItem): TMDBItem => ({
-          id: item.id,
-          title: item.title || item.name || "",
-          adult: item.adult || false,
-          vote_average: item.vote_average,
-          poster_path: tmdbImagesUrl + item.poster_path,
-          media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
-          media_type: convertMediaType(item.title ? "movie" : "tv"),
-          popularity: item.popularity,
-          release_date: item.release_date ?? item.first_air_date,
-          backdrop_path: backdropUrl + item.backdrop_path,
-        })
-      );
+      items = await fetchPopularItemsByType(convertTypeToTMDB(type), page ?? 1);
     } else {
-      for (const type of TYPES) {
-        const data = await fetchData(`${type}/popular`, {
-          page: page ?? 1,
-        });
-
-        const items = data.results.map(
-          (item: TMDBResponseItem): TMDBItem => ({
-            id: item.id,
-            title: item.title || item.name || "",
-            adult: item.adult || false,
-            vote_average: item.vote_average,
-            poster_path: tmdbImagesUrl + item.poster_path,
-            media_type_slug: convertMediaTypeToSlug(
-              item.title ? "movie" : "tv"
-            ),
-            media_type: convertMediaType(item.title ? "movie" : "tv"),
-            popularity: item.popularity,
-            release_date: item.release_date ?? item.first_air_date,
-            backdrop_path: backdropUrl + item.backdrop_path,
-          })
-        );
-
-        collection = [...collection, ...items];
+      for (const itemType of TYPES) {
+        const typeItems = await fetchPopularItemsByType(itemType, page ?? 1);
+        items = [...items, ...typeItems];
       }
     }
 
     if (limit) {
-      collection = collection.slice(0, limit);
+      items = items.slice(0, limit);
     }
 
-    return collection;
+    return items;
   } catch (error: any) {
     throw new Error(error);
   }
@@ -94,40 +55,62 @@ export async function getDetails({
   id: string;
 }): Promise<TMDBItemDetails> {
   try {
-    const posterUrl = ENV.TMDB_POSTER_IMAGES_URL;
-    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
     const data = await fetchData(`${convertTypeToTMDB(type)}/${id}`, {
       appendVideos: true,
     });
 
     const videos = data?.videos?.results?.map((video: any): TMDBVideo => {
+      const { id, name, site, key, published_at } = video;
+
       return {
-        id: video.id,
-        name: video.name,
-        url: `${getVideoBaseUrl(video.site)}${video.key}`,
-        published_at: video.published_at,
+        id,
+        name,
+        url: `${getVideoBaseUrl(site)}${key}`,
+        published_at,
       };
     });
 
+    const {
+      adult,
+      backdrop_path,
+      genres,
+      homepage,
+      id: itemId,
+      overview,
+      popularity,
+      poster_path,
+      title,
+      name,
+      vote_average,
+      vote_count,
+      release_date,
+      first_air_date,
+      number_of_episodes,
+      number_of_seasons,
+      tagline,
+      runtime,
+    } = data;
+    const mediaType = convertMediaType(title ? "movie" : "tv");
+
     return {
-      adult: data.adult,
-      backdrop_path: backdropUrl + data.backdrop_path,
-      genres: data.genres,
-      homepage: data.homepage,
-      id: data.id,
-      overview: data.overview,
-      popularity: data.popularity,
-      poster_path: posterUrl + data.poster_path,
-      title: data.title || data.name,
-      media_type_slug: convertMediaTypeToSlug(data.title ? "movie" : "tv"),
-      media_type: convertMediaType(data.title ? "movie" : "tv"),
-      vote_average: data.vote_average,
-      vote_count: data.vote_count,
-      release_date: data.release_date ?? data.first_air_date,
-      number_of_episodes: data.number_of_episodes,
-      number_of_seasons: data.number_of_seasons,
-      tagline: data.tagline || "",
-      runtime: data.runtime,
+      adult: adult,
+      backdrop_path: BACKDROP_URL + backdrop_path,
+      genres: genres,
+      homepage: homepage,
+      id: itemId,
+      overview: overview,
+      popularity: popularity,
+      poster_path: POSTER_URL + poster_path,
+      title: title || name,
+      media_type_slug: slugify(mediaType),
+      media_type: mediaType,
+      vote_average: vote_average,
+      vote_count: vote_count,
+      release_date: release_date ?? first_air_date,
+      number_of_episodes: number_of_episodes,
+      number_of_seasons: number_of_seasons,
+      tagline: tagline || "",
+      runtime: runtime,
       videos,
     };
   } catch (error: any) {
@@ -147,9 +130,6 @@ export async function getRecommendations({
   limit?: number;
 }): Promise<TMDBResponse> {
   try {
-    const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
-    const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
-
     const data = await fetchData(
       `${convertTypeToTMDB(type)}/${id}/recommendations`,
       {
@@ -161,65 +141,41 @@ export async function getRecommendations({
       data.results = data.results.slice(0, limit);
     }
 
-    data.results = data.results.map(
-      (item: TMDBResponseItem): TMDBItem => ({
-        id: item.id,
-        title: item.title || item.name || "",
-        adult: item.adult || false,
-        vote_average: item.vote_average,
-        poster_path: tmdbImagesUrl + item.poster_path,
-        media_type_slug: convertMediaTypeToSlug(item.media_type),
-        media_type: convertMediaType(item.media_type),
-        popularity: item.popularity,
-        release_date: item.release_date ?? item.first_air_date,
-        backdrop_path: backdropUrl + item.backdrop_path,
-      })
-    );
+    data.results = data.results.map((item: TMDBResponseItem): TMDBItem => {
+      const {
+        id,
+        title,
+        name,
+        adult,
+        vote_average,
+        poster_path,
+        media_type,
+        popularity,
+        release_date,
+        first_air_date,
+        backdrop_path,
+      } = item;
+
+      const mediaType = convertMediaType(title ? "movie" : "tv");
+
+      return {
+        id: id,
+        title: title || name || "",
+        adult: adult || false,
+        vote_average: vote_average,
+        poster_path: POSTER_URL + poster_path,
+        media_type_slug: slugify(mediaType),
+        media_type: mediaType,
+        popularity: popularity,
+        release_date: release_date ?? first_air_date,
+        backdrop_path: BACKDROP_URL + backdrop_path,
+      };
+    });
 
     return data;
   } catch (error: any) {
     throw new Error(error);
   }
-}
-
-export async function getSimilar({
-  type,
-  id,
-  page,
-  limit,
-}: {
-  type: string;
-  id: number;
-  page?: number;
-  limit?: number;
-}) {
-  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
-  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
-
-  const data = await fetchData(`${convertTypeToTMDB(type)}/${id}/similar`, {
-    page: page ?? 1,
-  });
-
-  if (limit) {
-    data.results = data.results.slice(0, limit);
-  }
-
-  data.results = data.results.map(
-    (item: TMDBResponseItem): TMDBItem => ({
-      id: item.id,
-      title: item.title || item.name || "",
-      adult: item.adult || false,
-      vote_average: item.vote_average,
-      poster_path: tmdbImagesUrl + item.poster_path,
-      media_type_slug: convertMediaTypeToSlug(item.media_type),
-      media_type: convertMediaType(item.media_type),
-      popularity: item.popularity,
-      release_date: item.release_date ?? item.first_air_date,
-      backdrop_path: backdropUrl + item.backdrop_path,
-    })
-  );
-
-  return data;
 }
 
 export async function getTrending({
@@ -233,34 +189,47 @@ export async function getTrending({
   limit?: number;
   period?: string | null;
 }): Promise<TMDBItem[]> {
-  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
-  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
-
-  let endpoint = type
+  const trendingEndpoint = type
     ? `trending/${convertTypeToTMDB(type)}/`
     : "trending/all/";
-  endpoint += period ? convertPeriodToTMDB(period) : "day";
+
+  const endpoint = period
+    ? `${trendingEndpoint}${convertPeriodToTMDB(period)}`
+    : `${trendingEndpoint}day`;
 
   const data = await fetchData(endpoint, {
     page: page ?? 1,
   });
 
-  if (limit) {
-    data.results = data.results.slice(0, limit);
-  }
+  const results = limit ? data.results.slice(0, limit) : data.results;
 
-  return data.results.map((item: TMDBResponseItem): TMDBItem => {
+  return results.map((item: TMDBResponseItem): TMDBItem => {
+    const {
+      id,
+      title,
+      name,
+      adult,
+      vote_average,
+      poster_path,
+      media_type,
+      popularity,
+      release_date,
+      first_air_date,
+      backdrop_path,
+    } = item;
+    const mediaType = convertMediaType(title ? "movie" : "tv");
+
     return {
-      id: item.id,
-      title: item.title || item.name || "",
-      adult: item.adult || false,
-      vote_average: item.vote_average,
-      poster_path: tmdbImagesUrl + item.poster_path,
-      media_type_slug: convertMediaTypeToSlug(item.media_type),
-      media_type: convertMediaType(item.media_type),
-      popularity: item.popularity,
-      release_date: item.release_date ?? item.first_air_date,
-      backdrop_path: backdropUrl + item.backdrop_path,
+      id: id,
+      title: title || name || "",
+      adult: adult || false,
+      vote_average: vote_average,
+      poster_path: POSTER_URL + poster_path,
+      media_type_slug: slugify(mediaType),
+      media_type: mediaType,
+      popularity: popularity,
+      release_date: release_date ?? first_air_date,
+      backdrop_path: BACKDROP_URL + backdrop_path,
     };
   });
 }
@@ -274,58 +243,100 @@ export async function search({
   type?: string;
   page?: number;
 }): Promise<TMDBItem[]> {
-  const tmdbImagesUrl = ENV.TMDB_POSTER_IMAGES_URL;
-  const backdropUrl = ENV.TMDB_BACKDROP_IMAGES_URL;
-
   if (type) {
-    const data = await fetchData(`search/${convertTypeToTMDB(type)}`, {
+    return await fetchSearchItemsByType(
+      convertTypeToTMDB(type),
       query,
-      page: page ?? 1,
-    });
-
-    return data.results.map(
-      (item: TMDBResponseItem): TMDBItem => ({
-        id: item.id,
-        title: item.title || item.name || "",
-        adult: item.adult || false,
-        vote_average: item.vote_average,
-        poster_path: tmdbImagesUrl + item.poster_path,
-        media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
-        media_type: convertMediaType(item.title ? "movie" : "tv"),
-        popularity: item.popularity,
-        release_date: item.release_date ?? item.first_air_date,
-        backdrop_path: backdropUrl + item.backdrop_path,
-      })
+      page ?? 1
     );
   } else {
-    let collection: TMDBItem[] = [];
+    let items: TMDBItem[] = [];
 
     for (const type of TYPES) {
-      const data = await fetchData(`search/${type}`, {
-        query,
-        page: page ?? 1,
-      });
-
-      const items = data.results.map(
-        (item: TMDBResponseItem): TMDBItem => ({
-          id: item.id,
-          title: item.title || item.name || "",
-          adult: item.adult || false,
-          vote_average: item.vote_average,
-          poster_path: `${tmdbImagesUrl}/${item.poster_path}`,
-          media_type_slug: convertMediaTypeToSlug(item.title ? "movie" : "tv"),
-          media_type: convertMediaType(item.title ? "movie" : "tv"),
-          popularity: item.popularity,
-          release_date: item.release_date ?? item.first_air_date,
-          backdrop_path: backdropUrl + item.backdrop_path,
-        })
-      );
-
-      collection = [...collection, ...items];
+      const data = await fetchSearchItemsByType(type, query, page ?? 1);
+      items = [...items, ...data];
     }
 
-    return collection;
+    return items;
   }
+}
+
+async function fetchPopularItemsByType(
+  type: string,
+  page: number
+): Promise<TMDBItem[]> {
+  const data = await fetchData(`${type}/popular`, {
+    page,
+  });
+
+  return data.results.map((result: TMDBResponseItem) => {
+    const {
+      title,
+      name,
+      adult,
+      vote_average,
+      poster_path,
+      popularity,
+      release_date,
+      first_air_date,
+      backdrop_path,
+    } = result;
+
+    const mediaType = convertMediaType(title ? "movie" : "tv");
+
+    return {
+      id: result.id,
+      title: title || name || "",
+      adult: adult ?? false,
+      vote_average,
+      poster_path: POSTER_URL + poster_path,
+      media_type_slug: slugify(mediaType),
+      media_type: mediaType,
+      popularity,
+      release_date: release_date ?? first_air_date,
+      backdrop_path: BACKDROP_URL + backdrop_path,
+    };
+  });
+}
+
+async function fetchSearchItemsByType(
+  type: string,
+  query: string,
+  page: number
+) {
+  const data = await fetchData(`search/${type}`, {
+    query,
+    page: page ?? 1,
+  });
+
+  return data.results.map((item: TMDBResponseItem): TMDBItem => {
+    const {
+      id,
+      title,
+      name,
+      adult,
+      vote_average,
+      poster_path,
+      popularity,
+      release_date,
+      first_air_date,
+      backdrop_path,
+    } = item;
+    const mediaType = convertMediaType(title ? "movie" : "tv");
+
+    return {
+      id: id,
+      title: title || name || "",
+      adult: adult || false,
+      vote_average: vote_average,
+      poster_path: POSTER_URL + poster_path,
+      media_type_slug: slugify(mediaType),
+      media_type: mediaType,
+      popularity: popularity,
+      release_date: release_date ?? first_air_date,
+      backdrop_path: BACKDROP_URL + backdrop_path,
+    };
+  });
 }
 
 async function fetchData(

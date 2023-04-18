@@ -82,6 +82,9 @@ export default function CardContainer(props: CardContainerProps) {
     setItems(props.items);
   }, [props.items]);
 
+  useEffect(() => setType(props.type), [props.type]);
+  useEffect(() => setSearch(props.search), [props.search]);
+
   return (
     <>
       <div ref={mainHeight} className="card-container">
