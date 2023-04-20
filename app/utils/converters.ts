@@ -1,3 +1,6 @@
+import { slugify } from "./general";
+import { TMDBItem, TMDBResponseItem } from "./types";
+
 export function convertTypeToTMDB(type: string): string {
   switch (type) {
     case "series":
@@ -7,22 +10,13 @@ export function convertTypeToTMDB(type: string): string {
   }
 }
 
-export function convertPeriodToTMDB(period: string): string {
+export function translatePeriodToEN(period: string): string {
   switch (period) {
     case "semana":
       return "week";
     default:
       return "day";
   }
-}
-
-export function convertMediaTypeToSlug(mediaType: string): "filmes" | "series" {
-  const mediaTypeMap: Record<string, "filmes" | "series"> = {
-    movie: "filmes",
-    tv: "series",
-  };
-
-  return mediaTypeMap[mediaType];
 }
 
 export function convertMediaType(mediaType: string): "Filmes" | "Séries" {
@@ -32,4 +26,38 @@ export function convertMediaType(mediaType: string): "Filmes" | "Séries" {
   };
 
   return mediaTypeMap[mediaType];
+}
+
+export function mapToTMDBItem(item: TMDBResponseItem): TMDBItem {
+  const POSTER_URL = ENV.TMDB_POSTER_IMAGES_URL;
+  const BACKDROP_URL = ENV.TMDB_BACKDROP_IMAGES_URL;
+
+  const {
+    id,
+    title,
+    name,
+    adult,
+    vote_average,
+    poster_path,
+    media_type,
+    popularity,
+    release_date,
+    first_air_date,
+    backdrop_path,
+  } = item;
+
+  const mediaType = convertMediaType(title ? "movie" : "tv");
+
+  return {
+    id: id,
+    title: title || name || "",
+    adult: adult || false,
+    vote_average: vote_average,
+    poster_path: POSTER_URL + poster_path,
+    media_type_slug: slugify(mediaType),
+    media_type: mediaType,
+    popularity: popularity,
+    release_date: release_date ?? first_air_date,
+    backdrop_path: BACKDROP_URL + backdrop_path,
+  };
 }

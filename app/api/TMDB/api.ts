@@ -1,14 +1,14 @@
 import {
   convertMediaType,
-  convertPeriodToTMDB,
   convertTypeToTMDB,
+  mapToTMDBItem,
+  translatePeriodToEN,
 } from "~/utils/converters";
 import { getVideoBaseUrl, slugify } from "~/utils/general";
 import {
   TMDBItem,
   TMDBItemDetails,
   TMDBResponse,
-  TMDBResponseItem,
   TMDBVideo,
 } from "~/utils/types";
 
@@ -141,36 +141,7 @@ export async function getRecommendations({
       data.results = data.results.slice(0, limit);
     }
 
-    data.results = data.results.map((item: TMDBResponseItem): TMDBItem => {
-      const {
-        id,
-        title,
-        name,
-        adult,
-        vote_average,
-        poster_path,
-        media_type,
-        popularity,
-        release_date,
-        first_air_date,
-        backdrop_path,
-      } = item;
-
-      const mediaType = convertMediaType(title ? "movie" : "tv");
-
-      return {
-        id: id,
-        title: title || name || "",
-        adult: adult || false,
-        vote_average: vote_average,
-        poster_path: POSTER_URL + poster_path,
-        media_type_slug: slugify(mediaType),
-        media_type: mediaType,
-        popularity: popularity,
-        release_date: release_date ?? first_air_date,
-        backdrop_path: BACKDROP_URL + backdrop_path,
-      };
-    });
+    data.results = data.results.map(mapToTMDBItem);
 
     return data;
   } catch (error: any) {
@@ -194,7 +165,7 @@ export async function getTrending({
     : "trending/all/";
 
   const endpoint = period
-    ? `${trendingEndpoint}${convertPeriodToTMDB(period)}`
+    ? `${trendingEndpoint}${translatePeriodToEN(period)}`
     : `${trendingEndpoint}day`;
 
   const data = await fetchData(endpoint, {
@@ -203,35 +174,7 @@ export async function getTrending({
 
   const results = limit ? data.results.slice(0, limit) : data.results;
 
-  return results.map((item: TMDBResponseItem): TMDBItem => {
-    const {
-      id,
-      title,
-      name,
-      adult,
-      vote_average,
-      poster_path,
-      media_type,
-      popularity,
-      release_date,
-      first_air_date,
-      backdrop_path,
-    } = item;
-    const mediaType = convertMediaType(title ? "movie" : "tv");
-
-    return {
-      id: id,
-      title: title || name || "",
-      adult: adult || false,
-      vote_average: vote_average,
-      poster_path: POSTER_URL + poster_path,
-      media_type_slug: slugify(mediaType),
-      media_type: mediaType,
-      popularity: popularity,
-      release_date: release_date ?? first_air_date,
-      backdrop_path: BACKDROP_URL + backdrop_path,
-    };
-  });
+  return results.map(mapToTMDBItem);
 }
 
 export async function search({
@@ -269,34 +212,7 @@ async function fetchPopularItemsByType(
     page,
   });
 
-  return data.results.map((result: TMDBResponseItem) => {
-    const {
-      title,
-      name,
-      adult,
-      vote_average,
-      poster_path,
-      popularity,
-      release_date,
-      first_air_date,
-      backdrop_path,
-    } = result;
-
-    const mediaType = convertMediaType(title ? "movie" : "tv");
-
-    return {
-      id: result.id,
-      title: title || name || "",
-      adult: adult ?? false,
-      vote_average,
-      poster_path: POSTER_URL + poster_path,
-      media_type_slug: slugify(mediaType),
-      media_type: mediaType,
-      popularity,
-      release_date: release_date ?? first_air_date,
-      backdrop_path: BACKDROP_URL + backdrop_path,
-    };
-  });
+  return data.results.map(mapToTMDBItem);
 }
 
 async function fetchSearchItemsByType(
@@ -309,34 +225,7 @@ async function fetchSearchItemsByType(
     page: page ?? 1,
   });
 
-  return data.results.map((item: TMDBResponseItem): TMDBItem => {
-    const {
-      id,
-      title,
-      name,
-      adult,
-      vote_average,
-      poster_path,
-      popularity,
-      release_date,
-      first_air_date,
-      backdrop_path,
-    } = item;
-    const mediaType = convertMediaType(title ? "movie" : "tv");
-
-    return {
-      id: id,
-      title: title || name || "",
-      adult: adult || false,
-      vote_average: vote_average,
-      poster_path: POSTER_URL + poster_path,
-      media_type_slug: slugify(mediaType),
-      media_type: mediaType,
-      popularity: popularity,
-      release_date: release_date ?? first_air_date,
-      backdrop_path: BACKDROP_URL + backdrop_path,
-    };
-  });
+  return data.results.map(mapToTMDBItem);
 }
 
 async function fetchData(

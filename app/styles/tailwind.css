@@ -973,8 +973,8 @@ select {
   gap: 1px;
 }
 
-.gap-8 {
-  gap: 2rem;
+.gap-4 {
+  gap: 1rem;
 }
 
 .gap-10 {
@@ -983,10 +983,6 @@ select {
 
 .gap-6 {
   gap: 1.5rem;
-}
-
-.gap-4 {
-  gap: 1rem;
 }
 
 .gap-y-10 {
@@ -1773,10 +1769,6 @@ form [aria-describedby^="errors"] {
 
   .md\:flex-row {
     flex-direction: row;
-  }
-
-  .md\:gap-8 {
-    gap: 2rem;
   }
 }
 
