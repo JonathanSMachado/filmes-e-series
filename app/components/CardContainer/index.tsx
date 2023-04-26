@@ -3,9 +3,6 @@ import { useFetcher } from "remix";
 import { CardContainerProps, TMDBItem } from "~/utils/types";
 import Card from "../Card";
 
-const sortByPopularity = (a: TMDBItem, b: TMDBItem) =>
-  b.popularity - a.popularity;
-
 export default function CardContainer(props: CardContainerProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [clientHeight, setClientHeight] = useState(0);
@@ -91,15 +88,13 @@ export default function CardContainer(props: CardContainerProps) {
         {!items.length ? (
           <p className="text-slate-300">Nenhum item encontrado!</p>
         ) : (
-          items
-            .sort(sortByPopularity)
-            .map((item: TMDBItem) => (
-              <Card
-                key={`${item.media_type_slug}-${item.id}`}
-                item={item}
-                link={`/catalogo/${item.media_type_slug}/${item.id}`}
-              />
-            ))
+          items.map((item: TMDBItem) => (
+            <Card
+              key={`${item.media_type_slug}-${item.id}`}
+              item={item}
+              link={`/catalogo/${item.media_type_slug}/${item.id}`}
+            />
+          ))
         )}
       </div>
       {fetcher.state === "loading" && (

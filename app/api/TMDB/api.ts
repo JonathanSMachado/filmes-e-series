@@ -47,6 +47,40 @@ export async function getMostPopular({
   }
 }
 
+export async function getTopRated({
+  type,
+  page,
+  limit,
+}: {
+  type?: string | null;
+  page?: number;
+  limit?: number;
+}): Promise<TMDBItem[]> {
+  try {
+    let items: TMDBItem[] = [];
+
+    if (type) {
+      items = await fetchTopRatedItemsByType(
+        convertTypeToTMDB(type),
+        page ?? 1
+      );
+    } else {
+      for (const itemType of TYPES) {
+        const typeItems = await fetchTopRatedItemsByType(itemType, page ?? 1);
+        items = [...items, ...typeItems];
+      }
+    }
+
+    if (limit) {
+      items = items.slice(0, limit);
+    }
+
+    return items;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+}
+
 export async function getDetails({
   type,
   id,
@@ -187,16 +221,12 @@ export async function search({
   page?: number;
 }): Promise<TMDBItem[]> {
   if (type) {
-    return await fetchSearchItemsByType(
-      convertTypeToTMDB(type),
-      query,
-      page ?? 1
-    );
+    return await searchItemsByType(convertTypeToTMDB(type), query, page ?? 1);
   } else {
     let items: TMDBItem[] = [];
 
     for (const type of TYPES) {
-      const data = await fetchSearchItemsByType(type, query, page ?? 1);
+      const data = await searchItemsByType(type, query, page ?? 1);
       items = [...items, ...data];
     }
 
@@ -208,18 +238,21 @@ async function fetchPopularItemsByType(
   type: string,
   page: number
 ): Promise<TMDBItem[]> {
-  const data = await fetchData(`${type}/popular`, {
-    page,
-  });
+  const data = await fetchData(`${type}/popular`, { page });
 
   return data.results.map(mapToTMDBItem);
 }
 
-async function fetchSearchItemsByType(
+async function fetchTopRatedItemsByType(
   type: string,
-  query: string,
   page: number
-) {
+): Promise<TMDBItem[]> {
+  const data = await fetchData(`${type}/top_rated`, { page });
+
+  return data.results.map(mapToTMDBItem);
+}
+
+async function searchItemsByType(type: string, query: string, page: number) {
   const data = await fetchData(`search/${type}`, {
     query,
     page: page ?? 1,
@@ -234,6 +267,7 @@ async function fetchData(
     page?: number;
     query?: string;
     appendVideos?: boolean;
+    include_adult?: boolean;
   }
 ) {
   const token = ENV.TMDB_TOKEN;
@@ -251,6 +285,10 @@ async function fetchData(
 
     if (params.appendVideos) {
       queryParams.push("append_to_response=videos");
+    }
+
+    if (params.include_adult) {
+      queryParams.push("include_adult=true");
     }
   }
 
