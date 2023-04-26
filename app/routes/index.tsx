@@ -24,9 +24,6 @@ export default function Index() {
   const data = useLoaderData<TMDBItem[]>();
   const [isTodayActive, setIsTodayActive] = useState(true);
 
-  const heroBackground =
-    data[Math.floor(Math.random() * data.length)].backdrop_path;
-
   useEffect(() => {
     setIsTodayActive(
       window.location.search.includes("tendencias=hoje") ||
@@ -35,7 +32,7 @@ export default function Index() {
   }, [data]);
 
   return (
-    <Layout showHero={true} heroBackground={heroBackground}>
+    <Layout showHero={true}>
       <div className="px-12 py-5 mb-10 flex flex-col md:flex-row items-center">
         <h3 className="text-2xl text-slate-300">Tendências</h3>
         <nav className="relative mt-2 md:mt-0 md:ml-10 flex bg-slate-300 rounded-full overflow-hidden">

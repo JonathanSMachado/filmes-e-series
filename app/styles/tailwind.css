@@ -850,6 +850,10 @@ select {
   min-height: 100vh;
 }
 
+.min-h-\[345px\] {
+  min-height: 345px;
+}
+
 .w-full {
   width: 100%;
 }

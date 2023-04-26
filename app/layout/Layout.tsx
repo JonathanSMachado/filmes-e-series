@@ -6,12 +6,11 @@ import { HeroArea } from "~/components/HeroArea";
 
 type LayoutProps = {
   showHero?: boolean;
-  heroBackground?: string;
   children?: ReactNode;
 };
 
 export default function Layout(props: LayoutProps) {
-  const { showHero, heroBackground, children } = props;
+  const { showHero, children } = props;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -36,7 +35,7 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <>
-      {showHero ? <HeroArea backgroundImage={heroBackground} /> : <Header />}
+      {showHero ? <HeroArea /> : <Header />}
       <main className="w-full flex-grow">{children}</main>
       <Footer />
       <button

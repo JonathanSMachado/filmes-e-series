@@ -1,7 +1,6 @@
 import { json, LoaderFunction, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
-import { Search } from "~/components/Search";
 import { getPage } from "~/utils/general";
 import { TMDBItem } from "~/utils/types";
 
@@ -39,7 +38,6 @@ export default function Catalog() {
 
   return (
     <>
-      <Search />
       {search && (
         <p className="text-slate-400 text-xl mx-10 mb-16">
           Resultado da busca por <em>{search}</em>

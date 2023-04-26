@@ -1,9 +1,9 @@
 import { Form } from "remix";
 
 type SearchProps = {
-  action?: string;
+  action: string;
   method?: "get" | "post";
-  placeholder?: string;
+  placeholder: string;
 };
 
 export function Search(props: SearchProps) {
@@ -12,7 +12,7 @@ export function Search(props: SearchProps) {
   return (
     <Form
       method={method ?? "get"}
-      action={"/catalogo" + (action ? `/${action}` : "")}
+      action={action}
       className="flex w-full max-w-[768px] mx-auto mt-4 mb-16"
       id="form-search"
     >
@@ -21,7 +21,7 @@ export function Search(props: SearchProps) {
           className="w-full h-10 pl-4 pr-10 rounded-3xl text-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all duration-200"
           type="search"
           name="search"
-          placeholder={placeholder ?? "Buscar filmes e séries"}
+          placeholder={placeholder}
         />
         <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">
           <svg
