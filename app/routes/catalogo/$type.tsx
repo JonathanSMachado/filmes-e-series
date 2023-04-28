@@ -50,7 +50,6 @@ export default function Type() {
         type={type}
         search={search}
       />
-      ;
     </>
   );
 }
