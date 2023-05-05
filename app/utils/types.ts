@@ -67,6 +67,7 @@ export type TMDBItemDetails = {
   tagline: string;
   runtime: number;
   videos: TMDBVideo[] | undefined;
+  recommendations: TMDBItem[];
 };
 
 export type CardSize = "small" | "medium" | "large";

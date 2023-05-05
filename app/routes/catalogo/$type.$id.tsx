@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { LoaderFunction, json, useFetcher, useLoaderData } from "remix";
+import { LoaderFunction, json, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import Score from "~/components/Card/Score";
 import { convertMinutesToFormattedHours, formatDateToPtBr } from "~/utils/date";
-import { TMDBItem, TMDBItemDetails, TMDBResponse } from "~/utils/types";
+import { TMDBItem, TMDBItemDetails } from "~/utils/types";
 
 export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
   const { type, id } = params;
@@ -14,40 +13,27 @@ export const loader: LoaderFunction = async ({ params }): Promise<Response> => {
     throw new Error("Invalid params.");
   }
 
-  const data = await TMDBApi.getDetails({ type, id });
+  const [data, recommendations] = await Promise.all([
+    TMDBApi.getDetails({ type, id }),
+    TMDBApi.getRecommendations({
+      type,
+      id: +id,
+      limit: 6,
+    }),
+  ]);
 
-  return json(data, {
-    headers: {
-      "Cache-Control": "max-age=60, stale-while-revalidate=60",
-    },
-  });
+  return json(
+    { ...data, recommendations },
+    {
+      headers: {
+        "Cache-Control": "max-age=60, stale-while-revalidate=60",
+      },
+    }
+  );
 };
 
 export default function Details() {
   const item = useLoaderData<TMDBItemDetails>();
-
-  const emptyTMDBResponse: TMDBResponse = {
-    page: 1,
-    total_pages: 1,
-    total_results: 1,
-    results: [],
-  };
-
-  const [recommendations, setRecommendations] =
-    useState<TMDBResponse>(emptyTMDBResponse);
-  const fetcher = useFetcher();
-
-  useEffect(() => {
-    fetcher.load(
-      `/catalogo/${item.media_type_slug}/${item.id}/recomendacoes?limit=6`
-    );
-  }, [item]);
-
-  useEffect(() => {
-    if (fetcher.data) {
-      setRecommendations(fetcher.data);
-    }
-  }, [fetcher.data]);
 
   return (
     <>
@@ -136,11 +122,11 @@ export default function Details() {
           </div>
         </section>
       )}
-      {recommendations.results.length && (
+      {item.recommendations.length && (
         <section className="p-10">
           <h3 className="text-xl text-slate-300 mb-10">Recomendados</h3>
-          <div className="flex flex-wrap gap-6 text-slate-400">
-            {recommendations.results.map((item: TMDBItem) => (
+          <div className="flex flex-wrap gap-10 text-slate-400">
+            {item.recommendations.map((item: TMDBItem) => (
               <Card
                 key={`${item.media_type_slug}-${item.id}`}
                 item={item}

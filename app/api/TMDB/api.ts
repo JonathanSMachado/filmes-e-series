@@ -5,12 +5,7 @@ import {
   translatePeriodToEN,
 } from "~/utils/converters";
 import { getVideoBaseUrl, slugify } from "~/utils/general";
-import {
-  TMDBItem,
-  TMDBItemDetails,
-  TMDBResponse,
-  TMDBVideo,
-} from "~/utils/types";
+import { TMDBItem, TMDBItemDetails, TMDBVideo } from "~/utils/types";
 
 const TYPES = ["movie", "tv"];
 const POSTER_URL = ENV.TMDB_POSTER_IMAGES_URL;
@@ -146,6 +141,7 @@ export async function getDetails({
       tagline: tagline || "",
       runtime: runtime,
       videos,
+      recommendations: [],
     };
   } catch (error: any) {
     throw new Error(error);
@@ -162,7 +158,7 @@ export async function getRecommendations({
   id: number;
   page?: number;
   limit?: number;
-}): Promise<TMDBResponse> {
+}): Promise<TMDBItem[]> {
   try {
     const data = await fetchData(
       `${convertTypeToTMDB(type)}/${id}/recommendations`,
@@ -175,9 +171,7 @@ export async function getRecommendations({
       data.results = data.results.slice(0, limit);
     }
 
-    data.results = data.results.map(mapToTMDBItem);
-
-    return data;
+    return data.results.map(mapToTMDBItem);
   } catch (error: any) {
     throw new Error(error);
   }
