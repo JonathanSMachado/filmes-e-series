@@ -1,19 +1,18 @@
-import { useTransition } from "@remix-run/react";
-import { Analytics } from "@vercel/analytics/react";
-import NProgress from "nprogress";
-import nProgressStyles from "nprogress/nprogress.css";
-import { useEffect } from "react";
-import progressBarStyles from "react-circular-progressbar/dist/styles.css";
-import type { MetaFunction } from "remix";
+import { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
-  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+  useTransition,
+} from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/react";
+import NProgress from "nprogress";
+import nProgressStyles from "nprogress/nprogress.css";
+import { useEffect } from "react";
+import progressBarStyles from "react-circular-progressbar/dist/styles.css";
 import tailwindStyles from "~/styles/tailwind.css";
 
 export const meta: MetaFunction = () => {
