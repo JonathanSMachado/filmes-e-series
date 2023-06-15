@@ -33,44 +33,18 @@ export const mutation = makeDomainFunction(schema)(async (values) => {
   return { status: "success" };
 });
 
-interface ContactProps {
-  submit: { status: "success" | "error" };
-}
-
-export function ContactForm({ submit }: ContactProps) {
+export function ContactForm() {
   return (
-    <div className="mt-7 max-w-xl mx-auto px-2">
-      {submit?.status === "success" ? (
-        <h1 className="text-slate-200 text-xl text-center">
-          Obrigado. Em breve manteremos contato!! ❤️
-        </h1>
-      ) : (
+    <Form schema={schema} mode="onChange" className="mt-8" buttonLabel="Enviar">
+      {({ Field, Errors, Button }) => (
         <>
-          <h1 className="text-slate-200 text-xl">
-            Entre em contato conosco preenchendo o formulário abaixo
-          </h1>
-          <Form
-            schema={schema}
-            mode="onChange"
-            className="mt-8"
-            buttonLabel="Enviar"
-          >
-            {({ Field, Errors, Button }) => (
-              <>
-                <Field name="name" label="Informe o seu nome" />
-                <Field name="email" label="Informe seu melhor e-mail" />
-                <Field
-                  name="message"
-                  label="Digite sua mensagem"
-                  multiline={true}
-                />
-                <Errors />
-                <Button type="submit" />
-              </>
-            )}
-          </Form>
+          <Field name="name" label="Informe o seu nome" />
+          <Field name="email" label="Informe seu melhor e-mail" />
+          <Field name="message" label="Digite sua mensagem" multiline={true} />
+          <Errors />
+          <Button type="submit" />
         </>
       )}
-    </div>
+    </Form>
   );
 }

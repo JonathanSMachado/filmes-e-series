@@ -1,7 +1,7 @@
 import { ActionFunction, useActionData } from "remix";
 import AppError from "~/components/AppError";
-import { ContactForm, mutation, schema } from "~/components/ContactForm";
-import Layout from "~/layout/Layout";
+import { mutation, schema } from "~/components/ContactForm";
+import ContactPage from "~/pages/contact";
 import { formAction } from "~/utils/forms";
 
 export const action: ActionFunction = async ({ request }) =>
@@ -14,11 +14,7 @@ export const action: ActionFunction = async ({ request }) =>
 export default function Contact() {
   const submit = useActionData();
 
-  return (
-    <Layout>
-      <ContactForm submit={submit} />
-    </Layout>
-  );
+  return <ContactPage submit={submit} />;
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
