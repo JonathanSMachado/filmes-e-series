@@ -1,4 +1,5 @@
-import { LoaderFunction, json, useLoaderData } from "remix";
+import { LoaderFunction, json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { TMDBApi } from "~/api/TMDB";
 import CardContainer from "~/components/CardContainer";
 import { getPage } from "~/utils/general";

@@ -1,13 +1,7 @@
 import { ContactForm } from "~/components/ContactForm";
 import Layout from "~/layout/Layout";
 
-interface ContactProps {
-  submit: {
-    status: string;
-  };
-}
-
-export default function ContactPage(props: ContactProps) {
+export default function ContactPage(props: any) {
   const { submit } = props;
 
   return (

@@ -1,4 +1,4 @@
-import { ArrowUpIcon } from "@heroicons/react/outline";
+import { ArrowUpIcon } from "@heroicons/react/24/outline";
 import { ReactNode, useEffect } from "react";
 import Footer from "~/components/Footer";
 import Header from "~/components/Header";

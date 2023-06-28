@@ -73,7 +73,7 @@ export type TMDBItemDetails = {
 export type CardSize = "small" | "medium" | "large";
 
 export type CardProps = {
-  item: TMDBItem | TMDBItemDetails;
+  item: TMDBItemDetails | TMDBItem;
   link?: string;
   size?: CardSize;
   showScore?: boolean;

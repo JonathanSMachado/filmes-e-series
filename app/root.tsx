@@ -1,37 +1,37 @@
-import { useTransition } from "@remix-run/react";
-import { Analytics } from "@vercel/analytics/react";
-import NProgress from "nprogress";
-import nProgressStyles from "nprogress/nprogress.css";
-import { useEffect } from "react";
-import progressBarStyles from "react-circular-progressbar/dist/styles.css";
-import type { MetaFunction } from "remix";
+import { LinksFunction } from "@remix-run/node";
 import {
   Links,
-  LinksFunction,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+  V2_MetaFunction,
+  useTransition,
+} from "@remix-run/react";
+import { Analytics } from "@vercel/analytics/react";
+import NProgress from "nprogress";
+import nProgressStyles from "nprogress/nprogress.css";
+import { useEffect } from "react";
+import progressBarStyles from "react-circular-progressbar/dist/styles.css";
 import tailwindStyles from "~/styles/tailwind.css";
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "Filmes e Séries",
-    description: "Catálogo de filmes e séries",
-
-    "og:type": "website",
-    "og:url": "https://filmes-e-series.vercel.app/",
-    "og:title": "Filmes e Séries",
-    "og:description": "Catálogo de filmes e séries atualizado.",
-    "og:image": "",
-    "twitter:card": "summary_large_image",
-    "twitter:url": "https://filmes-e-series.vercel.app/",
-    "twitter:title": "Filmes e Séries",
-    "twitter:description": "Catálogo de filmes e séries atualizado.",
-    "twitter:image": "",
-  };
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Filmes e Séries" },
+    { name: "description", content: "Catálogo de filmes e séries" },
+    { property: "og:title", content: "Filmes e Séries" },
+    { property: "og:description", content: "Catálogo de filmes e séries" },
+    { property: "og:image", content: "" },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://filmes-e-series.vercel.app/" },
+    { property: "og:site_name", content: "Filmes e Séries" },
+    { property: "twitter:title", content: "Filmes e Séries" },
+    { property: "twitter:description", content: "Catálogo de filmes e séries" },
+    { property: "twitter:image", content: "" },
+    { property: "twitter:card", content: "summary_large_image" },
+    { property: "twitter:url", content: "https://filmes-e-series.vercel.app/" },
+  ];
 };
 
 export const links: LinksFunction = () => {

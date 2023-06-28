@@ -1,4 +1,5 @@
-import { ActionFunction, useActionData } from "remix";
+import { ActionFunction } from "@remix-run/node";
+import { useActionData } from "@remix-run/react";
 import AppError from "~/components/AppError";
 import { mutation, schema } from "~/components/ContactForm";
 import ContactPage from "~/pages/contact";
