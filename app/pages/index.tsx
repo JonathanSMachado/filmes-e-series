@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLoaderData } from "remix";
+import { Link, useLoaderData } from "@remix-run/react";
 import CardContainer from "~/components/CardContainer";
 import { SwitchTrends } from "~/components/SwitchTrends";
 import Layout from "~/layout/Layout";

@@ -1,4 +1,4 @@
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import { formatDateToPtBr } from "~/utils/date";
 import { CardProps } from "~/utils/types";
 import Score from "./Score";

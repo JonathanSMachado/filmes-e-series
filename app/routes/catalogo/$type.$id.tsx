@@ -1,5 +1,6 @@
+import { LoaderFunction, json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import ReactPlayer from "react-player";
-import { LoaderFunction, json, useLoaderData } from "remix";
 import { TMDBApi } from "~/api/TMDB";
 import Card from "~/components/Card";
 import Score from "~/components/Card/Score";
@@ -45,7 +46,7 @@ export default function Details() {
           backgroundBlendMode: "darken",
         }}
       >
-        <Card item={item} size={"large"} showScore={false} />
+        <Card item={item as TMDBItemDetails} size={"large"} showScore={false} />
         <article className="text-slate-200">
           <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">

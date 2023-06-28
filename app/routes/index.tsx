@@ -1,4 +1,4 @@
-import { LoaderFunction, json } from "remix";
+import { LoaderFunction, json } from "@remix-run/node";
 import { TMDBApi } from "~/api/TMDB";
 import AppError from "~/components/AppError";
 import IndexPage from "~/pages";

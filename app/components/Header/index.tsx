@@ -1,5 +1,5 @@
-import { MailIcon } from "@heroicons/react/outline";
-import { NavLink } from "remix";
+import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { NavLink } from "@remix-run/react";
 import Logo from "../Logo";
 
 export default function Header() {
@@ -37,7 +37,7 @@ export default function Header() {
           title="Entre em contato"
           className="opacity-80 hover:opacity-90 transition-opacity text-white"
         >
-          <MailIcon className="w-8 h-8" />
+          <EnvelopeIcon className="w-8 h-8" />
         </NavLink>
       </nav>
     </header>

@@ -1,5 +1,5 @@
+import { useMatches } from "@remix-run/react";
 import { useEffect, useState } from "react";
-import { useMatches } from "remix";
 import Header from "../Header";
 import { Search } from "../Search";
 
@@ -18,15 +18,15 @@ function getInputSearchPlaceholder(pathname: string) {
 export function HeroArea() {
   const [backgroundImage, setBackgroundImage] = useState("");
   const matches = useMatches();
-  const pathname = matches.at(matches.length - 1)?.pathname!;
+  const pathname = matches[matches.length - 1]?.pathname!;
   const action = pathname === "/" ? "/catalogo" : pathname!;
   const placeholder = getInputSearchPlaceholder(pathname);
   const isHome = pathname === "/";
 
   useEffect(() => {
     const items =
-      matches.at(matches.length - 1)?.data?.items ||
-      matches.at(matches.length - 1)?.data;
+      matches[matches.length - 1]?.data?.items ||
+      matches[matches.length - 1]?.data;
 
     const backgroundImage =
       items[Math.floor(Math.random() * items.length)].backdrop_path;
