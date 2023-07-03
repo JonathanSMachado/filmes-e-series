@@ -116,6 +116,7 @@ export default function Details() {
                     width="100%"
                     height="100%"
                     light={true}
+                    pip={true}
                   />
                 </div>
               );
