@@ -70,14 +70,14 @@ export type TMDBItemDetails = {
   recommendations: TMDBItem[];
 };
 
-export type CardSize = "small" | "medium" | "large";
+// export type CardSize = "small" | "medium" | "large";
 
-export type CardProps = {
-  item: TMDBItemDetails | TMDBItem;
-  link?: string;
-  size?: CardSize;
-  showScore?: boolean;
-};
+// export type CardProps = {
+//   item: TMDBItemDetails | TMDBItem;
+//   link?: string;
+//   size?: CardSize;
+//   showScore?: boolean;
+// };
 
 export type CardContainerProps = {
   items: TMDBItem[];

@@ -1,12 +1,13 @@
 import { useFetcher } from "@remix-run/react";
 import { useCallback, useEffect, useState } from "react";
 import { CardContainerProps, TMDBItem } from "~/utils/types";
-import Card from "../Card";
+import { Card } from "../Card";
+import { Score } from "../Score";
 
 export default function CardContainer(props: CardContainerProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [clientHeight, setClientHeight] = useState(0);
-  const [height, setHeight] = useState(null);
+  const [height, setHeight] = useState<number | null>(null);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [page, setPage] = useState(2);
   const fetcher = useFetcher();
@@ -16,7 +17,7 @@ export default function CardContainer(props: CardContainerProps) {
   const [search, setSearch] = useState(props.search);
 
   const mainHeight = useCallback(
-    (node) => {
+    (node: HTMLDivElement) => {
       if (node !== null) {
         setHeight(node.getBoundingClientRect().height);
       }
@@ -93,7 +94,9 @@ export default function CardContainer(props: CardContainerProps) {
               key={`${item.media_type_slug}-${item.id}`}
               item={item}
               link={`/catalogo/${item.media_type_slug}/${item.id}`}
-            />
+            >
+              <Score value={item.vote_average} />
+            </Card>
           ))
         )}
       </div>
