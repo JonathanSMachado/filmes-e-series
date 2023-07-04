@@ -1,13 +1,21 @@
 import { Link } from "@remix-run/react";
 import { formatDateToPtBr } from "~/utils/date";
-import { CardProps } from "~/utils/types";
-import Score from "./Score";
+import { TMDBItem, TMDBItemDetails } from "~/utils/types";
+
+type CardSize = "small" | "medium" | "large";
+
+interface CardProps {
+  item: TMDBItem | TMDBItemDetails;
+  link?: string;
+  size?: CardSize;
+  children?: React.ReactNode;
+}
 
 function getUserScore(votes_average: number): number {
   return votes_average ? votes_average * 10 : 0;
 }
 
-export default function Card({ item, link, size, showScore }: CardProps) {
+export function Card({ item, link, size, children }: CardProps) {
   return (
     <Link
       prefetch="intent"
@@ -26,18 +34,10 @@ export default function Card({ item, link, size, showScore }: CardProps) {
           </p>
         </div>
       )}
+
       {item.adult && (
         <div className="card-adult-content-alert">
           <div className="image"></div>
-        </div>
-      )}
-
-      {(showScore === undefined || showScore) && (
-        <div
-          className="card-user-score"
-          title="Pontuação (quanto maior melhor)"
-        >
-          <Score value={item.vote_average} />
         </div>
       )}
 
@@ -49,6 +49,8 @@ export default function Card({ item, link, size, showScore }: CardProps) {
           loading="lazy"
         />
       )}
+
+      {children}
     </Link>
   );
 }
