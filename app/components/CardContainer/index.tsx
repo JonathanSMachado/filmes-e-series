@@ -1,35 +1,44 @@
 import { useFetcher } from "@remix-run/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { CardContainerProps, TMDBItem } from "~/utils/types";
 import { Card } from "../Card";
 import { Score } from "../Score";
 
 export default function CardContainer(props: CardContainerProps) {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const [clientHeight, setClientHeight] = useState(0);
-  const [height, setHeight] = useState<number | null>(null);
-  const [shouldFetch, setShouldFetch] = useState(true);
-  const [page, setPage] = useState(2);
+  const [state, updateState] = useReducer(
+    (prev: any, next: any) => {
+      return { ...prev, ...next };
+    },
+    {
+      scrollPosition: 0,
+      clientHeight: 0,
+      height: null,
+      shouldFetch: true,
+      page: 2,
+      items: props.items,
+      type: props.type,
+      search: props.search,
+    }
+  );
   const fetcher = useFetcher();
-  const [items, setItems] = useState<TMDBItem[]>(props.items);
   const infinityScroll = props.infinityScroll || false;
-  const [type, setType] = useState(props.type);
-  const [search, setSearch] = useState(props.search);
 
   const mainHeight = useCallback(
     (node: HTMLDivElement) => {
       if (node !== null) {
-        setHeight(node.getBoundingClientRect().height);
+        updateState({ height: node.getBoundingClientRect().height });
       }
     },
-    [items.length]
+    [state.items.length]
   );
 
   if (infinityScroll) {
     useEffect(() => {
       const scrollListener = () => {
-        setClientHeight(window.innerHeight);
-        setScrollPosition(window.scrollY);
+        updateState({
+          clientHeight: window.innerHeight,
+          scrollPosition: window.scrollY,
+        });
       };
 
       if (typeof window !== "undefined") {
@@ -44,52 +53,55 @@ export default function CardContainer(props: CardContainerProps) {
     }, []);
 
     useEffect(() => {
-      if (!shouldFetch || !height) return;
-      if (clientHeight + scrollPosition + 100 < height) return;
+      if (!state.shouldFetch || !state.height) return;
+      if (state.clientHeight + state.scrollPosition + 100 < state.height)
+        return;
 
       let endpoint: string = `/catalogo${
-        type ? `/${type}` : ""
-      }?index&page=${page}`;
+        state.type ? `/${state.type}` : ""
+      }?index&page=${state.page}`;
 
-      if (search) {
-        endpoint += `&search=${search}`;
+      if (state.search) {
+        endpoint += `&search=${state.search}`;
       }
 
       fetcher.load(endpoint);
 
-      setShouldFetch(false);
-    }, [clientHeight, scrollPosition, fetcher]);
+      updateState({ shouldFetch: false });
+    }, [state.clientHeight, state.scrollPosition, fetcher]);
 
     useEffect(() => {
       const items = fetcher?.data?.items;
 
       if (items?.length === 0) {
-        setShouldFetch(false);
+        updateState({ shouldFetch: false });
         return;
       }
 
       if (items?.length > 0) {
-        setItems((prevItems: TMDBItem[]) => [...prevItems, ...items]);
-        setPage((page: number) => page + 1);
-        setShouldFetch(true);
+        updateState({
+          items: [...state.items, ...items],
+          page: state.page + 1,
+        });
+        updateState({ shouldFetch: true });
       }
     }, [fetcher.data]);
   }
 
   useEffect(() => {
-    setItems(props.items);
+    updateState({ items: props.items });
   }, [props.items]);
 
-  useEffect(() => setType(props.type), [props.type]);
-  useEffect(() => setSearch(props.search), [props.search]);
+  useEffect(() => updateState({ type: props.type }), [props.type]);
+  useEffect(() => updateState({ search: props.search }), [props.search]);
 
   return (
     <>
       <div ref={mainHeight} className="card-container">
-        {!items.length ? (
+        {!state.items.length ? (
           <p className="text-slate-300">Nenhum item encontrado!</p>
         ) : (
-          items.map((item: TMDBItem) => (
+          state.items.map((item: TMDBItem) => (
             <Card
               key={`${item.media_type_slug}-${item.id}`}
               item={item}
