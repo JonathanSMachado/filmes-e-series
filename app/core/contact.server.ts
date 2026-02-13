@@ -1,6 +1,6 @@
 import { makeDomainFunction } from "domain-functions";
 import z from "zod";
-import { Mailer } from "~/lib/Mailer/Mailer";
+import { Mail } from "~/lib/Mail/Mail";
 
 const contactSchema = z.object({
   name: z.string("O nome deve ser informado").min(3, "Nome muito curto"),
@@ -16,7 +16,7 @@ const contactMutation = makeDomainFunction(contactSchema)(async (values) => {
     .join("");
 
   const subject = "Files e Séries - Novo contato";
-  const mailer = new Mailer();
+  const mailer = new Mail();
   const to = [ENV.MAIL_NOTIFICATION_RECIPIENT];
 
   return await mailer.sendAdminNotification({ subject, html, to });

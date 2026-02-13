@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import type { MessageObject } from "~/utils/types";
 
-export class Mailer {
+export class Mail {
   async sendAdminNotification({ subject, html, to }: MessageObject) {
     try {
       if (!to || !html)
