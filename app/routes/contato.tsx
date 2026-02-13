@@ -41,7 +41,7 @@ export default function Contact() {
                 className="w-full"
                 icon={<ArrowLeft />}
               >
-                Voltar ao início
+                Voltar para o início
               </Button>
             </div>
           </>
