@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 html,
@@ -12,4 +13,16 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+.btn {
+  @apply rounded-full shadow-md px-3 py-2 text-base transition-all;
+}
+
+.btn-primary {
+  @apply text-zinc-50 bg-cyan-700 hover:bg-cyan-600 hover:shadow-cyan-700;
+}
+
+.btn-large {
+  @apply px-5 py-3 text-xl;
 }
