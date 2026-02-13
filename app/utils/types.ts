@@ -5,7 +5,7 @@ type MessageObject = {
   subject: string;
   text?: string;
   html?: string;
-  to?: string;
+  to: string[];
 };
 
 type ApiItemsLoader = {
