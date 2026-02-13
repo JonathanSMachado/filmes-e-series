@@ -9,6 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { ProgressBar } from "./components/ProgressBar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -21,10 +22,29 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  {
+    rel: "icon",
+    type: "image/ico",
+    href: "/fav_icon.ico",
+  },
 ];
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: "Filmes & Séries" }];
+  return [
+    { title: "Filmes & Séries" },
+    { name: "description", content: "Catálogo de filmes e séries" },
+    { property: "og:title", content: "Filmes e Séries" },
+    { property: "og:description", content: "Catálogo de filmes e séries" },
+    { property: "og:image", content: "" },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://filmes-e-series.vercel.app/" },
+    { property: "og:site_name", content: "Filmes e Séries" },
+    { property: "twitter:title", content: "Filmes e Séries" },
+    { property: "twitter:description", content: "Catálogo de filmes e séries" },
+    { property: "twitter:image", content: "" },
+    { property: "twitter:card", content: "summary_large_image" },
+    { property: "twitter:url", content: "https://filmes-e-series.vercel.app/" },
+  ];
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -37,6 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col items-center bg-linear-to-tr from-slate-950 to-slate-700 min-h-screen">
+        <ProgressBar />
         {children}
         <ScrollRestoration />
         <Scripts />

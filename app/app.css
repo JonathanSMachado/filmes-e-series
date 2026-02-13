@@ -15,14 +15,19 @@ body {
   }
 }
 
-.btn {
-  @apply rounded-full shadow-md px-3 py-2 text-base transition-all;
+/* Customizando a cor do NProgress */
+#nprogress .bar {
+  background: #0891b2 !important; /* cyan-600 */
+  height: 3px !important;
 }
 
-.btn-primary {
-  @apply text-zinc-50 bg-cyan-700 hover:bg-cyan-600 hover:shadow-cyan-700;
+#nprogress .peg {
+  box-shadow:
+    0 0 10px #0891b2,
+    0 0 5px #0891b2 !important;
 }
 
-.btn-large {
-  @apply px-5 py-3 text-xl;
+#nprogress .spinner-icon {
+  border-top-color: #0891b2 !important;
+  border-left-color: #0891b2 !important;
 }
