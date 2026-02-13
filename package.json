@@ -9,13 +9,10 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@conform-to/react": "^1.17.0",
-    "@conform-to/zod": "^1.17.0",
     "@icons-pack/react-simple-icons": "^13.11.1",
     "@react-router/fs-routes": "^7.13.0",
     "@react-router/node": "^7.13.0",
     "@react-router/serve": "7.13.0",
-    "@vidstack/react": "^1.12.13",
     "date-fns": "^4.1.0",
     "domain-functions": "^3.3.0",
     "isbot": "^5.1.31",

@@ -1,4 +1,3 @@
-import "@vidstack/react/player/styles/base.css";
 import ReactPlayer from "react-player";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Card, Score } from "~/components/Card";
