@@ -3,7 +3,7 @@ import "nprogress/nprogress.css";
 import { useEffect } from "react";
 import { useNavigation } from "react-router";
 
-export function ProgressBar() {
+export function NavigationProgressBar() {
   const navigation = useNavigation();
 
   useEffect(() => {

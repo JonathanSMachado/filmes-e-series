@@ -9,7 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
-import { ProgressBar } from "./components/ProgressBar";
+import { NavigationProgressBar } from "./components/NavigationProgressBar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -57,7 +57,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col items-center bg-linear-to-tr from-slate-950 to-slate-700 min-h-screen">
-        <ProgressBar />
+        <NavigationProgressBar />
         {children}
         <ScrollRestoration />
         <Scripts />
