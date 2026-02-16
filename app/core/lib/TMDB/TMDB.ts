@@ -25,11 +25,9 @@ export class TMDB {
   async getMostPopular({
     type,
     page,
-    limit,
   }: {
     type?: string;
     page?: number;
-    limit?: number;
   }): Promise<TMDBItem[]> {
     try {
       let items: TMDBItem[] = [];
@@ -46,10 +44,6 @@ export class TMDB {
         }
       }
 
-      if (limit) {
-        items = items.slice(0, limit);
-      }
-
       return items;
     } catch (error: any) {
       if (error instanceof Error) throw error;
@@ -60,11 +54,9 @@ export class TMDB {
   async getTopRated({
     type,
     page,
-    limit,
   }: {
     type?: string;
     page?: number;
-    limit?: number;
   }): Promise<TMDBItem[]> {
     try {
       let items: TMDBItem[] = [];
@@ -82,10 +74,6 @@ export class TMDB {
           );
           items = [...items, ...typeItems];
         }
-      }
-
-      if (limit) {
-        items = items.slice(0, limit);
       }
 
       return items;
@@ -181,12 +169,10 @@ export class TMDB {
     type,
     id,
     page,
-    limit,
   }: {
     type: string;
     id: number;
     page?: number;
-    limit?: number;
   }): Promise<TMDBItem[]> {
     try {
       const data = await this.fetchData(
@@ -195,10 +181,6 @@ export class TMDB {
       );
 
       let results = (data as TMDBResponse).results;
-
-      if (limit) {
-        results = results.slice(0, limit);
-      }
 
       return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
@@ -210,12 +192,10 @@ export class TMDB {
   async getTrending({
     type,
     page,
-    limit,
     period,
   }: {
     type?: string;
     page?: number;
-    limit?: number;
     period?: string | null;
   }): Promise<TMDBItem[]> {
     try {
@@ -223,11 +203,8 @@ export class TMDB {
         ? `trending/${this.convertTypeToTMDBType(type)}/${period ?? "day"}`
         : `trending/all/${period ?? "day"}`;
       const data = await this.fetchData(trendingEndpoint, { page: page ?? 1 });
-      let results = (data as TMDBResponse).results;
 
-      if (limit) {
-        results = results.slice(0, limit);
-      }
+      let results = (data as TMDBResponse).results;
 
       return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
@@ -267,6 +244,7 @@ export class TMDB {
       }
     } catch (error: any) {
       if (error instanceof Error) throw error;
+
       throw new Error(String(error));
     }
   }
