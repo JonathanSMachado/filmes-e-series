@@ -1,8 +1,8 @@
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { CardsContainer } from "~/components/CardsContainer";
 import { Search } from "~/components/Search";
+import { TMDB } from "~/core/lib/TMDB/TMDB";
 import { MainLayout } from "~/layouts/Main";
-import { TMDB } from "~/lib/TMDB/TMDB";
 import type { TMDBItem } from "~/utils/tmdb_types";
 import type { ApiItemsLoader } from "~/utils/types";
 

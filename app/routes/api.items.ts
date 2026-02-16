@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { TMDB } from "~/lib/TMDB/TMDB";
+import { TMDB } from "~/core/lib/TMDB/TMDB";
 import type { TMDBItem } from "~/utils/tmdb_types";
 import type { ApiItemsLoader } from "~/utils/types";
 
