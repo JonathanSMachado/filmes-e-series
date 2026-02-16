@@ -4,6 +4,7 @@ import { slugify } from "~/utils/string-helpers";
 import type {
   TMDBItem,
   TMDBItemDetails,
+  TMDBResponse,
   TMDBResponseItem,
   TMDBVideo,
 } from "~/utils/tmdb_types";
@@ -100,10 +101,11 @@ export class TMDB {
     type: string;
   }): Promise<TMDBItemDetails> {
     try {
-      const data = await this.fetchData(
+      const data = (await this.fetchData(
         `${this.convertTypeToTMDBType(type)}/${id}`,
         { appendVideos: true },
-      );
+      )) as TMDBResponseItem;
+
       const videos =
         data?.videos?.results?.map((video: any): TMDBVideo => {
           const { id, name, site, key, published_at } = video;
@@ -135,10 +137,12 @@ export class TMDB {
         first_air_date,
         number_of_episodes,
         number_of_seasons,
-        tagline,
+        tag_line,
         runtime,
       } = data;
+
       const mediaType = this.convertMediaType(title ? "movie" : "tv");
+
       return {
         adult: adult,
         backdrop_path: backdrop_path ? this.BACKDROP_URL + backdrop_path : null,
@@ -148,7 +152,7 @@ export class TMDB {
         overview: overview,
         popularity: popularity,
         poster_path: poster_path ? this.POSTER_URL + poster_path : null,
-        title: title || name,
+        title: title || name || "",
         media_type_slug: slugify(mediaType),
         media_type: mediaType,
         vote_average: vote_average,
@@ -156,8 +160,8 @@ export class TMDB {
         release_date: release_date ?? first_air_date,
         number_of_episodes: number_of_episodes,
         number_of_seasons: number_of_seasons,
-        tagline: tagline || "",
-        runtime: runtime,
+        tagline: tag_line || "",
+        runtime: runtime || 0,
         videos,
         recommendations: null,
       };
@@ -184,11 +188,13 @@ export class TMDB {
         { page: page ?? 1 },
       );
 
+      let results = (data as TMDBResponse).results;
+
       if (limit) {
-        data.results = data.results.slice(0, limit);
+        results = results.slice(0, limit);
       }
 
-      return data.results.map((item: any) => this.mapToTMDBItem(item));
+      return results.map((item: any) => this.mapToTMDBItem(item));
     } catch (error: any) {
       if (error instanceof Error) throw error;
       throw new Error(String(error));
@@ -211,12 +217,13 @@ export class TMDB {
         ? `trending/${this.convertTypeToTMDBType(type)}/${period ?? "day"}`
         : `trending/all/${period ?? "day"}`;
       const data = await this.fetchData(trendingEndpoint, { page: page ?? 1 });
+      let results = (data as TMDBResponse).results;
 
       if (limit) {
-        data.results = data.results.slice(0, limit);
+        results = results.slice(0, limit);
       }
 
-      return data.results.map((item: any) => this.mapToTMDBItem(item));
+      return results.map((item: any) => this.mapToTMDBItem(item));
     } catch (error: any) {
       if (error instanceof Error) throw error;
       throw new Error(String(error));
@@ -262,7 +269,9 @@ export class TMDB {
     page: number,
   ): Promise<TMDBItem[]> {
     const data = await this.fetchData(`${type}/popular`, { page });
-    return data.results.map((item: any) => this.mapToTMDBItem(item));
+    const results = (data as TMDBResponse).results;
+
+    return results.map((item: any) => this.mapToTMDBItem(item));
   }
 
   private async fetchTopRatedItemsByType(
@@ -270,7 +279,9 @@ export class TMDB {
     page: number,
   ): Promise<TMDBItem[]> {
     const data = await this.fetchData(`${type}/top_rated`, { page });
-    return data.results.map((item: any) => this.mapToTMDBItem(item));
+    const results = (data as TMDBResponse).results;
+
+    return results.map((item: any) => this.mapToTMDBItem(item));
   }
 
   private async searchItemsByType(
@@ -279,7 +290,9 @@ export class TMDB {
     page: number,
   ): Promise<TMDBItem[]> {
     const data = await this.fetchData(`search/${type}`, { query, page });
-    return data.results.map((item: any) => this.mapToTMDBItem(item));
+    const results = (data as TMDBResponse).results;
+
+    return results.map((item: any) => this.mapToTMDBItem(item));
   }
 
   private async fetchData(
@@ -290,7 +303,7 @@ export class TMDB {
       appendVideos?: boolean;
       includeAdult?: boolean;
     },
-  ): Promise<any> {
+  ): Promise<TMDBResponse | TMDBResponseItem> {
     const token = getEnv().TMDB_TOKEN;
     const baseUrl = getEnv().TMDB_API_URL;
     const queryParams = ["language=pt-BR"];

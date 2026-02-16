@@ -12,27 +12,36 @@ type TMDBVideo = {
 
 type TMDBResponse = {
   page: number;
-  results: TMDBItem[];
+  results: TMDBResponseItem[];
   total_pages: number;
   total_results: number;
 };
 
 type TMDBResponseItem = {
-  poster_path: string | null;
-  adult?: boolean;
-  popularity: number;
-  id: number;
+  adult: boolean | false;
   backdrop_path: string | null;
-  vote_average: number;
+  genres: TMDBGenre[];
+  homepage: string | null;
+  id: number;
+  original_title: string;
   overview: string;
-  first_air_date?: string;
+  popularity: number;
+  poster_path: string | null;
+  vote_average: number;
   release_date?: string;
-  genre_ids: number[];
-  original_language: string;
-  vote_count: number;
-  name?: string;
+  status: string;
+  tag_line: string;
   title?: string;
+  first_air_date?: string;
+  genre_ids: number[];
+  vote_count: number;
+  original_language: string;
+  name?: string;
   media_type: "movie" | "tv";
+  videos?: { results: TMDBVideo[] };
+  number_of_episodes?: number;
+  number_of_seasons?: number;
+  runtime?: number;
 };
 
 type TMDBItem = {
