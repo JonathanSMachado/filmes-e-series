@@ -1,6 +1,6 @@
 import { makeDomainFunction } from "domain-functions";
 import z from "zod";
-import { Mail } from "~/lib/Mail/Mail";
+import { Mail } from "~/core/lib/Mail/Mail";
 
 const contactSchema = z.object({
   name: z.string("O nome deve ser informado").min(3, "Nome muito curto"),

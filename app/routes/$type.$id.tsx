@@ -1,8 +1,8 @@
 import ReactPlayer from "react-player";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Card, Score } from "~/components/Card";
+import { TMDB } from "~/core/lib/TMDB/TMDB";
 import { MainLayout } from "~/layouts/Main";
-import { TMDB } from "~/lib/TMDB/TMDB";
 import {
   convertMinutesToFormattedHours,
   formatReleaseDate,
