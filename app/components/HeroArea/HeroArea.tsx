@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useLocation } from "react-router";
-import type { TMDBItem } from "~/utils/tmdb_types";
+import type { TMDBItem } from "~/core/lib/TMDB/types";
 import { Header } from "../Header";
 import { Search } from "../Search";
 

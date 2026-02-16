@@ -2,12 +2,17 @@ import ReactPlayer from "react-player";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Card, Score } from "~/components/Card";
 import { TMDB } from "~/core/lib/TMDB/TMDB";
+import type {
+  TMDBGenre,
+  TMDBItem,
+  TMDBItemDetails,
+  TMDBVideo,
+} from "~/core/lib/TMDB/types";
 import { MainLayout } from "~/layouts/Main";
 import {
   convertMinutesToFormattedHours,
   formatReleaseDate,
 } from "~/utils/date-helpers";
-import type { TMDBItem, TMDBItemDetails, TMDBVideo } from "~/utils/tmdb_types";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { type, id } = params;
@@ -49,23 +54,16 @@ export default function Details() {
           backgroundBlendMode: "darken",
         }}
       >
-        <Card
-          item={item as TMDBItemDetails}
-          className="w-72 h-96"
-          showScore={false}
-        />
+        <Card item={item} className="w-72 h-96" showScore={false} />
         <article className="text-slate-200">
           <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">
-            {item.release_date && (
-              <span>{formatReleaseDate(item.release_date)} (BR)</span>
-            )}
-            {item.genres && (
-              <>
-                <span className="mx-2">-</span>
-                <span>{item.genres.map((genre) => genre.name).join(", ")}</span>
-              </>
-            )}
+            <span>{formatReleaseDate(item.release_date ?? "")} (BR)</span>
+            <span className="mx-2">-</span>
+            <span>
+              {item.genres.map((genre: TMDBGenre) => genre.name).join(", ")}
+            </span>
+
             {item.runtime && (
               <>
                 <span className="mx-2">-</span>
@@ -83,13 +81,11 @@ export default function Details() {
               </>
             )}
           </p>
-          {item.tagline && (
-            <p className="italic my-6 text-slate-300">{item.tagline}</p>
-          )}
+          <p className="italic my-6 text-slate-300">{item.tagLine}</p>
           <div className="mt-6">
             <h2 className="text-2xl mb-4 font-semibold">Sinopse</h2>
             <p className="text-justify text-lg">
-              {item.overview ? (
+              {item.overview.length ? (
                 item.overview
               ) : (
                 <span className="italic">Nenhuma informação disponível</span>
@@ -105,7 +101,7 @@ export default function Details() {
         </article>
       </section>
 
-      {item.videos?.length ? (
+      {item.videos ? (
         <section className="w-full p-10">
           <h3 className="text-xl text-slate-300 mb-10">Vídeos</h3>
           <div className="grid auto-rows-max grid-cols-[repeat(auto-fill,minmax(320px,1fr))] place-items-center gap-6 w-full">
@@ -132,7 +128,7 @@ export default function Details() {
         </section>
       ) : null}
 
-      {item.recommendations?.length ? (
+      {item.recommendations.length ? (
         <section className="p-10">
           <h3 className="text-xl text-slate-300 mb-10">Recomendados</h3>
           <div className="flex flex-wrap gap-10 text-slate-400">

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
-import type { TMDBItem } from "~/utils/tmdb_types";
+import type { TMDBItem } from "~/core/lib/TMDB/types";
 import type { ApiItemsLoader } from "~/utils/types";
 import { Card, CardSkeleton } from "../Card";
 import type { CardsContainerProps } from "./types";

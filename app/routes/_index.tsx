@@ -3,8 +3,8 @@ import { useLocation } from "react-router";
 import { CardsContainer } from "~/components/CardsContainer";
 import { SwitchTrends } from "~/components/SwitchTrends";
 import { TMDB } from "~/core/lib/TMDB/TMDB";
+import type { TMDBItem } from "~/core/lib/TMDB/types";
 import { MainLayout } from "~/layouts/Main";
-import type { TMDBItem } from "~/utils/tmdb_types";
 import type { ApiItemsLoader } from "~/utils/types";
 import type { Route } from "../+types/root";
 

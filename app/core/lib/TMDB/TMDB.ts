@@ -6,8 +6,10 @@ import type {
   TMDBItemDetails,
   TMDBResponse,
   TMDBResponseItem,
+  TMDBResponseItemDetails,
+  TMDBResponseVideo,
   TMDBVideo,
-} from "~/utils/tmdb_types";
+} from "./types";
 
 export class TMDB {
   TYPES = ["movie", "tv"];
@@ -100,15 +102,17 @@ export class TMDB {
     id: number;
     type: string;
   }): Promise<TMDBItemDetails> {
+    const itemId = id;
+
     try {
       const data = (await this.fetchData(
-        `${this.convertTypeToTMDBType(type)}/${id}`,
+        `${this.convertTypeToTMDBType(type)}/${itemId}`,
         { appendVideos: true },
-      )) as TMDBResponseItem;
+      )) as TMDBResponseItemDetails;
 
       const videos =
-        data?.videos?.results?.map((video: any): TMDBVideo => {
-          const { id, name, site, key, published_at } = video;
+        data.videos?.results?.map((video: TMDBResponseVideo): TMDBVideo => {
+          const { id, name, site, key, published_at, type, official } = video;
           const url =
             site && key ? `${getVideoBaseUrl(site)}${key}` : undefined;
 
@@ -116,6 +120,8 @@ export class TMDB {
             id,
             name,
             url,
+            type,
+            official,
             published_at,
           };
         }) ?? [];
@@ -125,7 +131,7 @@ export class TMDB {
         backdrop_path,
         genres,
         homepage,
-        id: itemId,
+        id,
         overview,
         popularity,
         poster_path,
@@ -137,33 +143,33 @@ export class TMDB {
         first_air_date,
         number_of_episodes,
         number_of_seasons,
-        tag_line,
+        tagLine,
         runtime,
       } = data;
 
       const mediaType = this.convertMediaType(title ? "movie" : "tv");
 
       return {
-        adult: adult,
+        adult,
         backdrop_path: backdrop_path ? this.BACKDROP_URL + backdrop_path : null,
-        genres: genres,
-        homepage: homepage,
-        id: itemId,
-        overview: overview,
-        popularity: popularity,
+        genres,
+        homepage,
+        id,
+        overview,
+        popularity,
         poster_path: poster_path ? this.POSTER_URL + poster_path : null,
         title: title || name || "",
         media_type_slug: slugify(mediaType),
         media_type: mediaType,
-        vote_average: vote_average,
-        vote_count: vote_count,
+        vote_average,
+        vote_count,
         release_date: release_date ?? first_air_date,
-        number_of_episodes: number_of_episodes,
-        number_of_seasons: number_of_seasons,
-        tagline: tag_line || "",
-        runtime: runtime || 0,
+        number_of_episodes,
+        number_of_seasons,
+        tagLine,
+        runtime,
         videos,
-        recommendations: null,
+        recommendations: [],
       };
     } catch (error: any) {
       if (error instanceof Error) throw error;
@@ -194,7 +200,7 @@ export class TMDB {
         results = results.slice(0, limit);
       }
 
-      return results.map((item: any) => this.mapToTMDBItem(item));
+      return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
       if (error instanceof Error) throw error;
       throw new Error(String(error));
@@ -223,7 +229,7 @@ export class TMDB {
         results = results.slice(0, limit);
       }
 
-      return results.map((item: any) => this.mapToTMDBItem(item));
+      return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
       if (error instanceof Error) throw error;
       throw new Error(String(error));
@@ -256,6 +262,7 @@ export class TMDB {
           );
           items = [...items, ...fetchedItems];
         }
+
         return items;
       }
     } catch (error: any) {
@@ -271,7 +278,9 @@ export class TMDB {
     const data = await this.fetchData(`${type}/popular`, { page });
     const results = (data as TMDBResponse).results;
 
-    return results.map((item: any) => this.mapToTMDBItem(item));
+    return results.map((item: TMDBResponseItem) =>
+      this.mapToTMDBItem(item, type),
+    );
   }
 
   private async fetchTopRatedItemsByType(
@@ -281,7 +290,9 @@ export class TMDB {
     const data = await this.fetchData(`${type}/top_rated`, { page });
     const results = (data as TMDBResponse).results;
 
-    return results.map((item: any) => this.mapToTMDBItem(item));
+    return results.map((item: TMDBResponseItem) =>
+      this.mapToTMDBItem(item, type),
+    );
   }
 
   private async searchItemsByType(
@@ -292,7 +303,9 @@ export class TMDB {
     const data = await this.fetchData(`search/${type}`, { query, page });
     const results = (data as TMDBResponse).results;
 
-    return results.map((item: any) => this.mapToTMDBItem(item));
+    return results.map((item: TMDBResponseItem) =>
+      this.mapToTMDBItem(item, type),
+    );
   }
 
   private async fetchData(
@@ -303,7 +316,7 @@ export class TMDB {
       appendVideos?: boolean;
       includeAdult?: boolean;
     },
-  ): Promise<TMDBResponse | TMDBResponseItem> {
+  ): Promise<TMDBResponse | TMDBResponseItemDetails> {
     const token = getEnv().TMDB_TOKEN;
     const baseUrl = getEnv().TMDB_API_URL;
     const queryParams = ["language=pt-BR"];
@@ -331,7 +344,9 @@ export class TMDB {
       throw new Error(`TMDB API error: ${response.status} ${text}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    return data;
   }
 
   private convertTypeToTMDBType(type: string): string {
@@ -352,7 +367,7 @@ export class TMDB {
     return mediaTypeMap[type.toLowerCase()] ?? "Filmes";
   }
 
-  private mapToTMDBItem(item: TMDBResponseItem): TMDBItem {
+  private mapToTMDBItem(item: TMDBResponseItem, type?: string): TMDBItem {
     const {
       id,
       title,
@@ -360,15 +375,14 @@ export class TMDB {
       adult = false,
       vote_average,
       poster_path,
-      media_type,
       popularity,
       release_date,
       first_air_date,
       backdrop_path,
     } = item;
 
-    const mediaType = media_type
-      ? this.convertMediaType(media_type)
+    const mediaType = type
+      ? this.convertMediaType(type)
       : this.convertMediaType(title ? "movie" : "tv");
 
     const mediaTypeSlug = slugify(mediaType) as "filmes" | "series";

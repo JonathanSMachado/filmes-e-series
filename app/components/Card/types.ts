@@ -1,4 +1,4 @@
-import type { TMDBItem, TMDBItemDetails } from "~/utils/tmdb_types";
+import type { TMDBItem, TMDBItemDetails } from "~/core/lib/TMDB/types";
 
 type CardProps = {
   item: TMDBItem | TMDBItemDetails;

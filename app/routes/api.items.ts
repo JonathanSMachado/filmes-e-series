@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { TMDB } from "~/core/lib/TMDB/TMDB";
-import type { TMDBItem } from "~/utils/tmdb_types";
+import type { TMDBItem } from "~/core/lib/TMDB/types";
 import type { ApiItemsLoader } from "~/utils/types";
 
 export async function loader({
