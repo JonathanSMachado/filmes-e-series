@@ -27,7 +27,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     TMDBApi.getRecommendations({
       type,
       id: +id,
-      limit: 6,
     }),
   ]);
 
