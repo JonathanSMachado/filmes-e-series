@@ -36,21 +36,38 @@ export function Card(props: CardProps) {
 
         {link && (
           <div
-            className="absolute bottom-0 w-full rounded-b-md bg-linear-to-t from-black/95 via-black/80 to-transparent opacity-0 group-hover:h-2/4 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end gap-2 p-4 z-20"
-            role="text"
+            className="absolute inset-0 bottom-0 w-full h-full rounded-md bg-linear-to-t from-black via-black/90 to-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end gap-2 p-4 z-20 pointer-events-none"
+            role="presentation"
           >
-            <p className="font-bold text-white leading-tight drop-shadow-md">
-              {item.title}
-            </p>
-            <div className="flex items-center gap-2">
-              {item.release_date && (
-                <span className="bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded text-[10px] font-medium border border-cyan-500/30">
-                  {new Date(item.release_date).getFullYear()}
+            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+              <p className="font-semibold text-white leading-tight line-clamp-2 mb-1">
+                {item.title}
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                {item.release_date && (
+                  <span className="text-cyan-400 text-[10px] font-bold">
+                    {new Date(item.release_date).getFullYear()}
+                  </span>
+                )}
+                <span className="text-slate-400 text-[10px] uppercase tracking-widest font-medium">
+                  • {item.media_type}
                 </span>
-              )}
-              <span className="text-slate-400 text-[10px] uppercase tracking-wider">
-                • {item.media_type}
-              </span>
+              </div>
+
+              <p className="text-xs text-slate-300 line-clamp-3 mb-3 leading-snug">
+                {item.overview}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5">
+                {item.genres.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="text-[9px] text-slate-200 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded border border-white/10"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         )}

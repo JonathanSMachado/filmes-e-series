@@ -3,11 +3,15 @@ type TMDBGenre = {
   name: string;
 };
 
-type TMDBResponse = {
+type TMDBResponseList = {
   page: number;
   results: TMDBResponseItem[];
   total_pages: number;
   total_results: number;
+};
+
+type TMDBResponseGenres = {
+  genres: TMDBGenre[];
 };
 
 type TMDBResponseItem = {
@@ -109,15 +113,18 @@ type TMDBItem = {
   release_date?: string;
   backdrop_path: string | null;
   link: string;
+  genres: TMDBGenre[];
+  overview: string;
 };
 
 export type {
   TMDBGenre,
   TMDBItem,
   TMDBItemDetails,
-  TMDBResponse,
+  TMDBResponseGenres,
   TMDBResponseItem,
   TMDBResponseItemDetails,
+  TMDBResponseList,
   TMDBResponseVideo,
   TMDBVideo,
 };

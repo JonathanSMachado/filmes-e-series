@@ -16,6 +16,7 @@
     "date-fns": "^4.1.0",
     "domain-functions": "^3.3.0",
     "isbot": "^5.1.31",
+    "lru-cache": "^11.2.6",
     "lucide-react": "^0.563.0",
     "nprogress": "^0.2.0",
     "react": "^19.2.4",

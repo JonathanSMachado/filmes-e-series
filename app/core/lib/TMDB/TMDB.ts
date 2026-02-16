@@ -1,20 +1,28 @@
+import { LRUCache } from "lru-cache";
 import { getEnv } from "~/utils/env.server";
 import { getVideoBaseUrl } from "~/utils/helpers";
 import { slugify } from "~/utils/string-helpers";
 import type {
+  TMDBGenre,
   TMDBItem,
   TMDBItemDetails,
-  TMDBResponse,
+  TMDBResponseGenres,
   TMDBResponseItem,
   TMDBResponseItemDetails,
+  TMDBResponseList,
   TMDBResponseVideo,
   TMDBVideo,
 } from "./types";
 
+const genreCache = new LRUCache<string, TMDBGenre[]>({
+  max: 10, // Quantidade de chaves
+  ttl: 1000 * 60 * 60 * 24, // 24 horas de duração
+});
+
 export class TMDB {
-  TYPES = ["movie", "tv"];
-  POSTER_URL: string;
-  BACKDROP_URL: string;
+  private TYPES = ["movie", "tv"];
+  private POSTER_URL: string;
+  private BACKDROP_URL: string;
 
   constructor() {
     const env = getEnv();
@@ -180,7 +188,7 @@ export class TMDB {
         { page: page ?? 1 },
       );
 
-      let results = (data as TMDBResponse).results;
+      let results = (data as TMDBResponseList).results;
 
       return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
@@ -204,7 +212,7 @@ export class TMDB {
         : `trending/all/${period ?? "day"}`;
       const data = await this.fetchData(trendingEndpoint, { page: page ?? 1 });
 
-      let results = (data as TMDBResponse).results;
+      let results = (data as TMDBResponseList).results;
 
       return results.map((item: any) => this.mapToTMDBItem(item, type));
     } catch (error: any) {
@@ -249,15 +257,41 @@ export class TMDB {
     }
   }
 
+  private async getGenres(type?: string): Promise<TMDBGenre[]> {
+    if (type && !this.TYPES.includes(type))
+      throw new Error("Type not supportted");
+
+    const cacheKey = "tmdb_" + (type || "all");
+    const cached = genreCache.get(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
+    let items: TMDBGenre[] = [];
+
+    for (const t of this.TYPES) {
+      const fetchedItems = (
+        (await this.fetchData(`genre/${t}/list`)) as TMDBResponseGenres
+      ).genres;
+      items = [...items, ...fetchedItems];
+    }
+
+    genreCache.set(cacheKey, items);
+
+    return items;
+  }
+
   private async fetchMostPopularByType(
     type: string,
     page: number,
   ): Promise<TMDBItem[]> {
+    const genres = await this.getGenres(type);
     const data = await this.fetchData(`${type}/popular`, { page });
-    const results = (data as TMDBResponse).results;
+    const results = (data as TMDBResponseList).results;
 
     return results.map((item: TMDBResponseItem) =>
-      this.mapToTMDBItem(item, type),
+      this.mapToTMDBItem(item, type, genres),
     );
   }
 
@@ -266,7 +300,7 @@ export class TMDB {
     page: number,
   ): Promise<TMDBItem[]> {
     const data = await this.fetchData(`${type}/top_rated`, { page });
-    const results = (data as TMDBResponse).results;
+    const results = (data as TMDBResponseList).results;
 
     return results.map((item: TMDBResponseItem) =>
       this.mapToTMDBItem(item, type),
@@ -279,7 +313,7 @@ export class TMDB {
     page: number,
   ): Promise<TMDBItem[]> {
     const data = await this.fetchData(`search/${type}`, { query, page });
-    const results = (data as TMDBResponse).results;
+    const results = (data as TMDBResponseList).results;
 
     return results.map((item: TMDBResponseItem) =>
       this.mapToTMDBItem(item, type),
@@ -294,7 +328,7 @@ export class TMDB {
       appendVideos?: boolean;
       includeAdult?: boolean;
     },
-  ): Promise<TMDBResponse | TMDBResponseItemDetails> {
+  ): Promise<TMDBResponseList | TMDBResponseItemDetails> {
     const token = getEnv().TMDB_TOKEN;
     const baseUrl = getEnv().TMDB_API_URL;
     const queryParams = ["language=pt-BR"];
@@ -345,7 +379,11 @@ export class TMDB {
     return mediaTypeMap[type.toLowerCase()] ?? "Filmes";
   }
 
-  private mapToTMDBItem(item: TMDBResponseItem, type?: string): TMDBItem {
+  private mapToTMDBItem(
+    item: TMDBResponseItem,
+    type?: string,
+    genresList: TMDBGenre[] = [],
+  ): TMDBItem {
     const {
       id,
       title,
@@ -357,6 +395,8 @@ export class TMDB {
       release_date,
       first_air_date,
       backdrop_path,
+      genre_ids = [],
+      overview,
     } = item;
 
     const mediaType = type
@@ -364,6 +404,11 @@ export class TMDB {
       : this.convertMediaType(title ? "movie" : "tv");
 
     const mediaTypeSlug = slugify(mediaType) as "filmes" | "series";
+
+    const itemGenres = genresList.filter((g) => genre_ids.includes(g.id));
+    const genres = Array.from(
+      new Map(itemGenres.map((g) => [g.id, g])).values(),
+    ).slice(0, 2);
 
     return {
       id,
@@ -377,6 +422,8 @@ export class TMDB {
       release_date: release_date ?? first_air_date,
       backdrop_path: backdrop_path ? this.BACKDROP_URL + backdrop_path : null,
       link: `/${mediaTypeSlug}/${id}`,
+      genres,
+      overview,
     };
   }
 }

@@ -8,8 +8,6 @@ import type { CardsContainerProps } from "./types";
 export function CardsContainer(props: CardsContainerProps) {
   const [items, setItems] = useState(props.items);
   const [page, setPage] = useState(2);
-  // const [type, setType] = useState(props.type);
-  // const [search, setSearch] = useState(props.search);
   const fetcher = useFetcher<ApiItemsLoader>();
   const loaderRef = useRef(null);
 
@@ -35,8 +33,6 @@ export function CardsContainer(props: CardsContainerProps) {
   }
 
   useEffect(() => setItems(props.items), [props.items]);
-  // useEffect(() => setType(props.type), [props.type]);
-  // useEffect(() => setSearch(props.search), [props.search]);
 
   return (
     <>
