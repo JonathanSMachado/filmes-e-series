@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { Badge } from "../Badge";
 import { AdultAlert } from "./AdultAlert";
 import { CardImage } from "./CardImage";
 import { Score } from "./Score";
@@ -60,12 +61,7 @@ export function Card(props: CardProps) {
 
               <div className="flex flex-wrap gap-1.5">
                 {item.genres.map((genre) => (
-                  <span
-                    key={genre.id}
-                    className="text-[9px] text-slate-200 bg-white/10 backdrop-blur-md px-2 py-0.5 rounded border border-white/10"
-                  >
-                    {genre.name}
-                  </span>
+                  <Badge key={genre.id}>{genre.name}</Badge>
                 ))}
               </div>
             </div>
