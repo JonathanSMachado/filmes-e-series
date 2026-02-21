@@ -1,5 +1,6 @@
 import ReactPlayer from "react-player";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
+import { Badge } from "~/components/Badge";
 import { Card, Score } from "~/components/Card";
 import { TMDB } from "~/core/lib/TMDB/TMDB";
 import type {
@@ -58,11 +59,6 @@ export default function Details() {
           <h1 className="text-4xl text-slate-100">{item.title}</h1>
           <p className="text-sm mt-2">
             <span>{formatReleaseDate(item.release_date ?? "")} (BR)</span>
-            <span className="mx-2">-</span>
-            <span>
-              {item.genres.map((genre: TMDBGenre) => genre.name).join(", ")}
-            </span>
-
             {item.runtime && (
               <>
                 <span className="mx-2">-</span>
@@ -79,6 +75,14 @@ export default function Details() {
                 </span>
               </>
             )}
+            <span className="mx-2">-</span>
+            <span className="inline-flex gap-1">
+              {item.genres.map((genre: TMDBGenre) => (
+                <Badge key={genre.id} className="text-xs">
+                  {genre.name}
+                </Badge>
+              ))}
+            </span>
           </p>
           <p className="italic my-6 text-slate-300">{item.tagLine}</p>
           <div className="mt-6">
