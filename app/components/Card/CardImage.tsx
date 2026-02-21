@@ -1,22 +1,16 @@
 import React from "react";
 import type { CardImageProps } from "./types";
+import fallbackImage from "/images/filmes_series.png";
 
-export function CardImage({
-  src,
-  alt,
-  className = "",
-  onError,
-}: CardImageProps) {
-  const fallback = "/images/fallback_poster.png";
+export function CardImage({ src, alt, className = "" }: CardImageProps) {
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = fallback;
-    if (onError) onError();
+    e.currentTarget.src = fallbackImage;
   };
 
   return (
     <img
       className={className}
-      src={src ?? fallback}
+      src={src || fallbackImage}
       alt={alt}
       loading="lazy"
       decoding="async"

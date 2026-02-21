@@ -47,16 +47,18 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 
   return (
     <MainLayout showHeroArea={true}>
-      {search ? (
-        <p className="text-2xl text-slate-300 my-4 text-center">
-          Resultados da busca por{" "}
-          <span className="italic font-semibold">{search}</span>
-        </p>
-      ) : (
-        <SwitchTrends isTodayActive={isTodayActive} />
-      )}
+      <div className="flex flex-col gap-10">
+        {search ? (
+          <p className="text-2xl text-slate-300 my-4 text-center">
+            Resultados da busca por{" "}
+            <span className="italic font-semibold">{search}</span>
+          </p>
+        ) : (
+          <SwitchTrends isTodayActive={isTodayActive} />
+        )}
 
-      <CardsContainer items={items} infinityScroll={true} search={search} />
+        <CardsContainer items={items} infinityScroll={true} search={search} />
+      </div>
     </MainLayout>
   );
 }

@@ -35,14 +35,16 @@ export default function Type() {
 
   return (
     <MainLayout>
-      <Search />
-      {search && (
-        <p className="text-2xl text-slate-300 my-4 text-center">
-          Resultado da busca por{" "}
-          <span className="italic font-semibold">{search}</span>
-        </p>
-      )}
-      <CardsContainer items={items} infinityScroll={true} search={search} />
+      <div className="flex flex-col gap-10">
+        <Search />
+        {search && (
+          <p className="text-2xl text-slate-300 my-4 text-center">
+            Resultado da busca por{" "}
+            <span className="italic font-semibold">{search}</span>
+          </p>
+        )}
+        <CardsContainer items={items} infinityScroll={true} search={search} />
+      </div>
     </MainLayout>
   );
 }

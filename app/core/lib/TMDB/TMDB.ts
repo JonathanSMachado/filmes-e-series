@@ -239,12 +239,14 @@ export class TMDB {
         );
       } else {
         let items: TMDBItem[] = [];
+
         for (const t of this.TYPES) {
           const fetchedItems = await this.searchItemsByType(
             this.convertTypeToTMDBType(t),
             query,
             page ?? 1,
           );
+
           items = [...items, ...fetchedItems];
         }
 

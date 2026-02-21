@@ -18,11 +18,7 @@ export function Card(props: CardProps) {
   };
 
   const cardStyleClasses = `
-    group shrink-0 rounded-md relative shadow-slate-700 shadow-lg 
-    ring-1 ring-slate-700 transition-all overflow-visible
-    hover:shadow-cyan-500 z-0 hover:z-10 hover:ring-2 
-    focus-visible:outline-none focus:shadow-cyan-500 focus:z-10 focus:ring-2 
-    ${className} ${!link ? "pointer-events-none" : ""} 
+    group hover:z-10 ${className} ${!link ? "pointer-events-none" : ""} 
   `.trim();
 
   const cardContent = (
@@ -31,7 +27,7 @@ export function Card(props: CardProps) {
         <CardImage
           src={imageSrc}
           alt={`Poster for ${item.title}`}
-          className="rounded-md object-cover w-full h-full aspect-2/3"
+          className="rounded-md object-cover w-full h-full aspect-2/3 shadow-slate-700 shadow-lg ring-1 ring-slate-700 hover:shadow-cyan-500 transition-shadow"
           onError={handleImageError}
         />
 
