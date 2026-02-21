@@ -36,7 +36,7 @@ export function CardsContainer(props: CardsContainerProps) {
 
   return (
     <>
-      <div className="grid place-items-center gap-6 auto-rows-max grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
+      <div className="grid place-items-center gap-6 auto-rows-max grid-cols-[repeat(auto-fill,minmax(240px,1fr))] px-4">
         {!items.length ? (
           <p className="text-center text-slate-300">Nenhum item encontrado!</p>
         ) : (
