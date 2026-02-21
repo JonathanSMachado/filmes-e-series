@@ -1,6 +1,3 @@
-import { format, formatDistanceToNow, isFuture, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
-
 function formatDateToPtBR(dateString: string): string {
   if (!dateString) return "";
 
@@ -12,23 +9,44 @@ function formatDateToPtBR(dateString: string): string {
   }).format(new Date(dateString + "T23:59:59"));
 }
 
-function convertMinutesToFormattedHours(minutes: number): string {
-  if (minutes <= 0) return "0h";
+/**
+ * Converte minutos para o formato 'Xh Ym'
+ * @param totalMinutes Minutos totais (ex: 130)
+ * @returns String formatada (ex: '2h 10m')
+ */
+function convertMinutesToFormattedHours(totalMinutes: number): string {
+  if (!totalMinutes || totalMinutes <= 0) return "N/A";
 
-  const hrs = Math.floor(minutes / 60);
-  const mins = minutes % 60;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
 
-  return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+  if (hours === 0) return `${minutes}m`;
+  if (minutes === 0) return `${hours}h`;
+
+  return `${hours}h ${minutes}m`;
 }
 
-function formatReleaseDate(dateString: string) {
-  const date = parseISO(dateString);
+/**
+ * Formata uma string de data ISO para o padrão local
+ * @param dateString Data no formato '2024-05-20'
+ * @returns String formatada '20/05/2024'
+ */
+function formatReleaseDate(dateString: string): string {
+  if (!dateString) return "Data desconhecida";
 
-  if (isFuture(date)) {
-    return `Estreia ${formatDistanceToNow(date, { addSuffix: true, locale: ptBR })}`;
+  try {
+    const date = new Date(dateString);
+
+    // Usamos o locale pt-BR para garantir o formato dia/mês/ano
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      timeZone: "UTC", // Importante: datas do TMDB não têm hora, use UTC para evitar erros de fuso
+    }).format(date);
+  } catch (e) {
+    return dateString;
   }
-
-  return format(date, "dd 'de' MMMM, yyyy", { locale: ptBR });
 }
 
 export { convertMinutesToFormattedHours, formatDateToPtBR, formatReleaseDate };

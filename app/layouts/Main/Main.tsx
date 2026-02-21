@@ -30,9 +30,7 @@ export default function MainLayout(props: MasterLayoutProps) {
   return (
     <>
       {showHeroArea ? <HeroArea /> : <Header />}
-      <main className="flex flex-col gap-10 w-full grow px-4 py-10">
-        {children}
-      </main>
+      <main className="flex flex-col gap-10 w-full grow py-10">{children}</main>
 
       <button
         id="back-to-top"
