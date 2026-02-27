@@ -11,4 +11,13 @@ export default defineConfig({
     reactRouter(),
     tsconfigPaths(),
   ],
+  build: {
+    sourcemap: true,
+  },
+  css: {
+    devSourcemap: true,
+  },
+  // esbuild: {
+  //   sourcemap: "inline",
+  // },
 });
