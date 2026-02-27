@@ -26,7 +26,7 @@
   ],
   "compounds": [
     {
-      "name": "Full Stack: React Router 7",
+      "name": "Debug Full",
       "configurations": ["Debug Server (Node)", "Debug Client (Chrome)"],
       "stopAll": true
     }
