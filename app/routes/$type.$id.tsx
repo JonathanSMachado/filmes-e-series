@@ -42,7 +42,7 @@ export default function Details() {
   return (
     <MainLayout>
       <section
-        className="relative flex flex-col md:flex-row items-center md:items-start gap-10 p-10 py-20 min-h-[550px]"
+        className="relative flex flex-col md:flex-row items-center md:items-start gap-10 p-10 py-20 min-h-137.5"
         style={{
           backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.7) 100%), url(${item.backdrop_path})`,
           backgroundPosition: "center",
@@ -199,7 +199,7 @@ export default function Details() {
       {item.recommendations.length ? (
         <section className="p-10">
           <h3 className="text-2xl font-bold text-slate-100 mb-8">
-            Recomendados
+            Você também pode gostar
           </h3>
           <div className="flex overflow-x-auto gap-6 pb-6 scrollbar-hide">
             {item.recommendations.map((rec: TMDBItem) => (

@@ -35,7 +35,7 @@ export default function MainLayout(props: MasterLayoutProps) {
       <button
         id="back-to-top"
         title="Voltar ao topo"
-        className="hidden fixed bottom-5 right-6 border-0 outline-none bg-cyan-700 cursor-pointer p-2 rounded-full text-lg transition-all hover:bg-cyan-500"
+        className="hidden fixed bottom-5 right-6 z-10 border-0 outline-none bg-cyan-700 cursor-pointer p-2 rounded-full text-lg transition-all hover:bg-cyan-500"
       >
         <ArrowUp className="w-5 h-5 text-slate-300 hover:text-white" />
       </button>

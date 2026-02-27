@@ -35,7 +35,7 @@ export function HeroArea() {
       }}
     >
       <Header />
-      <div className="w-full self-center flex flex-col gap-6 max-w-2xl mt-7 text-slate-300">
+      <div className="w-full self-center flex flex-col gap-6 max-w-2xl mt-7 px-2 text-slate-300">
         {isHome && (
           <div className="flex flex-col gap-3">
             <h1 className="text-5xl">Bem vindo(a)!</h1>
