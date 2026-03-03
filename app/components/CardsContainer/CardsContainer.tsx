@@ -10,27 +10,60 @@ export function CardsContainer(props: CardsContainerProps) {
   const [page, setPage] = useState(2);
   const fetcher = useFetcher<ApiItemsLoader>();
   const loaderRef = useRef(null);
+  const type = props.type;
+  const pageRequested = useRef<number | null>(null);
 
-  if (props.infinityScroll) {
-    useEffect(() => {
-      if (fetcher.data && fetcher.data.items) {
-        setItems((prev) => [...prev, ...(fetcher.data?.items ?? [])]);
-        if (fetcher.data.nextPage) setPage(fetcher.data.nextPage);
-      }
-    }, [fetcher.data]);
+  useEffect(() => {
+    setItems(props.items);
+    setPage(2);
+    pageRequested.current = null;
+  }, [props.items]);
 
-    useEffect(() => {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && fetcher.state === "idle" && page) {
-          fetcher.load(`/api/items?page=${page}`);
-        }
+  useEffect(() => {
+    if (fetcher.data?.items) {
+      setItems((prev) => {
+        const existingIds = new Set(prev.map((i) => i.id));
+        const uniqueNewItems = fetcher.data!.items.filter(
+          (i) => !existingIds.has(i.id),
+        );
+
+        return [...prev, ...uniqueNewItems];
       });
 
-      if (loaderRef.current) observer.observe(loaderRef.current);
+      if (fetcher.data.nextPage) setPage(fetcher.data.nextPage);
+    }
+  }, [fetcher.data]);
 
-      return () => observer.disconnect();
-    }, [page, fetcher]);
-  }
+  useEffect(() => {
+    if (!props.infinityScroll) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+
+        if (
+          target.isIntersecting &&
+          fetcher.state === "idle" &&
+          page !== pageRequested.current
+        ) {
+          pageRequested.current = page;
+
+          let url = `/api/items?page=${page}`;
+
+          if (type) {
+            url += `&type=${type}`;
+          }
+
+          fetcher.load(url);
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    if (loaderRef.current) observer.observe(loaderRef.current);
+
+    return () => observer.disconnect();
+  }, [page, fetcher.state, type, props.infinityScroll]);
 
   useEffect(() => setItems(props.items), [props.items]);
 
@@ -50,7 +83,7 @@ export function CardsContainer(props: CardsContainerProps) {
           ))
         )}
 
-        {props.infinityScroll && fetcher.state === "loading" && (
+        {fetcher.state === "loading" && (
           <>
             <CardSkeleton className="w-56 h-80" />
             <CardSkeleton className="w-56 h-80" />
@@ -60,10 +93,7 @@ export function CardsContainer(props: CardsContainerProps) {
         )}
       </div>
 
-      <div
-        ref={loaderRef}
-        className="h-20 flex justify-center items-center"
-      ></div>
+      <div ref={loaderRef} className="h-10 w-full"></div>
     </>
   );
 }

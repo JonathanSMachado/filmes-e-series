@@ -3,7 +3,7 @@ import type { TMDBItem } from "~/core/lib/TMDB/types";
 type CardsContainerProps = {
   items: TMDBItem[];
   infinityScroll?: boolean;
-  type?: "movie" | "film" | "filmes" | "series";
+  type?: string | null;
   search?: string | null;
 };
 

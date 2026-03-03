@@ -34,7 +34,7 @@ export class TMDB {
     type,
     page,
   }: {
-    type?: string;
+    type?: string | null;
     page?: number;
   }): Promise<TMDBItem[]> {
     try {
@@ -227,7 +227,7 @@ export class TMDB {
     page,
   }: {
     query: string;
-    type?: string;
+    type?: string | null;
     page?: number;
   }): Promise<TMDBItem[]> {
     try {

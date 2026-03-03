@@ -10,9 +10,9 @@ type MessageObject = {
 
 type ApiItemsLoader = {
   search: string | null;
+  type: string | null;
   items: TMDBItem[] | [];
   nextPage?: number | null;
-  type?: "filmes" | "series";
 };
 
 export type { ApiItemsLoader, MessageObject };

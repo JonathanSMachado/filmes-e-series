@@ -31,7 +31,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Type() {
-  const { items, search } = useLoaderData<ApiItemsLoader>();
+  const { items, search, type } = useLoaderData<ApiItemsLoader>();
 
   return (
     <MainLayout>
@@ -43,7 +43,12 @@ export default function Type() {
             <span className="italic font-semibold">{search}</span>
           </p>
         )}
-        <CardsContainer items={items} infinityScroll={true} search={search} />
+        <CardsContainer
+          items={items}
+          infinityScroll={true}
+          search={search}
+          type={type}
+        />
       </div>
     </MainLayout>
   );
