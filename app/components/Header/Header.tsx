@@ -37,6 +37,13 @@ export function Header() {
           Séries
         </NavLink>
         <NavLink
+          to="/favoritos"
+          role="button"
+          className={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+        >
+          Favoritos
+        </NavLink>
+        <NavLink
           to="/contato"
           role="button"
           title="Entre em contato"

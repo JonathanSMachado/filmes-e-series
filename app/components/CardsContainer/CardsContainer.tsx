@@ -11,7 +11,14 @@ export function CardsContainer(props: CardsContainerProps) {
   const [page, setPage] = useState(2);
   const fetcher = useFetcher<ApiItemsLoader>();
   const loaderRef = useRef<HTMLDivElement>(null);
-  const { type, search, trends, infinityScroll = true } = props;
+  const {
+    type,
+    search,
+    trends,
+    infinityScroll = true,
+    emptyTitle = "Nenhum título encontrado",
+    emptyDescription = "Não encontramos nenhum filme ou série correspondente à sua busca. Tente buscar por outros termos.",
+  } = props;
   const pageRequested = useRef<number | null>(null);
   const [hasMore, setHasMore] = useState(true);
 
@@ -85,10 +92,10 @@ export function CardsContainer(props: CardsContainerProps) {
         <div className="flex flex-col items-center justify-center py-16 px-4 bg-slate-900/40 border border-slate-800 rounded-2xl text-center backdrop-blur-sm">
           <Film className="w-16 h-16 text-slate-600 mb-4 stroke-1 animate-pulse" />
           <h3 className="text-xl font-bold text-slate-200 mb-1">
-            Nenhum título encontrado
+            {emptyTitle}
           </h3>
           <p className="text-sm text-slate-400 max-w-md">
-            Não encontramos nenhum filme ou série correspondente à sua busca. Tente buscar por outros termos.
+            {emptyDescription}
           </p>
         </div>
       ) : (
