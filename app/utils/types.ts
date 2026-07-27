@@ -11,6 +11,7 @@ type MessageObject = {
 type ApiItemsLoader = {
   search: string | null;
   type: string | null;
+  trends?: string | null;
   items: TMDBItem[] | [];
   nextPage?: number | null;
 };

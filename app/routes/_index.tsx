@@ -12,17 +12,21 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const page = Number(url.searchParams.get("page") || 1);
   const search = url.searchParams.get("search");
+  const trends = url.searchParams.get("trends") || "day";
   let items: TMDBItem[] = [];
   const TMDBApi = new TMDB();
 
   if (search) {
     items = await TMDBApi.search({ query: search, page });
   } else {
-    items = await TMDBApi.getMostPopular({ page });
+    items = await TMDBApi.getTrending({
+      period: trends === "week" ? "week" : "day",
+      page,
+    });
   }
 
   return Response.json(
-    { search, items },
+    { search, trends, items },
     {
       headers: {
         "Cache-Control": "private, max-age=300",
@@ -32,32 +36,34 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Index({ loaderData }: Route.ComponentProps) {
-  const { search, items } = loaderData as unknown as ApiItemsLoader;
+  const { search, trends, items } = loaderData as unknown as ApiItemsLoader;
   const location = useLocation();
-  const getIsToday = (search: string) =>
-    new URLSearchParams(search).get("trends") !== "week";
 
-  const [isTodayActive, setIsTodayActive] = useState(() =>
-    getIsToday(location.search ?? window.location.search),
-  );
-
-  useEffect(() => {
-    setIsTodayActive(getIsToday(location.search ?? window.location.search));
-  }, [location.search]);
+  const currentTrends = new URLSearchParams(location.search).get("trends") ?? trends ?? "day";
+  const isTodayActive = currentTrends !== "week";
 
   return (
     <MainLayout showHeroArea={true}>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-8 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {search ? (
-          <p className="text-2xl text-slate-300 my-4 text-center">
-            Resultados da busca por{" "}
-            <span className="italic font-semibold">{search}</span>
-          </p>
+          <div className="flex flex-col items-center justify-center gap-2 py-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 text-center">
+              Resultados para <span className="text-cyan-400 font-semibold">"{search}"</span>
+            </h2>
+            <p className="text-slate-400 text-sm">
+              Exibindo os principais títulos encontrados no catálogo
+            </p>
+          </div>
         ) : (
           <SwitchTrends isTodayActive={isTodayActive} />
         )}
 
-        <CardsContainer items={items} infinityScroll={true} search={search} />
+        <CardsContainer
+          items={items}
+          infinityScroll={true}
+          search={search}
+          trends={isTodayActive ? "day" : "week"}
+        />
       </div>
     </MainLayout>
   );

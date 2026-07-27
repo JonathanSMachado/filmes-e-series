@@ -5,6 +5,7 @@ type CardsContainerProps = {
   infinityScroll?: boolean;
   type?: string | null;
   search?: string | null;
+  trends?: string | null;
 };
 
 export type { CardsContainerProps };

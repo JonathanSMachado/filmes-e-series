@@ -10,11 +10,18 @@ export async function loader({
   const page = Number(url.searchParams.get("page") || 1);
   const search = url.searchParams.get("search");
   const type = url.searchParams.get("type");
+  const trends = url.searchParams.get("trends");
   let items: TMDBItem[] = [];
   const TMDBApi = new TMDB();
 
   if (search) {
     items = await TMDBApi.search({ query: search, type, page });
+  } else if (trends) {
+    items = await TMDBApi.getTrending({
+      period: trends === "week" ? "week" : "day",
+      type: type ?? undefined,
+      page,
+    });
   } else {
     items = await TMDBApi.getMostPopular({ type, page });
   }
@@ -22,6 +29,7 @@ export async function loader({
   return {
     search,
     type,
+    trends,
     items,
     nextPage: items.length ? page + 1 : null,
   };

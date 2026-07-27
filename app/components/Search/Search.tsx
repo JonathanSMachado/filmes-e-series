@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Form, useLocation, useSearchParams, useSubmit } from "react-router";
 import { getInputSearchPlaceholder } from "../HeroArea/utils";
@@ -26,24 +26,39 @@ export function Search({ action, placeholder, method = "get" }: SearchProps) {
     return () => clearTimeout(timer);
   }, [query, submit, activeAction, activePlaceholder]);
 
+  const handleClear = () => {
+    setQuery("");
+    submit({ search: "" }, { replace: true, action: activeAction });
+  };
+
   return (
     <Form
       method={method}
       action={activeAction}
-      className="flex w-full max-w-3xl mx-auto"
+      className="flex w-full max-w-2xl mx-auto group"
     >
-      <div className="relative text-slate-300 w-full">
+      <div className="relative flex items-center w-full shadow-2xl rounded-full">
+        <SearchIcon className="absolute left-4 w-5 h-5 text-slate-400 group-focus-within:text-cyan-400 transition-colors pointer-events-none z-10" />
+
         <input
-          type="search"
+          type="text"
           name="search"
           value={query}
           placeholder={activePlaceholder}
-          className="w-full h-10 pl-4 pr-10 rounded-full bg-slate-700 border border-cyan-700 text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 transition-all placeholder:text-slate-500"
+          className="w-full h-12 sm:h-14 pl-12 pr-12 rounded-full bg-slate-900/80 border border-slate-700/70 text-slate-100 text-sm sm:text-base placeholder:text-slate-500 backdrop-blur-xl transition-all duration-300 focus:outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-500/20 shadow-inner"
           onChange={(e) => setQuery(e.currentTarget.value)}
         />
-        <button type="submit" className="absolute right-0 top-2 mr-4">
-          <SearchIcon className="text-slate-400" />
-        </button>
+
+        {query ? (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-4 p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors z-10"
+            title="Limpar busca"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        ) : null}
       </div>
     </Form>
   );
