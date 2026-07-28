@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Badge } from "../Badge";
+import { FavoriteButton } from "../FavoriteButton";
 import { AdultAlert } from "./AdultAlert";
 import { CardImage } from "./CardImage";
 import { Score } from "./Score";
@@ -30,10 +31,13 @@ export function Card(props: CardProps) {
         onError={handleImageError}
       />
 
-      <div className="absolute top-2.5 left-2.5 z-30 pointer-events-none">
+      <div className="absolute top-2.5 left-2.5 z-30 flex flex-col gap-2 items-start pointer-events-none">
         <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white bg-slate-950/80 backdrop-blur-md border border-slate-700/60 rounded-md shadow-md">
           {item.media_type}
         </span>
+        <div className="pointer-events-auto">
+          <FavoriteButton item={item} />
+        </div>
       </div>
 
       {showScore && (

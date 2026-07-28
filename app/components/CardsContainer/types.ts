@@ -6,6 +6,8 @@ type CardsContainerProps = {
   type?: string | null;
   search?: string | null;
   trends?: string | null;
+  emptyTitle?: string;
+  emptyDescription?: string;
 };
 
 export type { CardsContainerProps };
