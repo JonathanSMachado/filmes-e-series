@@ -48,7 +48,7 @@ export function Card(props: CardProps) {
 
       {link && (
         <div
-          className="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-20"
+          className="absolute inset-0 w-full h-full rounded-2xl bg-linear-to-t from-slate-950 via-slate-950/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 z-20"
           role="presentation"
         >
           <div className="transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300 space-y-1.5">
@@ -64,7 +64,11 @@ export function Card(props: CardProps) {
               )}
               {item.genres && item.genres.length > 0 && (
                 <span className="text-slate-400 text-xs">
-                  • {item.genres.map((g) => g.name).slice(0, 2).join(", ")}
+                  •{" "}
+                  {item.genres
+                    .map((g) => g.name)
+                    .slice(0, 2)
+                    .join(", ")}
                 </span>
               )}
             </div>

@@ -1,6 +1,7 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Linkedin } from "lucide-react";
 import { Link, NavLink } from "react-router";
+import GoogleAuthButton from "../GoogleAuthButton/GoogleAuthButton";
 import { Logo } from "../Logo";
 
 export function Header() {
@@ -54,6 +55,8 @@ export function Header() {
       </nav>
 
       <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xl">
+        <GoogleAuthButton iconOnly />
+
         <Link
           to={githubUrl}
           target="_blank"

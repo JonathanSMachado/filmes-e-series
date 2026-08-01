@@ -1,7 +1,12 @@
 import { LRUCache } from "lru-cache";
 import { getEnv } from "~/utils/env.server";
 import { getVideoBaseUrl } from "~/utils/helpers";
-import { slugify } from "~/utils/string-helpers";
+import {
+  convertMediaTypeToUILabel,
+  convertTypeToTMDBType,
+  slugify,
+} from "~/utils/string-helpers";
+
 import type {
   TMDBGenre,
   TMDBItem,
@@ -42,7 +47,7 @@ export class TMDB {
 
       if (type) {
         items = await this.fetchMostPopularByType(
-          this.convertTypeToTMDBType(type),
+          convertTypeToTMDBType(type),
           page ?? 1,
         );
       } else {
@@ -71,7 +76,7 @@ export class TMDB {
 
       if (type) {
         items = await this.fetchTopRatedItemsByType(
-          this.convertTypeToTMDBType(type),
+          convertTypeToTMDBType(type),
           page ?? 1,
         );
       } else {
@@ -102,7 +107,7 @@ export class TMDB {
 
     try {
       const data = (await this.fetchData(
-        `${this.convertTypeToTMDBType(type)}/${itemId}`,
+        `${convertTypeToTMDBType(type)}/${itemId}`,
         { appendVideos: true },
       )) as TMDBResponseItemDetails;
 
@@ -143,7 +148,7 @@ export class TMDB {
         runtime,
       } = data;
 
-      const mediaType = this.convertMediaType(title ? "movie" : "tv");
+      const mediaType = convertMediaTypeToUILabel(title ? "movie" : "tv");
 
       return {
         adult,
@@ -184,7 +189,7 @@ export class TMDB {
   }): Promise<TMDBItem[]> {
     try {
       const data = await this.fetchData(
-        `${this.convertTypeToTMDBType(type)}/${id}/recommendations`,
+        `${convertTypeToTMDBType(type)}/${id}/recommendations`,
         { page: page ?? 1 },
       );
 
@@ -208,7 +213,7 @@ export class TMDB {
   }): Promise<TMDBItem[]> {
     try {
       const trendingEndpoint = type
-        ? `trending/${this.convertTypeToTMDBType(type)}/${period ?? "day"}`
+        ? `trending/${convertTypeToTMDBType(type)}/${period ?? "day"}`
         : `trending/all/${period ?? "day"}`;
       const data = await this.fetchData(trendingEndpoint, { page: page ?? 1 });
 
@@ -233,7 +238,7 @@ export class TMDB {
     try {
       if (type) {
         return await this.searchItemsByType(
-          this.convertTypeToTMDBType(type),
+          convertTypeToTMDBType(type),
           query,
           page ?? 1,
         );
@@ -242,7 +247,7 @@ export class TMDB {
 
         for (const t of this.TYPES) {
           const fetchedItems = await this.searchItemsByType(
-            this.convertTypeToTMDBType(t),
+            convertTypeToTMDBType(t),
             query,
             page ?? 1,
           );
@@ -363,24 +368,6 @@ export class TMDB {
     return data;
   }
 
-  private convertTypeToTMDBType(type: string): string {
-    const t = type.toLowerCase();
-    if (t === "filmes" || t === "filme" || t === "movie" || t === "movies")
-      return "movie";
-    if (t === "series" || t === "séries" || t === "serie" || t === "tv")
-      return "tv";
-    throw new Error(`Tipo inválido: ${type}`);
-  }
-
-  private convertMediaType(type: string): "Filmes" | "Séries" {
-    const mediaTypeMap: Record<string, "Filmes" | "Séries"> = {
-      movie: "Filmes",
-      tv: "Séries",
-    };
-
-    return mediaTypeMap[type.toLowerCase()] ?? "Filmes";
-  }
-
   private mapToTMDBItem(
     item: TMDBResponseItem,
     type?: string,
@@ -402,8 +389,8 @@ export class TMDB {
     } = item;
 
     const mediaType = type
-      ? this.convertMediaType(type)
-      : this.convertMediaType(title ? "movie" : "tv");
+      ? convertMediaTypeToUILabel(type)
+      : convertMediaTypeToUILabel(title ? "movie" : "tv");
 
     const mediaTypeSlug = slugify(mediaType) as "filmes" | "series";
 
