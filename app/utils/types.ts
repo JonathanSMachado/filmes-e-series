@@ -16,4 +16,16 @@ type ApiItemsLoader = {
   nextPage?: number | null;
 };
 
-export type { ApiItemsLoader, MessageObject };
+type AuthContextType = {
+  userProfile: UserProfile | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
+};
+
+type UserProfile = {
+  name: string;
+  avatarUrl?: string;
+  email?: string;
+};
+
+export type { ApiItemsLoader, AuthContextType, MessageObject, UserProfile };

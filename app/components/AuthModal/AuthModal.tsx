@@ -1,7 +1,7 @@
 import { LogIn, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import GoogleAuthButton from "../GoogleAuthButton/GoogleAuthButton";
+import AuthButton from "../AuthButton/AuthButton";
 
 type AuthModalProps = {
   isOpen: boolean;
@@ -48,7 +48,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </p>
 
         <div className="w-full flex justify-center">
-          <GoogleAuthButton />
+          <AuthButton />
         </div>
       </div>
     </div>,

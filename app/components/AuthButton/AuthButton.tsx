@@ -1,13 +1,13 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons";
 import { useFetcher } from "react-router";
-import type GoogleAuthButtonProps from "./GoogleAuthButtonProps";
+import type AuthButtonProps from "./AuthButtonProps";
 
-export default function GoogleAuthButton({
+export default function AuthButton({
   iconOnly = false,
   label = "Entrar com Google",
   className = "",
   onClick,
-}: GoogleAuthButtonProps) {
+}: AuthButtonProps) {
   const fetcher = useFetcher();
 
   return (

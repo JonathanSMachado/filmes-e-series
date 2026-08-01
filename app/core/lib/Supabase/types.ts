@@ -1,1 +1,3 @@
-export type DBMediaType = "movie" | "serie";
+type DBMediaType = "movie" | "serie";
+
+export type { DBMediaType };

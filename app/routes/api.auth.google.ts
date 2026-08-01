@@ -3,7 +3,6 @@ import { redirect } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-  console.log("action called");
   const { supabase, headers } = createSupabaseServerClient(request);
   const requestUrl = new URL(request.url);
 

@@ -10,6 +10,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { NavigationProgressBar } from "./components/NavigationProgressBar";
+import { AuthProvider } from "./context/AuthContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -57,10 +58,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="flex flex-col items-center bg-linear-to-tr from-slate-950 to-slate-700 min-h-screen">
-        <NavigationProgressBar />
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <AuthProvider>
+          <NavigationProgressBar />
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </AuthProvider>
       </body>
     </html>
   );

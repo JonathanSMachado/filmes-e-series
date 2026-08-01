@@ -1,10 +1,14 @@
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Linkedin } from "lucide-react";
 import { Link, NavLink } from "react-router";
-import GoogleAuthButton from "../GoogleAuthButton/GoogleAuthButton";
+import { useAuth } from "~/context/AuthContext";
+import AuthButton from "../AuthButton/AuthButton";
 import { Logo } from "../Logo";
+import { UserDropdown } from "../UserDropdown";
 
 export function Header() {
+  const { userProfile } = useAuth();
+
   const linkStyle =
     "text-slate-300 border-b-2 border-transparent transition-all ease-in-out outline-none hover:border-cyan-500 hover:text-cyan-500 focus:border-cyan-500 focus:text-cyan-500";
   const activeLinkStyle = "border-b-2 border-cyan-500";
@@ -55,7 +59,7 @@ export function Header() {
       </nav>
 
       <nav className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xl">
-        <GoogleAuthButton iconOnly />
+        {userProfile ? <UserDropdown /> : <AuthButton iconOnly />}
 
         <Link
           to={githubUrl}
