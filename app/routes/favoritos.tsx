@@ -33,9 +33,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     const { data, error } = await supabase
       .from("favorites")
-      .select(
-        "tmdb_id, title, poster_path, vote_average, media_type, overview, created_at",
-      )
+      .select("*")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
@@ -63,10 +61,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
         popularity: 0,
         vote_count: 0,
         genre_ids: [] as number[],
-        genres: [] as { id: number; name: string }[],
+        genres: fav.genres || [],
         original_language: "pt",
         media_type_slug: mediaTypeSlug,
         link: `/${mediaTypeSlug}/${fav.tmdb_id}`,
+        release_date: fav.release_date || "",
       } as TMDBItem;
     });
 

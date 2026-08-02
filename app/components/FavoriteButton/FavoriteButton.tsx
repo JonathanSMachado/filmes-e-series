@@ -36,6 +36,7 @@ export function FavoriteButton({ item, className = "" }: FavoriteButtonProps) {
         aria-label={
           favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"
         }
+        title={favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"}
         className={`group flex items-center justify-center p-2 rounded-full backdrop-blur-md border shadow-md transition-all duration-300 transform active:scale-90 ${
           favorite
             ? "bg-rose-500/20 border-rose-500/50 hover:bg-rose-500/30 shadow-rose-500/20"

@@ -219,7 +219,9 @@ export class TMDB {
 
       let results = (data as TMDBResponseList).results;
 
-      return results.map((item: any) => this.mapToTMDBItem(item, type));
+      const genres = await this.getGenres();
+
+      return results.map((item: any) => this.mapToTMDBItem(item, type, genres));
     } catch (error: any) {
       if (error instanceof Error) throw error;
       throw new Error(String(error));

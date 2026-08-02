@@ -35,6 +35,7 @@ export function Card(props: CardProps) {
         <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white bg-slate-950/80 backdrop-blur-md border border-slate-700/60 rounded-md shadow-md">
           {item.media_type}
         </span>
+
         <div className="pointer-events-auto">
           <FavoriteButton item={item} />
         </div>
@@ -56,22 +57,11 @@ export function Card(props: CardProps) {
               {item.title}
             </p>
 
-            <div className="flex items-center gap-2">
-              {item.release_date && (
-                <span className="text-cyan-400 text-xs font-bold">
-                  {new Date(item.release_date).getFullYear()}
-                </span>
-              )}
-              {item.genres && item.genres.length > 0 && (
-                <span className="text-slate-400 text-xs">
-                  •{" "}
-                  {item.genres
-                    .map((g) => g.name)
-                    .slice(0, 2)
-                    .join(", ")}
-                </span>
-              )}
-            </div>
+            {item.release_date && (
+              <span className="text-cyan-400 text-xs font-bold">
+                {new Date(item.release_date).getFullYear()}
+              </span>
+            )}
 
             {item.overview && (
               <p className="text-xs text-slate-300/90 line-clamp-3 leading-snug font-normal pt-1">
