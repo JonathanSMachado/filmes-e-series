@@ -1,8 +1,7 @@
-import { redirect } from "react-router";
+import { redirect, type LoaderFunctionArgs } from "react-router";
 import { createSupabaseServerClient } from "~/utils/supabase.server";
-import type { Route } from "./+types/api.auth.google.callback";
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const next = requestUrl.searchParams.get("next") || "/";
@@ -16,5 +15,5 @@ export async function loader({ request }: Route.LoaderArgs) {
     }
   }
 
-  return redirect("/login?error=auth_failed");
+  return redirect(next);
 }
