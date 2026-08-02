@@ -1,5 +1,6 @@
 import { SiGoogle } from "@icons-pack/react-simple-icons";
-import { Form, useLocation } from "react-router";
+import { Loader2 } from "lucide-react";
+import { Form, useLocation, useNavigation } from "react-router";
 import type AuthButtonProps from "./AuthButtonProps";
 
 export default function AuthButton({
@@ -8,6 +9,11 @@ export default function AuthButton({
   className = "",
 }: AuthButtonProps) {
   const location = useLocation();
+  const navigation = useNavigation();
+
+  const isLoggingIn =
+    navigation.state === "submitting" && navigation.formAction === "/api/auth";
+
   const currentPath = location.pathname + location.search;
 
   return (
@@ -21,6 +27,7 @@ export default function AuthButton({
 
       <button
         type="submit"
+        disabled={isLoggingIn}
         onClick={(e) => e.stopPropagation()}
         title={iconOnly ? label : undefined}
         aria-label={label}
@@ -37,7 +44,13 @@ export default function AuthButton({
         `}
       >
         <span className="absolute inset-0 bg-linear-to-r from-cyan-500/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-        <SiGoogle className="w-5 h-5 shrink-0 text-[#4285F4] group-hover:scale-110 transition-transform duration-200" />
+
+        {isLoggingIn ? (
+          <Loader2 className="w-5 h-5 shrink-0 text-cyan-400 animate-spin" />
+        ) : (
+          <SiGoogle className="w-5 h-5 shrink-0 text-[#4285F4] group-hover:scale-110 transition-transform duration-200" />
+        )}
+
         {!iconOnly && <span className="truncate tracking-wide">{label}</span>}
       </button>
     </Form>
