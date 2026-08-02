@@ -117,7 +117,12 @@ type TMDBItem = {
   overview: string;
 };
 
+type TMDBType = "movie" | "tv";
+
+type TMDBFormattedType = "Filmes" | "Séries";
+
 export type {
+  TMDBFormattedType,
   TMDBGenre,
   TMDBItem,
   TMDBItemDetails,
@@ -126,5 +131,6 @@ export type {
   TMDBResponseItemDetails,
   TMDBResponseList,
   TMDBResponseVideo,
+  TMDBType,
   TMDBVideo,
 };

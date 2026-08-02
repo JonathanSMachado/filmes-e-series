@@ -1,4 +1,4 @@
-import { Sparkles, Film, Tv, Compass } from "lucide-react";
+import { Compass, Film, Sparkles, Tv } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLoaderData, useLocation } from "react-router";
 import type { TMDBItem } from "~/core/lib/TMDB/types";
@@ -32,10 +32,10 @@ export function HeroArea() {
         />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/70 to-slate-950" />
+      <div className="absolute inset-0 bg-linear-to-b from-slate-950/90 via-slate-700/20 to-slate-950/90" />
       <div className="absolute inset-0 bg-radial from-cyan-500/10 via-transparent to-transparent pointer-events-none" />
 
-      <div className="relative z-10 flex flex-col w-full min-h-[420px]">
+      <div className="relative z-10 flex flex-col w-full min-h-105">
         <Header />
 
         <div className="w-full max-w-4xl mx-auto flex flex-col items-center justify-center gap-6 mt-8 sm:mt-12 px-4 text-center">
@@ -48,13 +48,14 @@ export function HeroArea() {
 
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-100 tracking-tight leading-tight max-w-3xl">
                 O que você quer assistir{" "}
-                <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-teal-300 bg-clip-text text-transparent drop-shadow-sm">
+                <span className="bg-linear-to-r from-cyan-400 via-sky-300 to-teal-300 bg-clip-text text-transparent drop-shadow-sm">
                   hoje?
                 </span>
               </h1>
 
               <p className="text-sm sm:text-base md:text-lg text-slate-300/90 max-w-xl font-normal leading-relaxed">
-                Descubra sinopses, avaliações, trailers e produções em alta no nosso catálogo interativo em tempo real.
+                Descubra sinopses, avaliações, trailers e produções em alta no
+                nosso catálogo interativo em tempo real.
               </p>
             </div>
           )}
