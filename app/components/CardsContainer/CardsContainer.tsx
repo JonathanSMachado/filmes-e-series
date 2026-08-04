@@ -1,6 +1,6 @@
+import { Film, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
-import { Film, Loader2 } from "lucide-react";
 import type { TMDBItem } from "~/core/lib/TMDB/types";
 import type { ApiItemsLoader } from "~/utils/types";
 import { Card, CardSkeleton } from "../Card";
@@ -37,7 +37,9 @@ export function CardsContainer(props: CardsContainerProps) {
       }
 
       setItems((prev) => {
-        const existingIds = new Set(prev.map((i) => `${i.media_type_slug}-${i.id}`));
+        const existingIds = new Set(
+          prev.map((i) => `${i.media_type_slug}-${i.id}`),
+        );
         const uniqueNewItems = fetcher.data!.items.filter(
           (i) => !existingIds.has(`${i.media_type_slug}-${i.id}`),
         );
@@ -94,12 +96,10 @@ export function CardsContainer(props: CardsContainerProps) {
           <h3 className="text-xl font-bold text-slate-200 mb-1">
             {emptyTitle}
           </h3>
-          <p className="text-sm text-slate-400 max-w-md">
-            {emptyDescription}
-          </p>
+          <p className="text-sm text-slate-400 max-w-md">{emptyDescription}</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 w-full">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4 sm:gap-6 w-full">
           {items.map((item: TMDBItem) => (
             <Card
               key={`${item.media_type_slug}-${item.id}`}
@@ -111,11 +111,9 @@ export function CardsContainer(props: CardsContainerProps) {
 
           {isLoadingMore && (
             <>
-              <CardSkeleton className="w-full aspect-2/3" />
-              <CardSkeleton className="w-full aspect-2/3" />
-              <CardSkeleton className="w-full aspect-2/3" />
-              <CardSkeleton className="w-full aspect-2/3" />
-              <CardSkeleton className="w-full aspect-2/3 hidden lg:block" />
+              {Array.from({ length: 6 }).map((_, index) => (
+                <CardSkeleton key={index} className="w-full aspect-2/3" />
+              ))}
             </>
           )}
         </div>
@@ -129,7 +127,9 @@ export function CardsContainer(props: CardsContainerProps) {
           {isLoadingMore ? (
             <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/60 border border-slate-800/80 backdrop-blur-md">
               <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-              <span className="text-xs font-medium text-slate-300">Carregando mais conteúdo...</span>
+              <span className="text-xs font-medium text-slate-300">
+                Carregando mais conteúdo...
+              </span>
             </div>
           ) : !hasMore && items.length > 0 ? (
             <p className="text-xs text-slate-500 font-medium tracking-wide">
