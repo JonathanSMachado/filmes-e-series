@@ -73,6 +73,9 @@ type TMDBVideo = {
   id: string;
   name: string;
   url?: string;
+  key?: string;
+  site?: string;
+  thumbnail?: string;
   type: string;
   official: boolean;
   published_at: string;

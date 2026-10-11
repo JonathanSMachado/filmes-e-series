@@ -1,6 +1,6 @@
 import { LRUCache } from "lru-cache";
 import { getEnv } from "~/utils/env.server";
-import { getVideoBaseUrl } from "~/utils/helpers";
+import { getVideoBaseUrl, getVideoThumbnail } from "~/utils/helpers";
 import {
   convertMediaTypeToUILabel,
   convertTypeToTMDBType,
@@ -116,11 +116,15 @@ export class TMDB {
           const { id, name, site, key, published_at, type, official } = video;
           const url =
             site && key ? `${getVideoBaseUrl(site)}${key}` : undefined;
+          const thumbnail = getVideoThumbnail(site, key);
 
           return {
             id,
             name,
             url,
+            key,
+            site,
+            thumbnail,
             type,
             official,
             published_at,
