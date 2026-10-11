@@ -1,9 +1,15 @@
-import ReactPlayer from "react-player";
+import { Film, Play } from "lucide-react";
+import { useState } from "react";
 import { useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Badge } from "~/components/Badge";
 import { AdultAlert, Card, Score } from "~/components/Card";
+import { VideoModal } from "~/components/VideoModal";
 import { TMDB } from "~/core/lib/TMDB/TMDB";
-import type { TMDBItem, TMDBItemDetails } from "~/core/lib/TMDB/types";
+import type {
+  TMDBItem,
+  TMDBItemDetails,
+  TMDBVideo,
+} from "~/core/lib/TMDB/types";
 import { MainLayout } from "~/layouts/Main";
 import {
   convertMinutesToFormattedHours,
@@ -38,6 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function Details() {
   const item = useLoaderData<TMDBItemDetails>();
+  const [selectedVideo, setSelectedVideo] = useState<TMDBVideo | null>(null);
 
   return (
     <MainLayout>
@@ -167,32 +174,79 @@ export default function Details() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {item.videos.map((video) => (
-              <div key={video.id} className="group flex flex-col gap-2">
-                <div className="w-full h-44 md:h-60 relative rounded-xl overflow-hidden border border-white/5 bg-slate-900 shadow-2xl">
-                  <ReactPlayer
-                    src={video.url}
-                    controls
-                    width="100%"
-                    height="100%"
-                    light={true} // Melhora performance carregando apenas a imagem
-                    playIcon={
-                      <div className="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/50 hover:scale-110 transition-transform">
-                        <div className="w-0 h-0 border-t-10 border-t-transparent border-l-15 border-l-white border-b-10 border-b-transparent ml-1" />
-                      </div>
-                    }
-                  />
+              <button
+                key={video.id}
+                type="button"
+                onClick={() => setSelectedVideo(video)}
+                className="group flex flex-col gap-2 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-xl"
+                aria-label={`Assistir ao vídeo ${video.name}`}
+              >
+                <div className="w-full h-44 md:h-60 relative rounded-xl overflow-hidden border border-white/5 bg-slate-900 shadow-2xl group-hover:border-cyan-500/40 group-hover:shadow-cyan-500/10 transition-all duration-300">
+                  {video.thumbnail || video.key || item.backdrop_path ? (
+                    <img
+                      src={
+                        video.thumbnail ||
+                        (video.key
+                          ? `https://i.ytimg.com/vi/${video.key}/hqdefault.jpg`
+                          : item.backdrop_path || "")
+                      }
+                      alt={video.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        if (
+                          item.backdrop_path &&
+                          e.currentTarget.src !== item.backdrop_path
+                        ) {
+                          e.currentTarget.src = item.backdrop_path;
+                        }
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-slate-800 flex items-center justify-center">
+                      <Film className="w-10 h-10 text-slate-600" />
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent group-hover:via-slate-950/10 transition-colors" />
+
+                  {/* Play Icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-14 h-14 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/50 group-hover:scale-110 group-hover:bg-cyan-400 transition-all duration-300">
+                      <Play className="w-6 h-6 text-white fill-white ml-0.5" />
+                    </div>
+                  </div>
+
+                  {/* Badges */}
+                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                    {video.official && (
+                      <span className="text-[10px] font-semibold text-cyan-300 bg-cyan-950/80 border border-cyan-500/30 px-2 py-0.5 rounded shadow backdrop-blur-xs">
+                        Oficial
+                      </span>
+                    )}
+                    <span className="text-[10px] font-medium text-slate-200 bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded border border-white/10 shadow">
+                      {video.type}
+                    </span>
+                  </div>
                 </div>
+
                 <div className="px-1">
-                  <p className="text-sm font-medium text-slate-200 truncate">
+                  <p className="text-sm font-medium text-slate-200 group-hover:text-cyan-400 transition-colors line-clamp-1">
                     {video.name}
                   </p>
                   <p className="text-[10px] text-slate-500 uppercase tracking-tighter">
                     {video.type} • {video.official ? "Oficial" : "Extra"}
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
+
+          <VideoModal
+            isOpen={!!selectedVideo}
+            video={selectedVideo}
+            onClose={() => setSelectedVideo(null)}
+          />
         </section>
       )}
 

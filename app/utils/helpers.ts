@@ -9,4 +9,17 @@ function getVideoBaseUrl(site: string): string {
   }
 }
 
-export { getVideoBaseUrl };
+function getVideoThumbnail(site?: string, key?: string): string | undefined {
+  if (!site || !key) return undefined;
+
+  switch (site.toLowerCase()) {
+    case "youtube":
+      return `https://i.ytimg.com/vi/${key}/hqdefault.jpg`;
+    case "vimeo":
+      return `https://vumbnail.com/${key}.jpg`;
+    default:
+      return undefined;
+  }
+}
+
+export { getVideoBaseUrl, getVideoThumbnail };
